@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+*::-webkit-scrollbar{
+    width: 0px;
+}
+body{
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size:13px;
+    background-color:#f4f4f4;
+}
+
+a{
+    text-decoration:none;
+}
+
+/* Start Navbar */
+.sidebars{
+    min-height:100vh;
+    background-color:#000;
+}
+
+.nav-item.nav-categories{
+    color:#fff;
+    margin:10px 0;
+}
+
+.sidebarlinks,.sidebarlinks .fas{
+    color:#fff;
+    opacity:0.9;
+    transition:all 0.3s;
+}
+
+.sidebarlinks:hover,.sidebarlinks .fas:hover{
+    color:#fff;
+    opacity:1;
+    background-color:#666;
+}
+
+.sidebarlinks{
+    position:relative;
+}
+
+.mores{
+    position:absolute;
+    right:10px;
+    top:50%;
+
+    transform:translateY(-50%);
+}
+
+.currents{
+    background-color:#333;    
+    box-shadow:1px 0 5px #222;
+}
+
+/* End Navbar */
+
+/* Start Top Sidebar  */
+/*Start notify & userlogout  */
+.dropdowns{
+    position:relative;
+}
+
+.dropbtn{
+    text-decoration:none;
+}
+
+.dropdown-contents{
+    min-width:250px;
+    background-color:#f6f6f6;
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:100;
+    display:none;
+}
+
+.dropdown-contents a{
+    color:#000;
+    text-decoration:none;
+    padding:10px;
+
+    display:block;
+}
+
+.dropdown-contents a:hover{
+    background-color:#ddd;
+}
+
+.show{
+    display:block;
+}
+
+/*End notify & userlogout */
+/* End Top Sidebar */
+
+/* Start Shortcut Area  */
+.border-left-primarys{
+    border-left-width:3px;
+    border-left-color:steelblue;
+}
+
+.border-left-successes{
+    border-left-width:3px;
+    border-left-color:green;
+}
+
+.border-left-infos{
+    border-left-width:3px;
+    border-left-color:skyblue;
+}
+
+.border-left-warnings{
+    border-left-width:3px;
+    border-left-color:orange;
+}
+
+.border-left-primary{
+    border-left-width:3px;
+    border-left-color:steelblue;
+}
+/* End Shortcut Area */
+
+/* start footer */
+.footers {
+    width: 83%;
+    background-color: #fff;
+    
+    position: fixed;
+    right: 0;
+    bottom: 0;
+}
+/* end footer */
+
+
+/* start Enroll */
+/* show */
+.enrollboxes:hover{
+    border: 1px solid skyblue !important;
+    transform: translateY(-1px);
+}
+/* show */
+/* end enroll */

@@ -1,0 +1,106 @@
+notification
+
+
+LIbs ချိတ်
+
+php artisan notifications:table
+
+php artisan migrate
+
+Request ေတာင်းသကဲ့သို့ Noti အတွက် မိမိပေးချင်သော noti ကို သတ်မှတ်ပေးရမည် 
+
+php artisan make:notification LeaveNotify   -> leave အတွက် သတ်မှတ်ေပးမည်
+
+model -> Notifiable 
+
+controller -> Notification 
+
+
+// email notification support platform 
+https://mailpit.axllent.org/ (support free)
+https://www.mailgun.com/  (paid)
+https://mailtrap.io/pricing/  (free)
+
+
+mailtrap -> emailtesting -> myinbox -> 
+
+
+email protocol နှစ်ခု SMTP / POP3  -> use SMTP 
+
+port
+username
+password
+
+
+    $contactdata = [
+          "firstname" => $contact -> firstname,
+          "lastname" => $contact -> lastname,
+          "birthday" => $contact -> birthday,
+          "relative" => $contact -> relative["name"],
+          "url" => url("/") # email ထဲတွင် link ေလးနှိပ်ပါက  domain linke ကို ရယူမည် လက်ရှီ project site ထဲသို့ ေရာက်လာမည် 
+      ];
+      Notification::send($user,new ContactEmailNotify($contactdata));
+
+resert credential ကို နှိပ်ပြီး port / username / password ကို ပြောင်းနုိင်သည် 
+
+
+project ကို ကျစ်ကျစ်လှစ်လှစ်ဖြစ်အောင် လုပ်သည် 
+
+php artisan config:clear
+
+php artisan config:cache 
+
+php artisan cache:clear 
+
+
+php artisan route:clear
+
+php artisan route:cache
+
+
+
+email နှင့်ေပးထားေကြာင်း 
+
+
+php artisan make:notification ContactEmailNotify
+
+
+mail with gmail 
+setting တစ်ချို့ On ေပးရမည် 
+
+
+real email ပို့ပါက 
+app folder ထဲတွင်
+php artisan make:mail EmailNmae ကို သုံးပေးရမည် 
+php artisan make:mail MailBox
+
+
+email template တစ်ခုဖမ်တီးပေးရမည် 
+
+
+
+
+=> queue သည် လုပ်ငန်းစဥ် ကို ခဏ စီစဥ်သည် 
+ထို့ကြောင့် အစီအစဥ်လိုက် လုပ်ငန်းစဥ်ကို လုပ်နိုင်သည် 
+
+QUEUE_CONNECTION=database    # sync သည် database ုေရာ email ေရာ သံုးနုိသ်သည် 
+queue အား သံုးပါက database ဟုေပြာင်းပေးရမည် Queue table တည်ဆောက်ပေးရန်လိုသည် 
+
+php artisan queue:table
+php artisan migrate
+
+queue ထဲရှိ job များ fail ဖြစ်ပါက fail job table ထဲသို့ရောက်သွားမည်ဖြစ်သည် 
+Email ကို တန်းမပို့တော့ဘဲ database ထဲသို့ အရင်ပို့ ပြီးမှသာ database ထဲမှ Email ပို့ပေးမည်ဖြစ်သည် 
+
+Queue အလုပ်လုပ်ရန် 
+php artisan queue:work
+or
+php aritsan queue:listen
+
+
+Queue ကို SMS ပို့သည့် နေရာတွင်လဲသုံးနုိင်သည် 
+
+Queue method 2  -> method 2 ဖြင့်သာရနေသည် 
+Jobs တစ်ခုဖန်တီးပေးရမည် 
+job တစ်ခု ဖန်တီးတိုင်း ပြုလုပ်ပေးရမည်
+php artisan make:job MailBoxJob

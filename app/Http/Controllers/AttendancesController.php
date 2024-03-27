@@ -46,11 +46,11 @@ class AttendancesController extends Controller
         $attendance = new Attendance();
         $attendance -> classdate = $request["classdate"];  
         $attendance -> post_id = $request["post_id"];  
-        $attendance -> attcode = $request["attcode"];  
+        $attendance -> attcode = Str::upper($request["attcode"]); // စကားလံုးအကြီးပြောင်းမည် 
         $attendance -> user_id = $user_id;  
 
         $attendance -> save();
-
+        session()->flash("success","Attended successful");
         return redirect(route("attendances.index"));
     }
 

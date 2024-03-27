@@ -84,14 +84,24 @@
                     <td>{{$enroll->created_at->format('d m Y')}}</td>
                     <td>{{$enroll->updated_at->format('d M Y')}}</td>
                     <td>
+                        <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm quick_form" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#quickmodal" 
+                            data-id="{{$enroll->id}}" 
+                            data-name="{{$enroll->name}}" 
+                            data-remark="{{$enroll->remark}}" 
+                            data-stage="{{$enroll->stage_id}}">
+                            <i class="fas fa-user-check"></i>
+                        </a>
                         <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" 
                             data-bs-toggle="modal" 
                             data-bs-target="#editmodal" 
                             data-id="{{$enroll->id}}" 
                             data-name="{{$enroll->name}}" 
-                            data-status="{{$enroll->stage->id}}">
+                            data-status="{{$enroll->stage_id}}">
                             <i class="fas fa-pen"></i>
                         </a>
+
                     </td>
 
                     
@@ -106,31 +116,30 @@
 
         <!-- START MODAL AREA-->
         <!-- start edit modal -->
-        <div id="editmodal" class="modal fade">
+        <div id="quickmodal" class="modal fade">
             <div class="modal-dialog modal-md modal-dialog-center">
                 <div class="modal-content rounded-0">
                     <div class="modal-header">
-                        <h6 class="modal-title">Edit Form</h6>
+                        <h6 class="modal-title">Quick Form</h6>
                         <button type="type" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="form_action" action="" method="POST" enctype="multipart/form-data" class=""> 
+                        <form id="quickformaction" action="" method="POST" enctype="multipart/form-data" class=""> 
 
                             {{csrf_field()}}
-                            {{ method_field("PUT") }}
 
                             <div class="row">
                                 <div class="col-md-4 col-sm-12 form-group mb-1">
                                     <label for="editstage_id">Permission</label>
-                                     <select name="stage_id" id="editstage_id" class="form-control rounded-0">
+                                     <select name="editstage_id" id="editstage_id" class="form-control rounded-0">
                                         @foreach($stages as $stage)
                                             <option value="{{$stage->id}}">{{$stage->name}}</option>
                                         @endforeach
                                      </select>
                                  </div>
                                 <div class="col-md-8 col-sm-12 form-group mb-1">
-                                     <label for="editpost_id">Remark</label>
-                                     <textarea name="remark" class="form-control rounded-0" id="" cols="30" rows="3"></textarea>
+                                     <label for="editremark">Remark</label>
+                                     <input type="text" name="editremark" class="form-control rounded-0" id="editremark"/>
                                  </div>
                                 <div class="col-md-12">
                                     <div class="d-flex justify-content-end">
@@ -162,6 +171,13 @@
 
     <script>
         $(document).ready(function(){
+
+            $.ajaxSetup({
+                headers:{
+                    "X-CSRF-TOKEN" : $("meta[name='csrf-token']").attr("content"),
+                }
+            })
+
             $(".delete-btns").click(function(){
                 // console.log("hello");
                 var getidx = $(this).data("idx");
@@ -175,25 +191,62 @@
                 }
             })
 
-            $(document).on("click",".edit_form",function(e){
+            $(document).on("click",".quick_form",function(e){
                 e.preventDefault();
                 // console.log("hello");
-                // console.log($(this).attr("data-name"));
-                // console.log($(this).data("id"));
-                $("#editname").val($(this).data("name"));
-                $("#editstage_id").val($(this).data("status"));
+                $("#editstage_id").val($(this).attr("data-stage"));
+                $("#editremark").val($(this).attr("data-remark"));
+                const getId = $(this).data('id');
 
-                const getid = $(this).data("id");
+                // console.log(getId);
+                $("#quickformaction").attr("data-id",getId);
 
-                // $("#form_action").attr('action',`\{\{route('statuses.update',$status->id)\}\}`); // error 
 
-                // use method 1
-                // $("#form_action").attr('action',`http://127.0.0.1:8000/statuses/${getid}`);
-
-                // method 2
-                $("#form_action").attr('action',`/enrolls/${getid}`);
-                
             })
+
+            $("#quickformaction").submit(function(e){
+                
+                e.preventDefault();
+                console.log("hello");
+                const getId = $(this).data('id');
+
+                $.ajax({
+                    url : `enrolls/${getId}`,
+                    type : "PUT",
+                    dataType : "json",
+                    data : $(this).serialize(),
+                    success : function(response){
+                        if(response && response.status === "success"){
+                            console.log(response);
+                            console.log(response.data);
+                            $("#quickmodal").modal("hide")
+                        }
+                    }
+
+                })
+            })
+
+            // $(document).on("click",".edit_form",function(e){
+            //     e.preventDefault();
+            //     // console.log("hello");
+            //     // console.log($(this).attr("data-name"));
+            //     // console.log($(this).data("id"));
+            //     $("#editname").val($(this).data("name"));
+            //     $("#editstage_id").val($(this).data("status"));
+
+            //     const getid = $(this).data("id");
+
+            //     // $("#form_action").attr('action',`\{\{route('statuses.update',$status->id)\}\}`); // error 
+
+            //     // use method 1
+            //     // $("#form_action").attr('action',`http://127.0.0.1:8000/statuses/${getid}`);
+
+            //     // method 2
+            //     $("#form_action").attr('action',`/enrolls/${getid}`);
+                
+            // })
+
+
             // for my table
             // let table = new DataTable('#mytable');
             $("#mytable").DataTable();

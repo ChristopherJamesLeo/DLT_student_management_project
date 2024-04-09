@@ -10,37 +10,7 @@
         
         <div class="row">
             <div class="col-md-12">
-                <form id="create_form" method="POST" enctype="multipart/form-data" class=""> 
-
-                     
-                     @method("POST")
-
-
-                     <div class="row">
-                         <div class="col-md-6 col-sm-12 form-group mb-1">
-                             <label for="name">Name <span class="text-danger">*</span></label>
-                             <input type="text" name="name" id="name" class="form-control rounded-0" placeholder="Enter Type Name" value="{{old('name')}}">
-                         </div>
-                         <div class="col-md-6 col-sm-12 form-group mb-1">
-                             <label for="status_id">Status</label>
-                             <select name="status_id" id="status_id" class="form-control rounded-0">
-                                @foreach($statuses as $status)
-                                    <option value="{{$status->id}}">{{$status['name']}}</option>
-                                @endforeach
-                                
-                             </select>
-                         </div>
-                         
-                         <div class="col-md-12">
-                             <div class="d-flex justify-content-end">
-                                
-                                 <button type="reset" class="btn btn-secondary btn-sm rounded-0 ms-3">Cancel</button>
-                                 <button type="submit" id="create_btn" class="btn btn-primary btn-sm rounded-0 ms-3">Submit</button>
-                             </div>
-                         </div>
-
-                     </div>
-                 </form>
+                <a href="javascript:void(0)" id="modal-btn" class="btn btn-primary btn-sm rounded-0">Create</a>
             </div>
         </div>
 
@@ -60,25 +30,25 @@
             </thead>
 
             <tbody>
-                @foreach($paymentmethods as $idx=>$paymentmethod) 
+                @foreach($socialapplications as $idx=>$socialapplication) 
                 
-                <tr id="delete_{{$paymentmethod->id}}">
+                <tr id="delete_{{$socialapplication->id}}">
 
                     <td>{{++$idx}}</td>
-                    <td>{{$paymentmethod->name}}</td>
+                    <td>{{$socialapplication->name}}</td>
                     <td>
                         <div class="form-checkbox form-switch">
                             <input type="checkbox" name="" id="" class="form-check-input change-btn" {{$paymentmethod->status_id == "3" ? "checked" : ""}}
                             {{-- type ကိုပြင်ရန် id သတ်မှတ်ရမည် --}}
-                            data-id = {{$paymentmethod->id}}
+                            data-id = {{$socialapplication->id}}
                             >
                         </div>
                     </td>
 
-                    <td>{{$paymentmethod["user"]["name"]}}</td>
+                    <td>{{$socialapplication["user"]["name"]}}</td>
                      
-                    <td>{{$paymentmethod->created_at->format('d m Y')}}</td>
-                    <td>{{$paymentmethod->updated_at->format('d M Y')}}</td>
+                    <td>{{$socialapplication->created_at->format('d m Y')}}</td>
+                    <td>{{$socialapplication->updated_at->format('d M Y')}}</td>
                     <td>
                         <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" data-id="{{$paymentmethod->id}}" data-name="{{$paymentmethod->name}}" data-status="{{$paymentmethod->status_id}}"><i class="fas fa-pen"></i></a>
                         
@@ -88,7 +58,7 @@
 
                         <a href="javascript:void(0)" class="text-danger me-3 delete-btns" 
 
-                        data-id = "{{$paymentmethod->id}}" ><i class="fas fa-trash"></i></a>
+                        data-id = "{{$socialapplication->id}}" ><i class="fas fa-trash"></i></a>
 
                     </td>
 
@@ -108,6 +78,54 @@
     <!--End Content Area-->
 
         <!-- START MODAL AREA-->
+         <!-- start create modal -->
+        <div id="createmodel" class="modal fade">
+            <div class="modal-dialog modal-sm modal-dialog-center">
+                <div class="modal-content rounded-0">
+                    <div class="modal-header">
+                        <h6 class="modal-title">Create Form</h6>
+                        <button type="type" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="form_action" action="{{route('days.store')}}" method="POST" enctype="multipart/form-data" class=""> 
+
+                            {{csrf_field()}}
+                            {{ method_field("POST") }}
+
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 form-group mb-1">
+                                    <label for="name">Name <span class="text-danger">*</span></label>
+                                    <input type="text" name="name" id="name" class="form-control rounded-0" placeholder="Enter Application Name" value="{{old('name')}}">
+                                </div>
+                                <div class="col-md-12 col-sm-12 form-group mb-1">
+                                     <label for="status_id">Status</label>
+                                     <select name="status_id" id="status_id" class="form-control rounded-0">
+                                        @foreach($statuses as $status)
+                                            <option value="{{$status->id}}">{{$status['name']}}</option>
+                                        @endforeach
+
+                                     </select>
+                                 </div>
+
+                                <div class="col-md-12">
+                                    <div class="d-flex justify-content-end">
+
+                                        <button type="submit" class="btn btn-primary btn-sm rounded-0 ms-3">Submit</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- end create modal -->
+
         <!-- start edit modal -->
         <div id="editmodal" class="modal fade">
             <div class="modal-dialog modal-sm modal-dialog-center">
@@ -183,10 +201,13 @@
         // end pass header token
         $(document).ready(function(){
             // start create form 
+            $("#modal-btn").click(function(){
+                $("#createmodel").modal("show");
+            })
             $("#create_btn").click(function(e){
                 e.preventDefault();
                 $.ajax({
-                    url : "{{route('paymentmethods.store')}}",  // blade route အား ထည့်သံုးနုိင်သည် 
+                    url : "{{route('socialapplications.store')}}",  // blade route အား ထည့်သံုးနုိင်သည် 
                     type : "POST",
                     dataType: "JSON",
                     // data : $("#create_form").serialize(),
@@ -227,7 +248,7 @@
 
                                     <a href="javascript:void(0)" class="text-danger me-3 delete-btns" 
 
-                                    data-id = "{{$paymentmethod->id}}" ><i class="fas fa-trash"></i></a>
+                                    data-id =  ><i class="fas fa-trash"></i></a>
 
                                 </td>
 
@@ -276,7 +297,7 @@
                     // data remove
                     // 419 Error တက်နေသည် ၄င်းသည် header ၏ authantication လိုအပ်နေသည့် ပြသနာဖြစ်သည် csrf ကို တိုက်စစ်နေသောကြောင့် data တွင် token ေပးရမည်
                     $.ajax({
-                        url : `paymentmethods/${getid}`,
+                        url : `socialapplications/${getid}`,
                         type : "DELETE",
                         dataType : "json",
                         data : {_token : "{{csrf_token()}}"},
@@ -313,7 +334,7 @@
                 // $("#form_action").attr('action',`http://127.0.0.1:8000/statuses/${getid}`);
 
                 // method 2
-                // $("#form_action").attr('action',`/paymentmethods/${getid}`);
+                // $("#form_action").attr('action',`/socialapplications/${getid}`);
 
                 
             })
@@ -324,7 +345,7 @@
                 const getid = $(this).attr("data-id");
                 console.log(getid);
                 $.ajax({
-                    url : `paymentmethods/${getid}`,
+                    url : `socialapplications/${getid}`,
                     type : "PUT",
                     dataType : "json",
                     data : $("#form_action").serialize(), // form action ထဲရှိ data အကုန်ပို့မည် 

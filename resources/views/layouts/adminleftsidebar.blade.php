@@ -96,6 +96,8 @@
                                     <li class="nav-item nav-categories"><a href="{{route('relatives.index')}}" class="nav-link text-white sidebarlinks">Relative</a></li>
 
                                     <li class="nav-item nav-categories"><a href="{{route('roles.index')}}" class="nav-link text-white sidebarlinks">Roles</a></li>
+
+                                    <li class="nav-item nav-categories"><a href="{{route('socialapplications.index')}}" class="nav-link text-white sidebarlinks">Social App</a></li>
                                     
                                 </ul>
 

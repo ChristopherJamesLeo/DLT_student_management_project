@@ -23,7 +23,7 @@ use App\Http\Controllers\PostsController;
 
 use App\Http\Controllers\PostsLikeController;
 use App\Http\Controllers\UsersFollwerController;
-
+use App\Http\Controllers\SocialapplicationsController;
 use App\Http\Controllers\AttendancesController;
 use App\Http\Controllers\LeavesController;
 use App\Http\Controllers\PaymentmethodsController;
@@ -123,6 +123,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource("stages",StagesController::class);
     Route::get("/stagestatus",[StagesController::class,"stagestatus"]);
+
+    Route::resource("socialapplications",SocialapplicationsController::class);
+    Route::get("/socialapplicationstatus",[SocialapplicationsController::class,"typestatus"]);
 
 
     Route::resource("leaves",LeavesController::class);

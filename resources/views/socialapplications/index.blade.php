@@ -38,7 +38,7 @@
                     <td>{{$socialapplication->name}}</td>
                     <td>
                         <div class="form-checkbox form-switch">
-                            <input type="checkbox" name="" id="" class="form-check-input change-btn" {{$paymentmethod->status_id == "3" ? "checked" : ""}}
+                            <input type="checkbox" name="" id="" class="form-check-input change-btn" {{$socialapplication->status_id == "3" ? "checked" : ""}}
                             {{-- type ကိုပြင်ရန် id သတ်မှတ်ရမည် --}}
                             data-id = {{$socialapplication->id}}
                             >
@@ -50,7 +50,7 @@
                     <td>{{$socialapplication->created_at->format('d m Y')}}</td>
                     <td>{{$socialapplication->updated_at->format('d M Y')}}</td>
                     <td>
-                        <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" data-id="{{$paymentmethod->id}}" data-name="{{$paymentmethod->name}}" data-status="{{$paymentmethod->status_id}}"><i class="fas fa-pen"></i></a>
+                        <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" data-id="{{$socialapplication->id}}" data-name="{{$socialapplication->name}}" data-status="{{$socialapplication->status_id}}"><i class="fas fa-pen"></i></a>
                         
                         {{-- <a href="javascript:void(0)" class="text-danger me-3 delete-btns" 
 
@@ -87,11 +87,9 @@
                         <button type="type" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="form_action" action="{{route('days.store')}}" method="POST" enctype="multipart/form-data" class=""> 
+                        <form id="form_action"  method="POST" enctype="multipart/form-data" class=""> 
 
-                            {{csrf_field()}}
-                            {{ method_field("POST") }}
-
+                            
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 form-group mb-1">
                                     <label for="name">Name <span class="text-danger">*</span></label>
@@ -110,7 +108,7 @@
                                 <div class="col-md-12">
                                     <div class="d-flex justify-content-end">
 
-                                        <button type="submit" class="btn btn-primary btn-sm rounded-0 ms-3">Submit</button>
+                                        <button type="submit" id="" class="btn btn-primary btn-sm rounded-0 ms-3">Submit</button>
                                     </div>
                                 </div>
 
@@ -183,8 +181,13 @@
 @endsection
 
 @section("scripts")
+{{-- jquyer validate --}}
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+
 {{-- datatable css1 js1 --}}
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+
     <script>
 
         // Start Pass Header Token
@@ -204,68 +207,37 @@
             $("#modal-btn").click(function(){
                 $("#createmodel").modal("show");
             })
-            $("#create_btn").click(function(e){
-                e.preventDefault();
-                $.ajax({
-                    url : "{{route('socialapplications.store')}}",  // blade route အား ထည့်သံုးနုိင်သည် 
-                    type : "POST",
-                    dataType: "JSON",
-                    // data : $("#create_form").serialize(),
-                    data : $("#create_form").serializeArray(), // serialize နှင့်အတူတူဘဲဖြစ်သည် 
-                    success: function(response){
-                        // console.log(response);
-                        // console.log(response.status);
-                        // console.log(response.data);
+            $("#form_action").validate({  // form သည် validate ဖြစ်ခဲ့လျှင် jquery ေအာက်တွင်ရှိသည် တိုက်ရိုက်မဟုတ်ဘဲ သူ့အတွက်သက်သက်ချိတ်ပေးရမည်
 
-                        const data = response.data;
+                // validate rule ေပးရန် 
+                rules : {
+                    name : "required",
 
-                        $("#mytable").prepend(
-                            `<tr id="${'delete_'+data.id}">
-
-                                <td>${data.id}</td>
-                                <td>${data.name}</td>
-                                <td>
-                                    <div class="form-checkbox form-switch">
-                                        <input type="checkbox" name="" id="" class="form-check-input change-btn" 
-                                        ${data.status_id === "3" ? "checked" : " "}
-                                       
-                                        
-                                        data-id = ${data.id}
-                                        >
-                                    </div>
-                                </td>
-
-                                <td>${data.user_id}</td>
-                                
-                                <td>${data.created_at}</td>
-                                <td>${data.updated_at}</td>
-                                <td>
-                                    <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" data-id="${data.id}" data-name="${data.name}" data-status="${data.status_id}"><i class="fas fa-pen"></i></a>
-                                    
-                                    {{-- <a href="javascript:void(0)" class="text-danger me-3 delete-btns" 
-
-                                    data-idx = "{{$type->$idx}}" ><i class="fas fa-trash"></i></a> --}}
-
-                                    <a href="javascript:void(0)" class="text-danger me-3 delete-btns" 
-
-                                    data-id =  ><i class="fas fa-trash"></i></a>
-
-                                </td>
-
-                                {{-- <form id="formdelete{{$type->$idx}}" action="{{route('types.destroy',$type->id)}}" method="POST">
-                                    {{ csrf_field() }}
-                                    {{ method_field('DELETE') }}
-                                </form> --}}
-
-
-                                </tr>`
-                        )
-                    },
-                    error : function (response){
-                        console.log("Error ", response);
-                    }
-                })
-                console.log("hello");
+                },
+                messages : {
+                    name : "Enter Application Name",
+                },
+                submitHandler:function(form){
+                    // let formdata = $("#form_action").serialize();
+                    // let formdata = $("#form_action").serializeArray();
+                    let formdata = $(form).serializeArray(); // parameter ကို ပြန်သံုးထားသည် 
+                    $.ajax({
+                        // data:$("#form_action").serialize(),
+                        data: formdata,
+                        url : "{{route('socialapplications.store')}}",
+                        type : "POST",
+                        dataType : "json",
+                        success : function(response){
+                            console.log(response);
+                            if(response && response.status === "success"){
+                                $("#createmodel").modal("hide");
+                            }
+                        },
+                        error:function(response){
+                            console.log("Error ",response);
+                        }
+                    })
+                }
             })
             // end create form
             // ---------------------
@@ -302,10 +274,14 @@
                         dataType : "json",
                         data : {_token : "{{csrf_token()}}"},
                         success : function(response){
-                            if(response && response.status=="success"){
-                                const getdata = response.data;
-                                $(`#delete_${getdata.id}`).remove();
+                            // console.log(response); ၁
+                            if(response){
+                                // const getdata = response.data;
+                                $(`#delete_${getid}`).remove();
                             }
+                        },
+                        error: function(response){
+                            console.log("error :" ,response)
                         }
                     })
                 }else{

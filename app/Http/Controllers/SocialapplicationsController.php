@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Exception;  // catch ထဲရျီ exception အားသံုးနုိင်ရန် ျ
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
 
 class SocialapplicationsController extends Controller
 {
@@ -30,11 +31,12 @@ class SocialapplicationsController extends Controller
 
     public function store(Request $request)
     {
-        $this -> validate($request,[
-            "name" => "required|max:50|unique:socialapplications,name",
-            "status_id" => "required|in:3,4" 
+        // frontend မှ validate စစ်မည် 
+        // $this -> validate($request,[
+        //     "name" => "required|max:50|unique:socialapplications,name",
+        //     "status_id" => "required|in:3,4" 
 
-        ]);
+        // ]);
 
 
         $user = Auth::user(); // log in ဝင်ထား‌သောကောင်၏ data ရယူရန်
@@ -132,20 +134,35 @@ class SocialapplicationsController extends Controller
 
     // use laravel route with ajax
     
-    public function destroy(Socialapplication $socialapplication)  // route မှ လာသော id ဖြင့် တစ်ခါတည်း data ထုတ်ပေးထားမည်ဖြစ်သည် 
+    // public function destroy(Socialapplication $socialapplication)  // route မှ လာသော id ဖြင့် တစ်ခါတည်း data ထုတ်ပေးထားမည်ဖြစ်သည် 
+    // {
+
+    //     try{
+    //         if($socialapplication){
+               
+    //             $socialapplication -> delete();
+
+
+    //             return response()->json(["status"=>"success","data"=>$socialapplication,"message"=> "Delete Successful"]); 
+
+    //         }
+
+    //         return response()->json(["status"=>"Failed","message"=>"Data Not Found"]);
+    //     }catch(Exception $e){
+    //         Log::error($e->getMessage());
+
+    //         return response()->json(["status"=>"Failed","message"=> $e->getMessage()]);
+    //     }
+    // }
+
+    public function destroy(string $id)  // route မှ လာသော id ဖြင့် တစ်ခါတည်း data ထုတ်ပေးထားမည်ဖြစ်သည် 
     {
 
         try{
-            if($socialapplication){
-               
-                $socialapplication -> delete();
+            $socialapplication = Socialapplication::where("id",$id)->delete();
 
+            return Response::json($socialapplication); // true or false ဘဲ return ပြန်မည် 
 
-                return response()->json(["status"=>"success","data"=>$socialapplication,"message"=> "Delete Successful"]); 
-
-            }
-
-            return response()->json(["status"=>"Failed","message"=>"Data Not Found"]);
         }catch(Exception $e){
             Log::error($e->getMessage());
 

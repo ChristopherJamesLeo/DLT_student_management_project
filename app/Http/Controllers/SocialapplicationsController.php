@@ -170,15 +170,30 @@ class SocialapplicationsController extends Controller
         }
     }
 
+    public function socialapplicationstatus(Request $request){
+        // return response()->json(["success" => "Status Change Successful"]);
 
-    public function paymentmethodsstatus(Request $request){
         $socialapplication = Socialapplication::findOrFail($request["id"]); // id သည် update ကဲ့သို့ route ကနေမရနေသောကြောင့် request မှ id ကို သံုးပေးရမည် 
+
+        // dd("hello");
 
         $socialapplication -> status_id = $request["status_id"];
 
         $socialapplication -> save();
 
         // success ဖြစ်ပါက response ပြန်ရန်
-        return response()->json(["success" => "Status Change Successful"]);
+        return response()->json(["success" => "Status Change Successful".$socialapplication]);
+    }
+
+    public function fatchalldates(){
+        try{
+
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+
+            return response()->json(["status"=>"Failed","message"=> $e->getMessage()]);
+        }
+        $socialapplications = Socialapplication::all();
+        return response()->json(["status"=>"success","data"=>$socialapplications]);
     }
 }

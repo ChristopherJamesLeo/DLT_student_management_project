@@ -198,7 +198,7 @@
 
                         const data = response.data;
 
-                        $("#mytable").prepend(
+                        $("#mytable tbody").prepend(
                             `<tr id="${'delete_'+data.id}">
 
                                 <td>${data.id}</td>
@@ -362,7 +362,8 @@
                         "status_id" : setstatus
                     },
                     success : function(response){
-                        console.log(response.success); // return ပြန်လာသော data အား ယူမည် 
+                        // console.log(response.success); // return ပြန်လာသော data အား ယူမည် 
+
                     }
                     
                 });

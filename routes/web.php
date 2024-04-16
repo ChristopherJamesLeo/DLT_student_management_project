@@ -125,7 +125,8 @@ Route::middleware('auth')->group(function () {
     Route::get("/stagestatus",[StagesController::class,"stagestatus"]);
 
     Route::resource("socialapplications",SocialapplicationsController::class);
-    Route::get("/socialapplicationstatus",[SocialapplicationsController::class,"typestatus"]);
+    Route::get("/socialapplicationstatus",[SocialapplicationsController::class,"socialapplicationstatus"]);
+    Route::get("/socialapplicationfatchalldatas",[SocialapplicationsController::class,"fatchalldates"])->name("socialapplications.fatchalldatas");
 
 
     Route::resource("leaves",LeavesController::class);

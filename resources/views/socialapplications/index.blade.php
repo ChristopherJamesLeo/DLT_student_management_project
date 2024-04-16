@@ -30,7 +30,7 @@
             </thead>
 
             <tbody>
-                @foreach($socialapplications as $idx=>$socialapplication) 
+                {{-- @foreach($socialapplications as $idx=>$socialapplication) 
                 
                 <tr id="delete_{{$socialapplication->id}}">
 
@@ -38,8 +38,8 @@
                     <td>{{$socialapplication->name}}</td>
                     <td>
                         <div class="form-checkbox form-switch">
-                            <input type="checkbox" name="" id="" class="form-check-input change-btn" {{$socialapplication->status_id == "3" ? "checked" : ""}}
-                            {{-- type ကိုပြင်ရန် id သတ်မှတ်ရမည် --}}
+                            <input type="checkbox" name="" id="" class="form-check-input change-btn" {{$socialapplication->status_id == "3" ? "checked" : ""}} --}}
+                            {{-- type ကိုပြင်ရန် id သတ်မှတ်ရမည်
                             data-id = {{$socialapplication->id}}
                             >
                         </div>
@@ -50,17 +50,17 @@
                     <td>{{$socialapplication->created_at->format('d m Y')}}</td>
                     <td>{{$socialapplication->updated_at->format('d M Y')}}</td>
                     <td>
-                        <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" data-id="{{$socialapplication->id}}" data-name="{{$socialapplication->name}}" data-status="{{$socialapplication->status_id}}"><i class="fas fa-pen"></i></a>
+                        <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" data-id="{{$socialapplication->id}}" data-name="{{$socialapplication->name}}" data-status="{{$socialapplication->status_id}}"><i class="fas fa-pen"></i></a> --}}
                         
                         {{-- <a href="javascript:void(0)" class="text-danger me-3 delete-btns" 
 
                         data-idx = "{{$type->$idx}}" ><i class="fas fa-trash"></i></a> --}}
 
-                        <a href="javascript:void(0)" class="text-danger me-3 delete-btns" 
+                        {{-- <a href="javascript:void(0)" class="text-danger me-3 delete-btns" 
 
                         data-id = "{{$socialapplication->id}}" ><i class="fas fa-trash"></i></a>
 
-                    </td>
+                    </td> --}}
 
                     {{-- <form id="formdelete{{$type->$idx}}" action="{{route('types.destroy',$type->id)}}" method="POST">
                         {{ csrf_field() }}
@@ -68,8 +68,8 @@
                     </form> --}}
 
                     
-                </tr>
-                @endforeach
+                {{-- </tr>
+                @endforeach --}}
             </tbody>
             
         </table>
@@ -187,6 +187,7 @@
 {{-- datatable css1 js1 --}}
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
 
@@ -203,6 +204,74 @@
 
         // end pass header token
         $(document).ready(function(){
+            // start fetch all data
+            function fetchalldata(){
+                $.ajax({
+                    url: "{{route('socialapplications.fatchalldatas')}}",
+                    method : "GET",
+                    type : "JSON",
+                    success : function(response){
+                        // console.log(response);
+                        const datas = response.data;
+                        console.log(datas);
+                        let html;
+                        
+                        datas.forEach(function(data,idx){
+                            // console.log(data);
+                            console.log(data.status_id);
+
+                            html +=  `<tr id="${'delete_'+data.id}">
+
+                                        <td>${++idx}</td>
+                                        <td>${data.name}</td>
+                                        <td>
+                                            <div class="form-checkbox form-switch">
+                                                <input type="checkbox" name="" id="" class="form-check-input change-btn" 
+                                                ${data.status_id === 3 ? "checked" : " "}
+                                            
+                                                
+                                                data-id = ${data.id}
+                                                >
+                                            </div>
+                                        </td>
+
+                                        <td>${data.user_id}</td>
+
+                                        <td>${data.created_at}</td>
+                                        <td>${data.updated_at}</td>
+                                        <td>
+                                            <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" data-id="${data.id}" data-name="${data.name}" data-status="${data.status_id}"><i class="fas fa-pen"></i></a>
+                                            
+                                            {{-- <a href="javascript:void(0)" class="text-danger me-3 delete-btns" 
+
+                                            data-idx = "{{$type->$idx}}" ><i class="fas fa-trash"></i></a> --}}
+
+                                            <a href="javascript:void(0)" class="text-danger me-3 delete-btns" 
+
+                                            data-id = "${data.id}" ><i class="fas fa-trash"></i></a>
+
+                                        </td>
+
+                                        {{-- <form id="formdelete{{$type->$idx}}" action="{{route('types.destroy',$type->id)}}" method="POST">
+                                            {{ csrf_field() }}
+                                            {{ method_field('DELETE') }}
+                                        </form> --}}
+
+
+                                        </tr>`;
+                                    // console.log(html);
+                        })
+                        $("#mytable tbody").prepend(html);
+                        
+                    }
+                })
+            }
+
+            fetchalldata();
+
+            // end fetch all data
+
+
             // start create form 
             $("#modal-btn").click(function(){
                 $("#createmodel").modal("show");
@@ -231,6 +300,11 @@
                             console.log(response);
                             if(response && response.status === "success"){
                                 $("#createmodel").modal("hide");
+                                Swal.fire({
+                                    title: "Updated",
+                                    text: "Update Successful",
+                                    icon: "success"
+                                });
                             }
                         },
                         error:function(response){
@@ -256,11 +330,50 @@
 
             // start delete
             // using default laravel route
-            $(".delete-btns").click(function(){
+            // $(".delete-btns").click(function(){
+            $(document).on("click",".delete-btns",function(e){
                 let getid = $(this).data("id");
-                // console.log(getid);
+                console.log(getid);
 
-                if(confirm("Are You Sure!! You Want to delete")){
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: `You won't be able to revert this! for ${getid}`,
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        $.ajax({
+                            url : `socialapplications/${getid}`,
+                            type : "DELETE",
+                            dataType : "json",
+                            // data : {_token : "{{csrf_token()}}"},
+                            success : function(response){
+                                // console.log(response); ၁
+                                if(response){
+                                    // const getdata = response.data;
+                                    $(`#delete_${getid}`).remove();
+                                    Swal.fire({
+                                        title: "Deleted!",
+                                        text: "Your file has been deleted.",
+                                        icon: "success"
+                                    });
+                                }
+                            },
+                            error: function(response){
+                                console.log("error :" ,response)
+                            }
+                        })
+
+                        
+                    }
+                });
+
+
+                // if(confirm("Are You Sure!! You Want to delete")){
 
                     // just ui remove
                     // ui ပါ တစ်ခါတည်းဖျက်မည် 
@@ -268,25 +381,8 @@
 
                     // data remove
                     // 419 Error တက်နေသည် ၄င်းသည် header ၏ authantication လိုအပ်နေသည့် ပြသနာဖြစ်သည် csrf ကို တိုက်စစ်နေသောကြောင့် data တွင် token ေပးရမည်
-                    $.ajax({
-                        url : `socialapplications/${getid}`,
-                        type : "DELETE",
-                        dataType : "json",
-                        data : {_token : "{{csrf_token()}}"},
-                        success : function(response){
-                            // console.log(response); ၁
-                            if(response){
-                                // const getdata = response.data;
-                                $(`#delete_${getid}`).remove();
-                            }
-                        },
-                        error: function(response){
-                            console.log("error :" ,response)
-                        }
-                    })
-                }else{
-                    return false;
-                }
+                    
+                // }
 
                 
             });
@@ -294,7 +390,7 @@
 
             $(document).on("click",".edit_form",function(e){
                 e.preventDefault();
-                // console.log("hello");
+                console.log("hello");
                 // console.log($(this).attr("data-name"));
                 // console.log($(this).data("id"));
                 $("#editname").val($(this).data("name"));
@@ -340,16 +436,19 @@
 
 
             // start change status btn
-            $(".change-btn").click(function(){
+            // $(".change-btn").click(function(){ // js မှလှမ်းပို့ပါက အလုပ်မလုပ်တော့ပေ
+            $(document).on("change",".change-btn",function(){ // ထို့ကြောင့် document ကို သံုးပေးရသည် 
                 // console.log($(this).data("id"));
-
+                // console.log("hello");
                 var getid = $(this).data("id");
 
                 // prop ဖြင့် checkbox သည် prop ဖြင့် check ဖြစ်သလား ဖြစ်လှျင်3 မဖြစ်လှျင် 4
                 var setstatus = $(this).prop("checked") === true ? 3 : 4;
+
+                // console.log(setstatus);
                 // change API 
                 $.ajax({
-                    url : "paymentmethodsstatus", //route list ထဲရှီ route name ကို ပို့ပေးရမည်
+                    url : "socialapplicationstatus", //route list ထဲရှီ route name ကို ပို့ပေးရမည်
                     type : "GET", // route ကို ဖမ်းတီးရာတွင် GET ဖြစ်သော ကြောင့် GET ဖြင့် သ့ဒဂပေးရမည်
                     
                     dataType : "json",
@@ -360,6 +459,11 @@
                     },
                     success : function(response){
                         console.log(response.success); // return ပြန်လာသော data အား ယူမည် 
+                        Swal.fire({
+                            title: "Updated",
+                            text: "Update Successful",
+                            icon: "success"
+                        });
                     }
                     
                 });

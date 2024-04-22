@@ -27,6 +27,7 @@ use App\Http\Controllers\SocialapplicationsController;
 use App\Http\Controllers\AttendancesController;
 use App\Http\Controllers\LeavesController;
 use App\Http\Controllers\PaymentmethodsController;
+use App\Http\Controllers\WarehousesController;
 
 
 
@@ -136,7 +137,19 @@ Route::middleware('auth')->group(function () {
     Route::resource("paymentmethods",PaymentmethodsController::class);
     Route::get("/paymentmethodsstatus",[PaymentmethodsController::class,"paymentmethodsstatus"]);
 
+    Route::resource("warehouses",WarehousesController::class);
+    Route::get("/warehousesstatus",[WarehousesController::class,"warehousesstatus"]);
+    Route::get("/warehousesfatchalldatas",[WarehousesController::class,"fatchalldates"])->name("warehouses.fatchalldatas");
+
+
     
 });
 
 require __DIR__.'/auth.php';
+
+
+// php artisan route:clear
+// php aritsan route:cache
+// php artisan config:clear
+// php artisan config:cache 
+// php artisan optimize 

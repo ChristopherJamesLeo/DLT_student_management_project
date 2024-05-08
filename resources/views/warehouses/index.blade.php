@@ -168,7 +168,8 @@
             // start fetch all data
             function fetchalldata(){
                 $.ajax({
-                    url: "{{route('warehouses.fatchalldatas')}}",
+                    // url: "{{route('warehouses.fatchalldatas')}}", // route name ကို သံုးသည် 
+                    url: "{{url('api/warehouses')}}", // url နှင့်သံုးသည်
                     method : "GET",
                     type : "JSON",
                     success : function(response){
@@ -198,7 +199,9 @@
                                             </div>
                                         </td>
 
-                                        <td>${data.user_id}</td>
+                                        <!-- <td>${data.user['name']}</td> bracket notation and dot notation-->
+                                        <td>${data.user.name}</td>
+
 
                                         <td>${data.created_at}</td>
                                         <td>${data.updated_at}</td>

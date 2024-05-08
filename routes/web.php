@@ -145,6 +145,7 @@ Route::middleware('auth')->group(function () {
     
 });
 
+
 require __DIR__.'/auth.php';
 
 
@@ -153,3 +154,7 @@ require __DIR__.'/auth.php';
 // php artisan config:clear
 // php artisan config:cache 
 // php artisan optimize 
+
+
+// API ထုတ်ရန် 
+// php artisan make:resource WarehousesResource  // resource file ဖန်တီးကေးရမည်

@@ -20,5 +20,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// php artisan route:cache (error)
+// Route::apiResource("warehouses", WarehousesController::class);
 
-Route::apiResource("warehouses", WarehousesController::class);
+// third parameter ထဲတွင် naming ပေးလိုက်ချင်းဖြင့် error ဖေျာက်နုိင်သည် alias ပေးလိုက်ခြင်းဖြစ်သည် 
+Route::apiResource("warehouses", WarehousesController::class,["as"=>"api"]);
+// custom api route
+Route::get("/warehousesstatus",[WarehousesController::class,"warehousesstatus"]);

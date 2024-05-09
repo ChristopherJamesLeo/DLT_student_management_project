@@ -5,6 +5,9 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+use App\Models\User;
+use App\Models\Status;
+
 class WarehousesResource extends JsonResource
 {
     /**
@@ -21,8 +24,11 @@ class WarehousesResource extends JsonResource
             "slug" => $this -> slug,
             "status_id" => $this -> status_id,
             "user_id" => $this -> user_id,
-            "created_at" => $this -> created_at,
-            "updated_at"  => $this -> updated_at,
+            "created_at" => $this -> created_at -> format("d-m-y"),
+            "updated_at"  => $this -> updated_at -> format("d-m-y"),
+            "user" => User::where("id",$this->user_id) -> select("id","name")->first() , // user ၏ data များပါ condition စစ်ပြီးဆွဲထုတ်နိုင်သည် 
+
+            "status" => Status::where("id",$this->status_id) -> select("id","name") -> first()
         ];
     }
 }

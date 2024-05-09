@@ -52,6 +52,8 @@
 
                             
                             <div class="row">
+                                <input type="hidden" name="user_id" id="user_id" value="{{Auth::user()->id}}">
+
                                 <div class="col-md-12 col-sm-12 form-group mb-1">
                                     <label for="name">Name <span class="text-danger">*</span></label>
                                     <input type="text" name="name" id="name" class="form-control rounded-0" placeholder="Enter Application Name" value="{{old('name')}}">
@@ -95,12 +97,13 @@
                     </div>
                     <div class="modal-body">
                         {{-- <form id="form_action" action="" method="POST" enctype="multipart/form-data" class="">  --}}
-                        <form id="form_action" action="" method="" enctype="multipart/form-data" class=""> 
+                        <form id="edit_form_action" action="" method="" enctype="multipart/form-data" class=""> 
 
                             {{csrf_field()}}
                             {{ method_field("PUT") }}
 
                             <div class="row">
+                                <input type="hidden" name="user_id" id="user_id" value="{{$userdata->id}}">
                                 <div class="col-md-12 col-sm-12 form-group mb-1">
                                     <label for="name">Name <span class="text-danger">*</span></label>
                                     <input type="text" name="name" id="editname" class="form-control rounded-0" placeholder="Enter Status Name" value="{{old('name')}}">
@@ -168,7 +171,10 @@
             // start fetch all data
             function fetchalldata(){
                 $.ajax({
-                    // url: "{{route('warehouses.fatchalldatas')}}", // route name ကို သံုးသည် 
+                    
+                    // url: "{{url('api/warehouses')}}", // url နှင့်သံုးသည်
+                    // url: "{{route('api.warehouses.index')}}", // API use with route name
+                    // url: "{{'api/warehouses'}}", // url နှင့်သံုးသည်
                     url: "{{url('api/warehouses')}}", // url နှင့်သံုးသည်
                     method : "GET",
                     type : "JSON",
@@ -259,11 +265,13 @@
                     $.ajax({
                         // data:$("#form_action").serialize(),
                         data: formdata,
-                        url : "{{route('warehouses.store')}}",
+                        // url : "{{route('warehouses.store')}}", // error
+                        url : "{{url('api/warehouses')}}", // method 1
+                        // url : "{{url('api.warehouses.store')}}", // method 2
                         type : "POST",
                         dataType : "json",
                         success : function(response){
-                            if(response && response.status === "success"){
+                            if(response){ // respose ်ပြန်လာမှအလုပ်လုပ်မည် 
                                 $("#createmodel").modal("hide");
                                 // $("#mytable tbody").
                                 // console.log(response)
@@ -284,7 +292,7 @@
                                                     </div>
                                                 </td>
 
-                                                <td>${data.user_id}</td>
+                                                <td>${data.user.name}</td>
 
                                                 <td>${data.created_at}</td>
                                                 <td>${data.updated_at}</td>
@@ -357,7 +365,7 @@
                     if (result.isConfirmed) {
 
                         $.ajax({
-                            url : `warehouses/${getid}`,
+                            url : `api/warehouses/${getid}`,
                             type : "DELETE",
                             dataType : "json",
                             // data : {_token : "{{csrf_token()}}"},
@@ -408,21 +416,21 @@
 
                 const getid = $(this).data("id");
 
-                $("#form_action").attr("data-id",getid);
+                $("#edit_form_action").attr("data-id",getid);
 
                 
             })
 
-            $("#form_action").submit(function(e){
+            $("#edit_form_action").submit(function(e){
                 e.preventDefault();
                 // console.log("hello");
                 const getid = $(this).attr("data-id");
                 console.log(getid);
                 $.ajax({
-                    url : `warehouses/${getid}`,
+                    url : `api/warehouses/${getid}`,
                     type : "PUT",
                     dataType : "json",
-                    data : $("#form_action").serialize(), // form action ထဲရှိ data အကုန်ပို့မည် 
+                    data : $("#edit_form_action").serialize(), // form action ထဲရှိ data အကုန်ပို့မည် 
                     success : function(response){
                         // console.log(response);
                         let data = response.data;
@@ -450,7 +458,7 @@
                 // console.log(setstatus);
                 // change API 
                 $.ajax({
-                    url : "warehousesstatus", //route list ထဲရှီ route name ကို ပို့ပေးရမည်
+                    url : "api/warehousesstatus", //route list ထဲရှီ route name ကို ပို့ပေးရမည်
                     type : "GET", // route ကို ဖမ်းတီးရာတွင် GET ဖြစ်သော ကြောင့် GET ဖြင့် သ့ဒဂပေးရမည်
                     
                     dataType : "json",

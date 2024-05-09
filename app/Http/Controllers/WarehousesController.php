@@ -39,31 +39,31 @@ class WarehousesController extends Controller
         // ]);
 
 
-        $user = Auth::user(); // log in ဝင်ထား‌သောကောင်၏ data ရယူရန်
+        // $user = Auth::user(); // log in ဝင်ထား‌သောကောင်၏ data ရယူရန်
 
-        $user_id = $user->id;
+        // $user_id = $user->id;
 
-        try {
-            $warehouse = new Warehouse();
-            $warehouse -> name = $request["name"];
-            $warehouse -> slug = Str::slug($request["name"]);  // Str ထဲရှီ slug ဟူသော metho dထဲသို့ firstname အား ပေးမည် ၄င်းသည် route name ဖြစ်သွ းမည်ဖြစ်သည် 
-            $warehouse -> status_id = $request["status_id"];  
-            $warehouse -> user_id = $user_id;  
+        // try {
+        //     $warehouse = new Warehouse();
+        //     $warehouse -> name = $request["name"];
+        //     $warehouse -> slug = Str::slug($request["name"]);  // Str ထဲရှီ slug ဟူသော metho dထဲသို့ firstname အား ပေးမည် ၄င်းသည် route name ဖြစ်သွ းမည်ဖြစ်သည် 
+        //     $warehouse -> status_id = $request["status_id"];  
+        //     $warehouse -> user_id = $user_id;  
 
             
     
-            $warehouse -> save();
+        //     $warehouse -> save();
 
-            if($warehouse){
-                return response()->json(["status" => "success","data" => $warehouse]);
-            }else {
-                return response()->json(["status" => "fail","data" => $warehouse]);
-            }
+        //     if($warehouse){
+        //         return response()->json(["status" => "success","data" => $warehouse]);
+        //     }else {
+        //         return response()->json(["status" => "fail","data" => $warehouse]);
+        //     }
     
-        }catch(Exception $e){
-            Log::error($e -> getMessage());
-            return response()->json(["status"=>"failed","message"=> $e -> getMessage()]);
-        }
+        // }catch(Exception $e){
+        //     Log::error($e -> getMessage());
+        //     return response()->json(["status"=>"failed","message"=> $e -> getMessage()]);
+        // }
 
         // return redirect(route("warehouses.index"));
 
@@ -86,51 +86,51 @@ class WarehousesController extends Controller
     }
 
 
-    public function update(Request $request, string $id)
-    {
-        $this -> validate($request,[
-            // method 1 
-            // "name" => "required|max:50|unique:types,name,". $id,
+    // public function update(Request $request, string $id)
+    // {
+    //     $this -> validate($request,[
+    //         // method 1 
+    //         // "name" => "required|max:50|unique:types,name,". $id,
 
-            // method 2 -> array ဖြင့် လဲ ပေးနိုင်သည် pipe နေရာတွင် comer  ထည့်ပီး single code double code ထည့်ပေးနိုင်သည် // မှားနိုင်သည် 
-            "name" => ["required","max:50","unique:warehouses,name,". $id],
-            "status_id" => ["required","in:3,4"]  // 3 နှင့် 4 ဘဲ လက်ခံမည် // fontend နှင့် ချိန်ပြီးထည့်ရမည် 
+    //         // method 2 -> array ဖြင့် လဲ ပေးနိုင်သည် pipe နေရာတွင် comer  ထည့်ပီး single code double code ထည့်ပေးနိုင်သည် // မှားနိုင်သည် 
+    //         "name" => ["required","max:50","unique:warehouses,name,". $id],
+    //         "status_id" => ["required","in:3,4"]  // 3 နှင့် 4 ဘဲ လက်ခံမည် // fontend နှင့် ချိန်ပြီးထည့်ရမည် 
 
-        ]);
+    //     ]);
 
  
 
-        $user = Auth::user(); // log in ဝင်ထား‌သောကောင်၏ data ရယူရန်\
+    //     $user = Auth::user(); // log in ဝင်ထား‌သောကောင်၏ data ရယူရန်\
 
-        $user_id = $user->id;
+    //     $user_id = $user->id;
 
-        try{
-            $warehouse = Warehouse::findOrFail($id);
-            $warehouse -> name = $request["name"];
-            $warehouse -> slug = Str::slug($request["name"]); 
-            $warehouse -> status_id = $request["status_id"];  
-            $warehouse -> user_id = $user_id;  
+    //     try{
+    //         $warehouse = Warehouse::findOrFail($id);
+    //         $warehouse -> name = $request["name"];
+    //         $warehouse -> slug = Str::slug($request["name"]); 
+    //         $warehouse -> status_id = $request["status_id"];  
+    //         $warehouse -> user_id = $user_id;  
     
     
     
-            $warehouse -> save();
+    //         $warehouse -> save();
     
-            // return redirect(route("warehouses.index"));
+    //         // return redirect(route("warehouses.index"));
 
-            if($warehouse){
-                return response()->json(["status" => 'success',"data"=>$warehouse]);
-            }else{
-                return response()->json(["status"=>"failed","message"=>"Failed to update payment method"]);
+    //         if($warehouse){
+    //             return response()->json(["status" => 'success',"data"=>$warehouse]);
+    //         }else{
+    //             return response()->json(["status"=>"failed","message"=>"Failed to update payment method"]);
 
-            }
+    //         }
 
-        }catch(Exception $e){
-            Log::error($e->getMessage());
-            return response()->json(["status"=>"failed","message"=>$e->getMessage()]);
-        }
+    //     }catch(Exception $e){
+    //         Log::error($e->getMessage());
+    //         return response()->json(["status"=>"failed","message"=>$e->getMessage()]);
+    //     }
 
 
-    }
+    // }
 
     // use laravel route with ajax
     
@@ -155,35 +155,38 @@ class WarehousesController extends Controller
     //     }
     // }
 
-    public function destroy(string $id)  // route မှ လာသော id ဖြင့် တစ်ခါတည်း data ထုတ်ပေးထားမည်ဖြစ်သည် 
-    {
+    // ---API ကြောင်းမသံုးတော့ပေ
+    // public function destroy(string $id)  // route မှ လာသော id ဖြင့် တစ်ခါတည်း data ထုတ်ပေးထားမည်ဖြစ်သည် 
+    // {
 
-        try{
-            $warehouse = Warehouse::where("id",$id)->delete();
+    //     try{
+    //         $warehouse = Warehouse::where("id",$id)->delete();
 
-            return Response::json($warehouse); // true or false ဘဲ return ပြန်မည် 
+    //         return Response::json($warehouse); // true or false ဘဲ return ပြန်မည် 
 
-        }catch(Exception $e){
-            Log::error($e->getMessage());
+    //     }catch(Exception $e){
+    //         Log::error($e->getMessage());
 
-            return response()->json(["status"=>"Failed","message"=> $e->getMessage()]);
-        }
-    }
+    //         return response()->json(["status"=>"Failed","message"=> $e->getMessage()]);
+    //     }
+    // }
 
-    public function warehousesstatus(Request $request){
-        // return response()->json(["success" => "Status Change Successful"]);
 
-        $warehouse = Warehouse::findOrFail($request["id"]); // id သည် update ကဲ့သို့ route ကနေမရနေသောကြောင့် request မှ id ကို သံုးပေးရမည် 
 
-        // dd("hello");
+    // public function warehousesstatus(Request $request){
+    //     // return response()->json(["success" => "Status Change Successful"]);
 
-        $warehouse -> status_id = $request["status_id"];
+    //     $warehouse = Warehouse::findOrFail($request["id"]); // id သည် update ကဲ့သို့ route ကနေမရနေသောကြောင့် request မှ id ကို သံုးပေးရမည် 
 
-        $warehouse -> save();
+    //     // dd("hello");
 
-        // success ဖြစ်ပါက response ပြန်ရန်
-        return response()->json(["success" => "Status Change Successful".$warehouse]);
-    }
+    //     $warehouse -> status_id = $request["status_id"];
+
+    //     $warehouse -> save();
+
+    //     // success ဖြစ်ပါက response ပြန်ရန်
+    //     return response()->json(["success" => "Status Change Successful".$warehouse]);
+    // }
 
     public function fatchalldates(){
         try{

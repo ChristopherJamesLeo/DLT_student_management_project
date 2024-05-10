@@ -88,6 +88,8 @@ Route::middleware('auth')->group(function () {
 
 
     Route::resource("cities",CityController::class);
+    Route::delete("citiesbulkdeletes",[CityController::class,"bulkdelete"])->name("cities.bulkdelete");
+
     Route::resource("countries",CountryContrller::class);
     Route::resource("contacts",ContactsController::class);
     Route::resource("comments",CommentsController::class);
@@ -141,7 +143,7 @@ Route::middleware('auth')->group(function () {
     Route::get("/warehousesstatus",[WarehousesController::class,"warehousesstatus"]);
     Route::get("/warehousesfatchalldatas",[WarehousesController::class,"fatchalldates"])->name("warehouses.fatchalldatas");
 
-
+    
     
 });
 

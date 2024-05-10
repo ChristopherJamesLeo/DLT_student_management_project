@@ -25,7 +25,7 @@ class CityController extends Controller
             if($getfilter = request("filtername")){
                 $query -> where("name","LIKE","%".$getfilter."%");
             }
-        })->paginate(2);
+        })->paginate(5);
 
         // return $cities;
         return view("cities.index",compact("cities"));
@@ -103,4 +103,22 @@ class CityController extends Controller
 
         return redirect() -> back();
     }
+
+
+    // start bulkdelete 
+    public function bulkdelete(Request $request){
+        try{
+            $getselectedids = $request->selectedids;
+
+            City::whereIn("id",$getselectedids)->delete();  // whereIn ဖြင့် သံုးပါက ဝင်လာသော array အား looping ပတ်စရာမလိုတော့ပေ
+
+            return response()->json(["status"=>"success","messgae"=>"Selected data havd been deleted successfully"]);
+
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+
+            return response()->json(["status"=>"failed","message"=>$e->getMessage()]);
+        }
+    }
+    // end bulkdelete
 }

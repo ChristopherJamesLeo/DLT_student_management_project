@@ -37,27 +37,38 @@
             <hr>
         </div>
         <div class="col-md-12">
-            <form action="" method="">
-                <div class="row justify-content-end">
-                    <div class="col-md-2 col-sm-6 mb-2">
-                        <div class="input-group">
-                            <input type="text" name="filtername" id="filtername" class="form-control form-control-sm rounded-0" placeholder="Search..." value="{{request("filtername")}}">
-                            {{-- ရှာထားပြိးသား vlaue ကို ပြန်ယူတည့်ရန်  --}}
-                            {{-- <button type="submit" id="btn-search" class="btn btn-secondary"><i class="fas fa-search"></i></button> --}}
-                            {{-- <button type="submit" id="btn-search" class="btn btn-secondary"><i class="fas fa-search"></i></button> --}}
 
-                            {{-- with javascript --}}
-                            <button type="button" id="btn-search" class="btn btn-secondary"><i class="fas fa-search"></i></button>
+            <div>
+                <a href="javascript:void(0)" id="bulkdeletebtn" class="btn btn-primary rounded-0 btn-sm ">Bulk Delete</a>
+            </div>
+            <div >
+                <form action="" method="">
+                    <div class="row justify-content-end">
+                        <div class="col-md-2 col-sm-6 mb-2">
+                            <div class="input-group">
+                                <input type="text" name="filtername" id="filtername" class="form-control form-control-sm rounded-0" placeholder="Search..." value="{{request("filtername")}}">
+                                {{-- ရှာထားပြိးသား vlaue ကို ပြန်ယူတည့်ရန်  --}}
+                                {{-- <button type="submit" id="btn-search" class="btn btn-secondary"><i class="fas fa-search"></i></button> --}}
+                                {{-- <button type="submit" id="btn-search" class="btn btn-secondary"><i class="fas fa-search"></i></button> --}}
+    
+                                {{-- with javascript --}}
+                                <button type="button" id="btn-search" class="btn btn-secondary"><i class="fas fa-search"></i></button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
+
+            
         </div>
     
         <table id="mytable"  class="table table-hover border">
             <thead>
                 <tr>
                     <th>No</th>
+                    <th>
+                        <input type="checkbox" name="selectalls[]" id="selectalls" class="form-check-input selectalls" value="" >
+                    </th>
                     <th>Name</th>
                     <th>By</th>
                     <th>Create At</th>
@@ -68,11 +79,13 @@
             <tbody>
                 @foreach($cities as $idx=>$city) 
                     
-                <tr>
+                <tr id="delete_{{$city->id}}">
 
                     {{-- <td>{{++$idx}}</td> --}}
                     <td>{{$idx+ $cities->firstItem()}}</td>
-                    
+                    <td>
+                        <input type="checkbox" name="singlechecks" getcheck="siglechecks" id="siglechecks{{$city->id}}" class="form-check-input singlechecks" value="{{$city -> id}}" >
+                    </td>
                     <td>{{$city->name}}</td>
                     <td>{{$city->user["name"]}}</td> 
 
@@ -89,11 +102,6 @@
                         {{ csrf_field() }}
                         {{ method_field('DELETE') }}
                     </form>
-                    
-
-                    
-
-                    
                     
                 </tr>
                
@@ -216,6 +224,53 @@
             
             // $("#mytable").DataTable();
             // end edit form
+
+            // Start Bulk Delete
+            $("#selectalls").click(function(){
+                $(".singlechecks").prop("checked",$(this).prop("checked")); // check လုပ်ထားသလားစစ်ဆေးသည်
+            });
+
+            $("#bulkdeletebtn").click(function(){
+                let getselectedids = [];
+                
+                // console.log($("input"));
+                // console.log($("input:checkbox[name=singlechecks ]"));
+                console.log($("input:checkbox[name=singlechecks]:checked"));
+                // $("input:checkbox[name='singlechecks']:checked");
+                $("input:checkbox[name=singlechecks]:checked").each(function(){
+                    getselectedids.push($(this).val());
+                })
+                console.log(getselectedids);
+
+                $("#bulkdeletebtn").text("Loading");
+
+                $.ajax({
+                    url:"{{route('cities.bulkdelete')}}",
+                    type : "DELETE",
+                    dataType : "json",
+                    data : {
+                        selectedids : getselectedids,
+                        _token : "{{csrf_token()}}",
+                    },
+                    success : function(response){
+                        console.log(response);
+                        if(response){
+                            $.each(getselectedids,function(key,value){ // each သည် first parameter အား second para ရှိ function ဖြ့် looping ပတ်ပြီး key value ထုတ်ပေးမည် ၄င်း အား ပြန်သံုးနုိငသည် 
+                                $(`#delete_${value}`).remove();
+                                $("#bulkdeletebtn").text("Bulk Delete");
+
+                            })
+
+                        }
+                    },
+                    error : function (response){
+                        console.log("error" , response);
+                    }
+                })
+            })
+            // end bulk delete
+
+
         })
 
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\City;
+use App\Models\Country;
+use App\Models\Status;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -27,8 +29,12 @@ class CityController extends Controller
             }
         })->paginate(5);
 
+        $countries = Country::all();
+
+        $statuses = Status::whereIn("id",[3,4])->get();
+
         // return $cities;
-        return view("cities.index",compact("cities"));
+        return view("cities.index",compact("cities","countries","statuses"));
     }
 
     /**

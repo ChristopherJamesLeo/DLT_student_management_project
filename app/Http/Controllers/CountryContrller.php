@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Country;
+use App\Models\Status;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+
 
 class CountryContrller extends Controller
 {
@@ -27,10 +29,12 @@ class CountryContrller extends Controller
             if($getname = request("filtername")){
                 $query -> where("name","LIKE","%".$getname."%");
             }
-        })->paginate(2);
+        })->paginate(20);
+
+        $statuses = Status::whereIn("id",[3,4])->get();
 
         // dd($countries);
-        return view("countries.index",compact("countries"));
+        return view("countries.index",compact("countries","statuses"));
     }
 
     /**
@@ -55,6 +59,7 @@ class CountryContrller extends Controller
         $country = new Country;
         $country -> name = $request["name"];
         $country -> slug = Str::slug($request["name"]);
+        $country -> status_id = $request["status_id"];
         $country -> user_id = $user_id ;
 
         $country -> save();
@@ -86,7 +91,7 @@ class CountryContrller extends Controller
     public function update(Request $request, string $id)
     {
         $this -> validate($request,[
-            "name" => "required|unique:countries,name"
+            "name" => "required|unique:countries,name,".$id,
         ]);
 
         $user_id = Auth::user() -> id;
@@ -94,6 +99,8 @@ class CountryContrller extends Controller
         $country = Country::findOrFail($id);
         $country -> name = $request["name"];
         $country -> slug = Str::slug($request["name"]);
+        $country -> status_id = $request["status_id"];
+
         $country -> user_id = $user_id ;
 
         $country -> save();
@@ -112,5 +119,13 @@ class CountryContrller extends Controller
         $country -> delete();
 
         return redirect(route("countries.index"));
+    }
+
+    public function typestatus(Request $request){
+        $country = Country::findOrFail($request["id"]);
+        $country->status_id = $request["status_id"];
+        $country->save();
+
+        return response()->json(["success"=>"Status Update Successful"]);
     }
 }

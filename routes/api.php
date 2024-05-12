@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\WarehousesController;
+use App\Http\Controllers\Api\CitiesController;
 
 // api route ကို ခေါ်ပါက http://127.0.0.1:8000/api/warehouses ဟုပြန်ခေါ်ပေးရမည်
 /*
@@ -26,4 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // third parameter ထဲတွင် naming ပေးလိုက်ချင်းဖြင့် error ဖေျာက်နုိင်သည် alias ပေးလိုက်ခြင်းဖြစ်သည် 
 Route::apiResource("warehouses", WarehousesController::class,["as"=>"api"]);
 // custom api route
+
 Route::get("/warehousesstatus",[WarehousesController::class,"warehousesstatus"]);
+
+Route::apiResource("cities", CitiesController::class,["as"=>"api"]);

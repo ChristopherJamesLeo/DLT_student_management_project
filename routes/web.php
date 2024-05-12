@@ -91,6 +91,8 @@ Route::middleware('auth')->group(function () {
     Route::delete("citiesbulkdeletes",[CityController::class,"bulkdelete"])->name("cities.bulkdelete");
 
     Route::resource("countries",CountryContrller::class);
+    Route::get("countrystatus",[CountryContrller::class,"typestatus"]);
+
     Route::resource("contacts",ContactsController::class);
     Route::resource("comments",CommentsController::class);
     Route::resource("genders",GenderController::class);

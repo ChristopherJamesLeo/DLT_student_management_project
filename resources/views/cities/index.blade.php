@@ -10,7 +10,8 @@
         
         <div class="col-md-12 my-3">
            <div class="col-md-12"></div>
-                <form action="{{route('cities.store')}}" method="POST" enctype="multipart/form-data" class=""> 
+                {{-- <form action="{{route('cities.store')}}" method="POST" enctype="multipart/form-data" class="">  --}}
+                <form> 
 
                      {{csrf_field()}}
                      @method("POST")
@@ -21,8 +22,27 @@
                              @error("name") 
                                 <span class="text-danger">{{$message}}</span>
                              @enderror
-                             <input type="text" name="name" id="name" class="form-control rounded-0 @error("name") is-invalid @enderror" placeholder="Enter Status Name" value="{{old('name')}}">
+                             <input type="text" name="name" id="name" class="form-control rounded-0 @error("name") is-invalid @enderror" placeholder="Enter City Name" value="{{old('name')}}">
                          </div>
+                         <div class="col-md-6 col-sm-12 form-group mb-1">
+                            <label for="status_id">Country</label>
+                            <select name="status_id" id="status_id" class="form-control rounded-0">
+                                <option value="" selected disabled>Choose Country</option>
+                               @foreach($countries as $country)
+                                   <option value="{{$country->id}}">{{$country['name']}}</option>
+                               @endforeach
+
+                            </select>
+                        </div>
+                        <div class="col-md-6 col-sm-12 form-group mb-1">
+                            <label for="status_id">Status</label>
+                            <select name="status_id" id="status_id" class="form-control rounded-0">
+                               @foreach($statuses as $status)
+                                   <option value="{{$status->id}}">{{$status['name']}}</option>
+                               @endforeach
+
+                            </select>
+                        </div>
                          
                          <div class="col-md-12">
                              <div class="d-flex justify-content-end">
@@ -65,10 +85,11 @@
         <table id="mytable"  class="table table-hover border">
             <thead>
                 <tr>
-                    <th>No</th>
                     <th>
                         <input type="checkbox" name="selectalls[]" id="selectalls" class="form-check-input selectalls" value="" >
                     </th>
+                    <th>No</th>
+                    
                     <th>Name</th>
                     <th>By</th>
                     <th>Create At</th>
@@ -80,12 +101,12 @@
                 @foreach($cities as $idx=>$city) 
                     
                 <tr id="delete_{{$city->id}}">
-
-                    {{-- <td>{{++$idx}}</td> --}}
-                    <td>{{$idx+ $cities->firstItem()}}</td>
                     <td>
                         <input type="checkbox" name="singlechecks" getcheck="siglechecks" id="siglechecks{{$city->id}}" class="form-check-input singlechecks" value="{{$city -> id}}" >
                     </td>
+                    {{-- <td>{{++$idx}}</td> --}}
+                    <td>{{$idx+ $cities->firstItem()}}</td>
+                    
                     <td>{{$city->name}}</td>
                     <td>{{$city->user["name"]}}</td> 
 

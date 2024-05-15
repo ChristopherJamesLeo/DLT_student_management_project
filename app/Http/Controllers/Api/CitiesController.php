@@ -20,7 +20,7 @@ class CitiesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**

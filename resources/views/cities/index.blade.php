@@ -11,7 +11,7 @@
         <div class="col-md-12 my-3">
            <div class="col-md-12"></div>
                 {{-- <form action="{{route('cities.store')}}" method="POST" enctype="multipart/form-data" class="">  --}}
-                <form> 
+                <form id="createform"> 
 
                      {{csrf_field()}}
                      @method("POST")
@@ -25,8 +25,8 @@
                              <input type="text" name="name" id="name" class="form-control rounded-0 @error("name") is-invalid @enderror" placeholder="Enter City Name" value="{{old('name')}}">
                          </div>
                          <div class="col-md-6 col-sm-12 form-group mb-1">
-                            <label for="status_id">Country</label>
-                            <select name="status_id" id="status_id" class="form-control rounded-0">
+                            <label for="country_id">Country</label>
+                            <select name="country_id" id="country_id" class="form-control rounded-0">
                                 <option value="" selected disabled>Choose Country</option>
                                @foreach($countries as $country)
                                    <option value="{{$country->id}}">{{$country['name']}}</option>
@@ -43,12 +43,12 @@
 
                             </select>
                         </div>
-                         
+                         <input type="hidden" name="user_id" id="user_id" value="{{$userdata['id']}}">
                          <div class="col-md-12">
                              <div class="d-flex justify-content-end">
                                 
                                  <button type="reset" class="btn btn-secondary btn-sm rounded-0 ms-3">Cancel</button>
-                                 <button type="submit" class="btn btn-primary btn-sm rounded-0 ms-3">Submit</button>
+                                 <button type="submit" id="createformbtn" class="btn btn-primary btn-sm rounded-0 ms-3">Submit</button>
                              </div>
                          </div>
 
@@ -141,23 +141,45 @@
     <!-- START MODAL AREA-->
         <!-- start edit modal -->
         <div id="editmodal" class="modal fade">
-            <div class="modal-dialog modal-sm modal-dialog-center">
+            <div class="modal-dialog modal-md modal-dialog-center">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h6 class="modal-title">Edit Form</h6>
                         <button type="type" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="form_action" action="" method="POST" enctype="multipart/form-data" class=""> 
+                        {{-- <form id="form_action" action="" method="POST" enctype="multipart/form-data" class="">  --}}
+                        <form id="editform_action" > 
 
-                            {{csrf_field()}}
-                            {{ method_field("PUT") }}
-
+                            {{-- {{csrf_field()}}
+                            {{ method_field("PUT") }} --}}
+                            <input type="hidden" name="edituser_id" id="user_id" value="{{$userdata['id']}}">
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 form-group mb-1">
                                     <label for="name">Name <span class="text-danger">*</span></label>
-                                    <input type="text" name="name" id="editname" class="form-control rounded-0" placeholder="Enter Status Name" value="{{old('name')}}">
+                                    <input type="text" name="editname" id="editname" class="form-control rounded-0" placeholder="Enter Status Name" value="{{old('name')}}">
                                 </div>
+                                <div class="col-md-6 col-sm-12 form-group mb-1">
+                                    <label for="editcountry_id">Country</label>
+                                    <select name="editcountry_id" id="editcountry_id" class="form-control rounded-0">
+                                        <option value="" selected disabled>Choose Country</option>
+                                       @foreach($countries as $country)
+                                           <option value="{{$country->id}}">{{$country['name']}}</option>
+                                       @endforeach
+        
+                                    </select>
+                                </div>
+                                <div class="col-md-6 col-sm-12 form-group mb-1">
+                                    <label for="status_id">Status</label>
+                                    <select name="editstatus_id" id="editstatus_id" class="form-control rounded-0">
+                                       @foreach($statuses as $status)
+                                           <option value="{{$status->id}}">{{$status['name']}}</option>
+                                       @endforeach
+        
+                                    </select>
+                                </div>
+                                <input type="hidden" name="id" id="id">
+                                 <input type="hidden" name="user_id" id="user_id" value="{{$userdata['id']}}">
 
                                 <div class="col-md-12">
                                     <div class="d-flex justify-content-end">
@@ -185,6 +207,8 @@
 @endsection
 
 @section("scripts")
+{{-- jquyer validate --}}
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 {{-- datatable css1 js1 --}}
 {{-- <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script> --}}
     <script>
@@ -205,43 +229,102 @@
 
         // end filter 
 
+        $.ajaxSetup(   // ajax ဖြင့် စကတည်းက ပို့ထားမည် csrf ကို ပို့ထားမည် 
+            {
+                headers : { 
+                    // header အား သံုးနုိင်ရန် html ရှိ header ထဲတွင် meta tag ဖြင့် attribute name = "csrf-token" content="{{csrf_token()}}"
+                    'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr("content"), // meta tag ထဲတွင် ရှိသော value အား ယူမည် 
+                }
+            }
+        )
+
 
         $(document).ready(function(){
-            // start delete item
-            $(".delete-btns").click(function(){
-                // console.log("hello");
-                var getidx = $(this).data("idx");
 
-                // console.log(getidx);
+            // start create
+            $("#createform").validate({
+                rule : {
+                    name : "required"
+                },
+                message :{
+                    name : "Enter Application Name"
+                },
+                submitHandler:function(form){
+                    console.log("hello");
 
-                if(confirm(`Are Your Sure!! You want to delete ${getidx}`)){
-                    $("#formdelete"+getidx).submit();
-                }else{
-
+                    $.ajax({
+                        url : "{{url('api.cities.store')}}",
+                        type : "POST",
+                        dataType : "json",
+                        data : $("#createform").serializeArray();
+                        success : function(response){
+                            console.log(response);
+                        },
+                        error : function (response){
+                            console.log("Error message" , response)
+                        }
+                    })
                 }
             })
+
+            // start edit 
+            
+
+            // start delete
+            $(document).on("click",".delete-btns",function(){
+                let getid = $(this).data("idx");
+
+                $.ajax({
+                    url : `api/cities/${getid}`,
+                    type : "DELETE",
+                    dataType : "json",
+                    success : function(response){
+                        console.log(response);
+
+                    },
+                    error : function (response){
+                        console.log("error",response);
+                    }
+                })
+            })
+
+
+
+            // start delete item
+            // $(".delete-btns").click(function(){
+            //     // console.log("hello");
+            //     var getidx = $(this).data("idx");
+
+            //     // console.log(getidx);
+
+            //     if(confirm(`Are Your Sure!! You want to delete ${getidx}`)){
+            //         $("#formdelete"+getidx).submit();
+            //     }else{
+
+            //     }
+            // })
             // end delete item
 
             // start edit form
                 // single page upload
-            $(document).on("click",".edit_form",function(e){
-                e.preventDefault();
-                // console.log("hello");
-                // console.log($(this).attr("data-name"));
-                // console.log($(this).data("id"));
-                $("#editname").val($(this).data("name"));
+            // $(document).on("click",".edit_form",function(e){
+                // e.preventDefault();
+                // // console.log("hello");
+                // // console.log($(this).attr("data-name"));
+                // // console.log($(this).data("id"));
+                // $("#editname").val($(this).data("name"));
 
-                const getid = $(this).data("id");
+                // const getid = $(this).data("id");
 
-                // $("#form_action").attr('action',`\{\{route('statuses.update',$status->id)\}\}`); // error 
+                // // $("#form_action").attr('action',`\{\{route('statuses.update',$status->id)\}\}`); // error 
 
-                // use method 1
-                // $("#form_action").attr('action',`http://127.0.0.1:8000/statuses/${getid}`);
+                // // use method 1
+                // // $("#form_action").attr('action',`http://127.0.0.1:8000/statuses/${getid}`);
 
-                // method 2
-                $("#form_action").attr('action',`/cities/${getid}`);
+                // // method 2
+                // $("#form_action").attr('action',`/cities/${getid}`);
                 
-            })
+            // })
             
             // $("#mytable").DataTable();
             // end edit form

@@ -16,7 +16,9 @@ class CitiesController extends Controller
      */
     public function index()
     {
-        //
+        $cities = City::all();
+
+        return CitiesResource::collection($cities); // collection မဖြစ်မနေထည့်ေပးရမ် 
     }
 
     /**

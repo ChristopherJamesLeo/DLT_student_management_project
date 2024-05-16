@@ -56,7 +56,7 @@
                  </form>
             <hr>
         </div>
-        <div class="col-md-12">
+        <div class=" col-md-12">
 
             <div>
                 <a href="javascript:void(0)" id="bulkdeletebtn" class="btn btn-primary rounded-0 btn-sm ">Bulk Delete</a>
@@ -81,63 +81,41 @@
 
             
         </div>
+        <div class="loader_container">
     
-        <table id="mytable"  class="table table-hover border">
-            <thead>
-                <tr>
-                    <th>
-                        <input type="checkbox" name="selectalls[]" id="selectalls" class="form-check-input selectalls" value="" >
-                    </th>
-                    <th>No</th>
-                    
-                    <th>Name</th>
-                    <th>By</th>
-                    <th>Create At</th>
-                    <th>Updated at</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($cities as $idx=>$city) 
-                    
-                <tr id="delete_{{$city->id}}">
-                    <td>
-                        <input type="checkbox" name="singlechecks" getcheck="siglechecks" id="siglechecks{{$city->id}}" class="form-check-input singlechecks" value="{{$city -> id}}" >
-                    </td>
-                    {{-- <td>{{++$idx}}</td> --}}
-                    <td>{{$idx+ $cities->firstItem()}}</td>
-                    
-                    <td>{{$city->name}}</td>
-                    <td>{{$city->user["name"]}}</td> 
-
-                    <td>{{$city->created_at->format('d m Y')}}</td>
-                    <td>{{$city->updated_at->format('d M Y')}}</td>
-                    <td>
-                        <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" 
-                        data-id="{{$city->id}}"
-                        data-country_id="{{$country->id}}" 
-                        data-status_id="{{$status->id}}" 
-                        data-user_id = "{{$city->user['id']}}"
-                        data-name="{{$city->name}}"><i class="fas fa-pen"></i></a>
+            <table id="mytable"  class="table table-hover border">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" name="selectalls[]" id="selectalls" class="form-check-input selectalls" value="" >
+                        </th>
+                        <th>No</th>
                         
-                        
-                        <a href="#" class="text-danger me-3 delete-btns" data-idx = "{{$city->id}}" ><i class="fas fa-trash"></i></a>
- 
-                    </td>
-                    <form id="formdelete{{$city->id}}" action="{{route('cities.destroy',$city->id)}}" method="POST">
-                        {{ csrf_field() }}
-                        {{ method_field('DELETE') }}
-                    </form>
-                    
-                </tr>
-               
-                @endforeach
-            </tbody>
-            
-            
-        </table>
+                        <th>Name</th>
+                        <th>Country</th>
+                        <th>Status</th>
+                        <th>By</th>
+                        <th>Create At</th>
+                        <th>Updated at</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   
+                </tbody>
+                
+                
+            </table>
+    
+            {{-- {{$cities->links("pagination::bootstrap-4")}} --}}
+    
+            <div class=" loader">
+                <div class="loader-item"></div>
+                <div class="loader-item"></div>
+                <div class="loader-item"></div>
+            </div>
+        </div>
 
-        {{$cities->links("pagination::bootstrap-4")}}
         
     </div>
     <!--End Content Area-->
@@ -246,16 +224,84 @@
 
         $(document).ready(function(){
 
+            // read 
+
+            function getNo(){
+                let getTrs = document.querySelectorAll("#mytable tbody tr");
+                getTrs.forEach(function(tr,idx){
+                    console.log(++idx,tr);
+                    tr.innerText = ++idx;
+                })
+            }
+            
+            function fetchAllData(){
+                $.ajax({
+                    url:"api/cities",
+                    type : "GET",
+                    dataType : "JSON",
+                    success : function(response){
+                        // console.log(response);
+
+                        let datas = response.data;
+                        // console.log(datas);
+
+                        let trs ;
+                        
+                        datas.forEach(function(data,idx){
+                            console.log(data);
+                            let tr = `<tr id="delete_${data.id}">
+                                            <td>
+                                                <input type="checkbox" name="singlechecks" getcheck="siglechecks" id="siglechecks${data.id}" class="form-check-input singlechecks" value="${data.id}" >
+                                            </td>
+                                            <td class="tr_no">${++idx}</td>
+                                            <td>${data.name}</td>
+                                            <td>${data.country.name}</td>
+                                            <td>${data.status.name}</td>
+                                            <td>${data.user.name}</td> 
+
+                                            <td>${data.created_at}</td>
+                                            <td>${data.updated_at}</td>
+                                            <td>
+                                                <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" 
+                                                data-id="${data.id}"
+                                                data-country_id="${data.country_id}" 
+                                                data-status_id="${data.status_id}" 
+                                                data-user_id = "${data.user.id}"
+                                                data-name="${data.name}"><i class="fas fa-pen"></i></a>
+                                                
+                                                
+                                                <a href="#" class="text-danger me-3 delete-btns" data-idx = "${data.id}" ><i class="fas fa-trash"></i></a>
+                        
+                                            </td>
+                                            
+                                        </tr>`
+                                $("#mytable tbody").append(tr);
+                                
+                        })
+                        
+                        
+                    },
+                    error : function (response){
+                        console.log("error");
+                    }
+                })
+            }
+
+            fetchAllData();
+            
+
             // start create
             $("#createform").validate({
                 rule : {
                     name : "required"
                 },
                 message :{
-                    name : "Enter Application Name"
+                    name : "Enter City Name"
                 },
                 submitHandler:function(form){
-                    console.log("hello");
+                    // console.log("hello");
+
+                    $("#createformbtn").text("Sending...");
 
                     $.ajax({
                         url : "{{url('api/cities')}}",
@@ -263,7 +309,36 @@
                         dataType : "JSON",
                         data : $("#createform").serializeArray(),
                         success : function(response){
-                            console.log(response);
+                            // console.log(response);
+                            $("#createformbtn").text("Submit");
+                            let data = response.data;
+                            let tr = `<tr id="delete_${data.id}">
+                                            <td>
+                                                <input type="checkbox" name="singlechecks" getcheck="siglechecks" id="siglechecks${data.id}" class="form-check-input singlechecks" value="${data.id}" >
+                                            </td>
+                                            <td></td>
+                                            <td>${data.name}</td>
+                                            <td>${data.user.name}</td> 
+                                            <td>${data.country.name}</td>
+                                            <td>${data.status.name}</td>
+                                            <td>${data.created_at}</td>
+                                            <td>${data.updated_at}</td>
+                                            <td>
+                                                <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" 
+                                                data-id="${data.id}"
+                                                data-country_id="${data.country_id}" 
+                                                data-status_id="${data.status_id}" 
+                                                data-user_id = "${data.user.id}"
+                                                data-name="${data.name}"><i class="fas fa-pen"></i></a>
+                                                
+                                                
+                                                <a href="javascript:void(0)" class="text-danger me-3 delete-btns" data-idx = "${data.id}" ><i class="fas fa-trash"></i></a>
+                        
+                                            </td>
+                                            
+                                        </tr>`
+                                $("#mytable tbody").append(tr);
+
                         },
                         error : function (response){
                             console.log("Error message" , response)
@@ -275,13 +350,13 @@
             // start edit 
             $(document).on("click",".edit_form",function(){
                 let getId = $(this).data("id");
-                console.log(getId);
+                // console.log(getId);
                 let getName = $(this).data("name");
                 let getCountryId = $(this).data("country_id");
                 let getStatusId = $(this).data("status_id");
                 let getUserId = $(this).data("user_id")
 
-                console.log(getId,getName,getCountryId,getStatusId);
+                // console.log(getId,getName,getCountryId,getStatusId);
 
                 $("#editname").val(getName);
                 $("#editcountry_id").val(getCountryId);
@@ -292,17 +367,45 @@
             
             $("#editform_action").submit(function(e){
                 e.preventDefault();
-                console.log("hello");
+                // console.log("hello");
                 let getId = $("#edit_id").val();
 
-                console.log(getId);
+                // console.log(getId);
                 $.ajax({
                     url: `api/cities/${getId}`,
                     type : "PUT",
                     dataType : "json",
                     data : $("#editform_action").serializeArray(),
                     success: function(response){
-                        console.log(response);
+                        // console.log(response);
+                        let data = response.data;
+                        $("#editmodal").modal("hide");
+                        document.getElementById(`delete_${data.id}`).innerHTML = `<tr id="delete_${data.id}">
+                                                            <td>
+                                                                <input type="checkbox" name="singlechecks" getcheck="siglechecks" id="siglechecks${data.id}" class="form-check-input singlechecks" value="${data.id}" >
+                                                            </td>
+                                                            <td>${data.id}</td>
+                                                            <td>${data.name}</td>
+                                                            <td>${data.user.name}</td> 
+
+                                                            <td>${data.created_at}</td>
+                                                            <td>${data.updated_at}</td>
+                                                            <td>
+                                                                <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" 
+                                                                data-id="${data.id}"
+                                                                data-country_id="${data.country_id}" 
+                                                                data-status_id="${data.status_id}" 
+                                                                data-user_id = "${data.user.id}"
+                                                                data-name="${data.name}"><i class="fas fa-pen"></i></a>
+                                                                
+                                                                
+                                                                <a href="javascript:void(0)" class="text-danger me-3 delete-btns" data-idx = "${data.id}" ><i class="fas fa-trash"></i></a>
+                                        
+                                                            </td>
+                                                            
+                                                        </tr>`;
+
+                                                        
                     },
                     error : function(response){
                         console.log("error");
@@ -311,7 +414,8 @@
             })
             
             // start delete
-            $(document).on("click",".delete-btns",function(){
+            $(document).on("click",".delete-btns",function(e){
+                e.preventDefault();
                 let getid = $(this).data("idx");
 
                 $.ajax({
@@ -319,7 +423,10 @@
                     type : "DELETE",
                     dataType : "json",
                     success : function(response){
-                        console.log(response);
+                        // console.log(response);
+                        let data = response.data;
+
+                        $(`#delete_${data.id}`).remove();
 
                     },
                     error : function (response){
@@ -424,3 +531,39 @@
         
     </script>
 @endsection
+
+{{-- 
+@foreach($cities as $idx=>$city) 
+                    
+<tr id="delete_{{$city->id}}">
+    <td>
+        <input type="checkbox" name="singlechecks" getcheck="siglechecks" id="siglechecks{{$city->id}}" class="form-check-input singlechecks" value="{{$city -> id}}" >
+    </td>
+    <td>{{++$idx}}</td>
+    <td>{{$idx+ $cities->firstItem()}}</td>
+    
+    <td>{{$city->name}}</td>
+    <td>{{$city->user["name"]}}</td> 
+
+    <td>{{$city->created_at->format('d m Y')}}</td>
+    <td>{{$city->updated_at->format('d M Y')}}</td>
+    <td>
+        <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" 
+        data-id="{{$city->id}}"
+        data-country_id="{{$country->id}}" 
+        data-status_id="{{$status->id}}" 
+        data-user_id = "{{$city->user['id']}}"
+        data-name="{{$city->name}}"><i class="fas fa-pen"></i></a>
+        
+        
+        <a href="#" class="text-danger me-3 delete-btns" data-idx = "{{$city->id}}" ><i class="fas fa-trash"></i></a>
+
+    </td>
+    <form id="formdelete{{$city->id}}" action="{{route('cities.destroy',$city->id)}}" method="POST">
+        {{ csrf_field() }}
+        {{ method_field('DELETE') }}
+    </form>
+    
+</tr>
+
+@endforeach --}}

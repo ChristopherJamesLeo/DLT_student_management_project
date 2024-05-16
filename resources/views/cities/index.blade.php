@@ -113,7 +113,12 @@
                     <td>{{$city->created_at->format('d m Y')}}</td>
                     <td>{{$city->updated_at->format('d M Y')}}</td>
                     <td>
-                        <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" data-id="{{$city->id}}" data-name="{{$city->name}}"><i class="fas fa-pen"></i></a>
+                        <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" 
+                        data-id="{{$city->id}}"
+                        data-country_id="{{$country->id}}" 
+                        data-status_id="{{$status->id}}" 
+                        data-user_id = "{{$city->user['id']}}"
+                        data-name="{{$city->name}}"><i class="fas fa-pen"></i></a>
                         
                         
                         <a href="#" class="text-danger me-3 delete-btns" data-idx = "{{$city->id}}" ><i class="fas fa-trash"></i></a>
@@ -178,8 +183,8 @@
         
                                     </select>
                                 </div>
-                                <input type="hidden" name="id" id="id">
-                                 <input type="hidden" name="user_id" id="user_id" value="{{$userdata['id']}}">
+                                <input type="hidden" name="edit_id" id="edit_id">
+                                 <input type="hidden" name="edituser_id" id="user_id" value="{{$userdata['id']}}">
 
                                 <div class="col-md-12">
                                     <div class="d-flex justify-content-end">
@@ -253,10 +258,10 @@
                     console.log("hello");
 
                     $.ajax({
-                        url : "{{url('api.cities.store')}}",
+                        url : "{{url('api/cities')}}",
                         type : "POST",
-                        dataType : "json",
-                        data : $("#createform").serializeArray();
+                        dataType : "JSON",
+                        data : $("#createform").serializeArray(),
                         success : function(response){
                             console.log(response);
                         },
@@ -268,8 +273,43 @@
             })
 
             // start edit 
-            
+            $(document).on("click",".edit_form",function(){
+                let getId = $(this).data("id");
+                console.log(getId);
+                let getName = $(this).data("name");
+                let getCountryId = $(this).data("country_id");
+                let getStatusId = $(this).data("status_id");
+                let getUserId = $(this).data("user_id")
 
+                console.log(getId,getName,getCountryId,getStatusId);
+
+                $("#editname").val(getName);
+                $("#editcountry_id").val(getCountryId);
+                $("#editstatus_id").val(getStatusId);
+                $("#user_id").val(getUserId);
+                $("#edit_id").val(getId);
+            })
+            
+            $("#editform_action").submit(function(e){
+                e.preventDefault();
+                console.log("hello");
+                let getId = $("#edit_id").val();
+
+                console.log(getId);
+                $.ajax({
+                    url: `api/cities/${getId}`,
+                    type : "PUT",
+                    dataType : "json",
+                    data : $("#editform_action").serializeArray(),
+                    success: function(response){
+                        console.log(response);
+                    },
+                    error : function(response){
+                        console.log("error");
+                    }
+                })
+            })
+            
             // start delete
             $(document).on("click",".delete-btns",function(){
                 let getid = $(this).data("idx");

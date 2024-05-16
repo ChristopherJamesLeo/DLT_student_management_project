@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+// use Illumiate\Support\Facades\Auth;
+use App\Models\City;
+use App\Http\Resources\CitiesResource;
 
 class CitiesController extends Controller
 {
@@ -20,7 +24,21 @@ class CitiesController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $this -> validate($request,[
+            "name" => "required|unique:cities,name"
+        ]);
+        // $user = Auth::user();
+
+        $city = new City();
+        $city -> name = $request["name"];
+        $city -> slug = Str::slug($request["name"]);
+        $city -> country_id = $request["country_id"];
+        $city -> status_id = $request["status_id"];
+        $city -> user_id = $request["user_id"];
+
+        $city -> save();
+
+        return new CitiesResource($city);
     }
 
     /**
@@ -36,7 +54,18 @@ class CitiesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        
+
+        $city = City::findOrFail($id);
+        $city -> name = $request["editname"];
+        $city -> slug = Str::slug($request["editname"]);
+        $city -> user_id = $request["edituser_id"];
+        $city -> country_id = $request["editcountry_id"];
+        $city -> status_id = $request["editstatus_id"];
+
+        $city -> save();
+
+        return new CitiesResource($city);
     }
 
     /**
@@ -44,6 +73,10 @@ class CitiesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $city = City::findOrFail($id);
+        
+        $city -> delete();
+
+        return new CitiesResource($city);
     }
 }

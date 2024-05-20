@@ -34,7 +34,7 @@
             </tbody>
             
         </table>
-        
+        {{ $warehouses->links() }}
     </div>
     <!--End Content Area-->
 
@@ -442,7 +442,7 @@
                 })
             });
 
-            $("#mytable").DataTable();
+            // $("#mytable").DataTable();
 
 
             // start change status btn

@@ -16,7 +16,8 @@ class CitiesController extends Controller
      */
     public function index()
     {
-        $cities = City::all();
+        // $cities = City::all();
+        $cities = City::paginate(10);
 
         return CitiesResource::collection($cities); // collection မဖြစ်မနေထည့်ေပးရမ် 
     }
@@ -79,6 +80,22 @@ class CitiesController extends Controller
         
         $city -> delete();
 
+        return new CitiesResource($city);
+    }
+
+
+    public function citiesstatus(Request $request){
+        // return response()->json(["success" => "Status Change Successful"]);
+
+        $city = City::findOrFail($request["id"]); // id သည် update ကဲ့သို့ route ကနေမရနေသောကြောင့် request မှ id ကို သံုးပေးရမည် 
+
+        // dd("hello");
+
+        $city -> status_id = $request["status_id"];
+
+        $city -> save();
+
+        // success ဖြစ်ပါက response ပြန်ရန်
         return new CitiesResource($city);
     }
 }

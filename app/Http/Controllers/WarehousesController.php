@@ -16,7 +16,7 @@ class WarehousesController extends Controller
 {
     public function index()
     {
-        $warehouses = Warehouse::all();
+        $warehouses = Warehouse::paginate(3);
         $statuses = Status::whereIn("id",[3,4])->get(); 
         return view("warehouses.index",compact("warehouses","statuses"));
     }

@@ -22,9 +22,10 @@ class WarehousesController extends Controller
         // return new WarehousesCollection(Warehouse::all());
         // WarehousesCollection ထဲသို့ Warehouse model တစ်ခုလံုးထည့်ပေးလိုက်သည် ထို့ေကြာင့် warehousecollection ထဲတွင် model မှ data asset ရပြီး api ထုတ်ပေးမ် 
 
-        // method 2 (not use collectio)
-        $warehouse = Warehouse::all();
-        return WarehousesResource::collection($warehouse);
+        // method 2 (not use collection)
+        $warehouses = Warehouse::paginate(3); // paginate ပေးပါက web controller ထဲတွင်ပါ paginate ထည့်ပေးရမည်
+
+        return WarehousesResource::collection($warehouses);
 
 
     }

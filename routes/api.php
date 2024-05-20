@@ -31,3 +31,4 @@ Route::apiResource("warehouses", WarehousesController::class,["as"=>"api"]);
 Route::get("/warehousesstatus",[WarehousesController::class,"warehousesstatus"]);
 
 Route::apiResource("cities", CitiesController::class,["as"=>"api"]);
+Route::get("/citiesstatus",[CitiesController::class,"citiesstatus"]);

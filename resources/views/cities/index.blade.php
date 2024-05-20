@@ -194,6 +194,7 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 {{-- datatable css1 js1 --}}
 {{-- <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
 
         // start filter 
@@ -229,65 +230,175 @@
             function getNo(){
                 let getTrs = document.querySelectorAll("#mytable tbody tr");
                 getTrs.forEach(function(tr,idx){
-                    console.log(++idx,tr);
+                    // console.log(++idx,tr);
                     tr.innerText = ++idx;
                 })
             }
             
-            function fetchAllData(){
-                $.ajax({
-                    url:"api/cities",
-                    type : "GET",
-                    dataType : "JSON",
-                    success : function(response){
-                        // console.log(response);
+            // function fetchAllData(){
+            //     $.ajax({
+            //         url:"api/cities",
+            //         type : "GET",
+            //         dataType : "JSON",
+            //         success : function(response){
+            //             // console.log(response);
 
-                        let datas = response.data;
-                        // console.log(datas);
+            //             let datas = response.data;
+            //             // console.log(datas);
 
-                        let trs ;
+            //             let trs ;
                         
-                        datas.forEach(function(data,idx){
-                            console.log(data);
-                            let tr = `<tr id="delete_${data.id}">
-                                            <td>
-                                                <input type="checkbox" name="singlechecks" getcheck="siglechecks" id="siglechecks${data.id}" class="form-check-input singlechecks" value="${data.id}" >
-                                            </td>
-                                            <td class="tr_no">${++idx}</td>
-                                            <td>${data.name}</td>
-                                            <td>${data.country.name}</td>
-                                            <td>${data.status.name}</td>
-                                            <td>${data.user.name}</td> 
-
-                                            <td>${data.created_at}</td>
-                                            <td>${data.updated_at}</td>
-                                            <td>
-                                                <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" 
-                                                data-id="${data.id}"
-                                                data-country_id="${data.country_id}" 
-                                                data-status_id="${data.status_id}" 
-                                                data-user_id = "${data.user.id}"
-                                                data-name="${data.name}"><i class="fas fa-pen"></i></a>
-                                                
-                                                
-                                                <a href="#" class="text-danger me-3 delete-btns" data-idx = "${data.id}" ><i class="fas fa-trash"></i></a>
-                        
-                                            </td>
+            //             datas.forEach(function(data,idx){
+            //                 // console.log(data);
+            //                 let tr = `<tr id="delete_${data.id}">
+            //                                 <td>
+            //                                     <input type="checkbox" name="singlechecks" getcheck="siglechecks" id="siglechecks${data.id}" class="form-check-input singlechecks" value="${data.id}" >
+            //                                 </td>
+            //                                 <td class="tr_no">${++idx}</td>
+            //                                 <td>${data.name}</td>
                                             
-                                        </tr>`
-                                $("#mytable tbody").append(tr);
+            //                                 <td>${data.country.name}</td>
+                                            
+            //                                 <td>
+            //                                         <div class="form-checkbox form-switch">
+            //                                             <input type="checkbox" name="" id="" class="form-check-input change-btn" 
+            //                                             ${data.status_id === 3 ? "checked" : " "}
+            //                                             data-id = ${data.id}
+            //                                             >
+            //                                         </div>
+            //                                 </td>
+            //                                 <td>${data.user.name}</td> 
+            //                                 <td>${data.created_at}</td>
+            //                                 <td>${data.updated_at}</td>
+            //                                 <td>
+            //                                     <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" 
+            //                                     data-id="${data.id}"
+            //                                     data-country_id="${data.country_id}" 
+            //                                     data-status_id="${data.status_id}" 
+            //                                     data-user_id = "${data.user.id}"
+            //                                     data-name="${data.name}"><i class="fas fa-pen"></i></a>
+                                                
+                                                
+            //                                     <a href="#" class="text-danger me-3 delete-btns" data-idx = "${data.id}" ><i class="fas fa-trash"></i></a>
+                        
+            //                                 </td>
+                                            
+            //                             </tr>`
+            //                     $("#mytable tbody").append(tr);
                                 
-                        })
+            //             })
                         
                         
-                    },
-                    error : function (response){
-                        console.log("error");
-                    }
+            //         },
+            //         error : function (response){
+            //             console.log("error");
+            //         }
+            //     })
+            // }
+
+            // fetchAllData();
+
+            // start fetch data by pagination
+            let page = 1; // Initialize the page variable
+            const gettbody = document.querySelector("#mytable tbody");
+
+            async function getAllDataByPaginate() {
+                console.log(page);
+                let result ;
+                const url = `api/cities?page=${page}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                // console.log(data);
+                result = data.data;
+                // console.log(result);
+
+                return result;
+            }
+
+            // Example usage: Call the function to get the first page of data
+            // getAllDataByPaginate();
+
+            async function alldatastodom(){
+                const getResult = await getAllDataByPaginate();
+
+                console.log(getResult);
+
+                getResult.forEach(function(data,idx){
+                const newTr = document.createElement("tr");
+                // console.log(newTr)
+                newTr.id = `delete_${data.id}`;
+                newTr.innerHTML = `
+                            <td>
+                            <input type="checkbox" name="singlechecks" getcheck="siglechecks" id="siglechecks${data.id}" class="form-check-input singlechecks" value="${data.id}" >
+                            </td>
+                            <td class="tr_no">${++idx}</td>
+                            <td>${data.name}</td>
+                            
+                            <td>${data.country.name}</td>
+                            
+                            <td>
+                                    <div class="form-checkbox form-switch">
+                                        <input type="checkbox" name="" id="" class="form-check-input change-btn" 
+                                        ${data.status_id === 3 ? "checked" : " "}
+                                        data-id = ${data.id}
+                                        >
+                                    </div>
+                            </td>
+                            <td>${data.user.name}</td> 
+                            <td>${data.created_at}</td>
+                            <td>${data.updated_at}</td>
+                            <td>
+                                <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" 
+                                data-id="${data.id}"
+                                data-country_id="${data.country_id}" 
+                                data-status_id="${data.status_id}" 
+                                data-user_id = "${data.user.id}"
+                                data-name="${data.name}"><i class="fas fa-pen"></i></a>
+                                <a href="#" class="text-danger me-3 delete-btns" data-idx = "${data.id}" ><i class="fas fa-trash"></i></a>
+                            </td>`
+
+                // $("#mytable tbody").append(tr);
+                    gettbody.appendChild(newTr);
+
                 })
             }
 
-            fetchAllData();
+            alldatastodom();
+
+            // show loader & fetch more data 
+            const getloader = document.querySelector(".loader");
+
+            function showloader(){
+                getloader.classList.add("show");
+
+                setTimeout(() => {
+                    getloader.classList.remove("show");
+
+                    setTimeout(()=>{
+                        page++;
+                        alldatastodom();
+                        
+                    },300)
+
+                }, 1000);
+            }
+
+            document.addEventListener("scroll",function(){
+                // console.log("helo");
+                // console.log(document.documentElement.scrollTop);
+                // console.log(document.documentElement.scrollHeight);
+                // console.log(document.documentElement.clientHeight);
+
+                const {scrollTop,scrollHeight,clientHeight} = document.documentElement;
+
+                if(scrollTop + clientHeight >= scrollHeight) {
+                    console.log("hay");
+                    showloader();
+                }
+            })
+
+            // start fetch data by pagination
+                
             
 
             // start create
@@ -318,9 +429,18 @@
                                             </td>
                                             <td></td>
                                             <td>${data.name}</td>
-                                            <td>${data.user.name}</td> 
+                                            
                                             <td>${data.country.name}</td>
-                                            <td>${data.status.name}</td>
+                                            <td>${data.user.name}</td> 
+                                            <td>
+                                                    <div class="form-checkbox form-switch">
+                                                        <input type="checkbox" name="" id="" class="form-check-input change-btn" 
+                                                        ${data.status_id === 3 ? "checked" : " "}
+                                                        data-id = ${data.id}
+                                                        >
+                                                    </div>
+                                                </td>
+
                                             <td>${data.created_at}</td>
                                             <td>${data.updated_at}</td>
                                             <td>
@@ -386,8 +506,21 @@
                                                             </td>
                                                             <td>${data.id}</td>
                                                             <td>${data.name}</td>
-                                                            <td>${data.user.name}</td> 
+                                                            <td>${data.country.name}</td>
+                                                            <td>
+                                                                <div class="form-checkbox form-switch">
+                                                                    <input type="checkbox" name="" id="" class="form-check-input change-btn" 
+                                                                    ${data.status_id === 3 ? "checked" : " "}
+                                                                
+                                                                    
+                                                                    data-id = ${data.id}
+                                                                    >
+                                                                </div>
+                                                            </td>
 
+                                                            <td>${data.user.name}</td> 
+                                                            
+                                                            
                                                             <td>${data.created_at}</td>
                                                             <td>${data.updated_at}</td>
                                                             <td>
@@ -520,6 +653,40 @@
                 })
             })
             // end bulk delete
+
+                        // $(".change-btn").click(function(){ // js မှလှမ်းပို့ပါက အလုပ်မလုပ်တော့ပေ
+            $(document).on("change",".change-btn",function(){ // ထို့ကြောင့် document ကို သံုးပေးရသည် 
+                // console.log($(this).data("id"));
+                // console.log("hello");
+                var getid = $(this).data("id");
+
+                // prop ဖြင့် checkbox သည် prop ဖြင့် check ဖြစ်သလား ဖြစ်လှျင်3 မဖြစ်လှျင် 4
+                var setstatus = $(this).prop("checked") === true ? 3 : 4;
+
+                // console.log(setstatus);
+                // change API 
+                $.ajax({
+                    url : "api/citiesstatus", //route list ထဲရှီ route name ကို ပို့ပေးရမည်
+                    type : "GET", // route ကို ဖမ်းတီးရာတွင် GET ဖြစ်သော ကြောင့် GET ဖြင့် သ့ဒဂပေးရမည်
+                    
+                    dataType : "json",
+                    data : {
+                        // columnName : value
+                        "id" : getid,
+                        "status_id" : setstatus
+                    },
+                    success : function(response){
+                        console.log(response.success); // return ပြန်လာသော data အား ယူမည် 
+                        Swal.fire({
+                            title: "Updated",
+                            text: "Update Successful",
+                            icon: "success"
+                        });
+                    }
+                    
+                });
+            })
+            // end change status btn
 
 
         })

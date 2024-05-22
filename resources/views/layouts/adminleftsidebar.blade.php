@@ -87,12 +87,12 @@
 
                                     <li class="nav-item nav-categories"><a href="{{route('cities.index')}}" class="nav-link text-white sidebarlinks">Cities</a></li>
 
-                                    <li class="nav-item nav-categories"><a href="{{route('countries.index')}}" class="nav-link text-white sidebarlinks">Countries</a></li>
+                                    
 
                                     <li class="nav-item nav-categories"><a href="{{route('paymentmethods.index')}}" class="nav-link text-white sidebarlinks">Payment Method</a></li>
 
                                     <li class="nav-item nav-categories"><a href="{{route('genders.index')}}" class="nav-link text-white sidebarlinks">Genders</a></li>
-
+                                    <li class="nav-item nav-categories"><a href="{{route('paymenttypes.index')}}" class="nav-link text-white sidebarlinks">Payment Type</a></li>
                                     <li class="nav-item nav-categories"><a href="{{route('relatives.index')}}" class="nav-link text-white sidebarlinks">Relative</a></li>
 
                                     <li class="nav-item nav-categories"><a href="{{route('roles.index')}}" class="nav-link text-white sidebarlinks">Roles</a></li>
@@ -105,6 +105,7 @@
 
                             <li class="nav-item"><a href="javascript:void(0);" class="nav-link text-white p-3 mb-2 sidebarlinks" data-bs-target="#fixedrole" data-bs-toggle="collapse"><i class="fas fa-file-alt fa-lg me-3"></i>Fixed Analysis<i class="fas fa-angle-left mores"></i></a>
                                 <ul id="fixedrole" class="collapse ps-2">
+                                    <li class="nav-item nav-categories"><a href="{{route('countries.index')}}" class="nav-link text-white sidebarlinks">Countries</a></li>
                                     <li class="nav-item nav-categories"><a href="{{route('stages.index')}}" class="nav-link text-white sidebarlinks">Stages</a></li>
                                     
                                     <li class="nav-item nav-categories"><a href="{{route('statuses.index')}}" class="nav-link text-white sidebarlinks">Status</a></li>

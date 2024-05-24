@@ -83,12 +83,15 @@ Route::middleware('auth')->group(function () {
     Route::resource("students",StudentsController::class);
     // mail ပို့ရန် route သတ်မှတ်သည် 
     Route::post("compose/mailbox",[StudentsController::class,"mailbox"])->name("students.mailbox");
+    // search route
+    Route::post("/students/quicksearch",[StudentsController::class,"quicksearch"])->name("students.quicksearch");
 
     Route::resource("roles",RolesController::class);
     Route::get("rolestatus",[RolesController::class,"rolestatus"]);
 
 
     Route::resource("cities",CityController::class);
+    // bulk delete
     Route::delete("citiesbulkdeletes",[CityController::class,"bulkdelete"])->name("cities.bulkdelete");
 
     Route::resource("countries",CountryContrller::class);

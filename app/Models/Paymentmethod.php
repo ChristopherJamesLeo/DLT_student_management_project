@@ -16,6 +16,7 @@ class Paymentmethod extends Model
         "image",
         "name",
         "slug",
+        "paymenttype_id",
         "status_id",
         "user_id",
     ];
@@ -26,5 +27,9 @@ class Paymentmethod extends Model
 
     public function status(){
         return $this -> belongsTo(Status::class); 
+    }
+
+    public function paymenttype(){
+        return $this->belongsTo(Paymenttype::class);
     }
 }

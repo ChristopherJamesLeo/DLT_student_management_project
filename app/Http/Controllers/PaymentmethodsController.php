@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Paymentmethod;
+use App\Models\Paymenttype;
 use App\Models\Status;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -15,8 +16,9 @@ class PaymentmethodsController extends Controller
     public function index()
     {
         $paymentmethods = Paymentmethod::all();
+        $paymenttypes = Paymenttype::where("status_id",3)->get();
         $statuses = Status::whereIn("id",[3,4])->get(); 
-        return view("paymentmethods.index",compact("paymentmethods","statuses"));
+        return view("paymentmethods.index",compact("paymentmethods","statuses","paymenttypes"));
     }
 
 
@@ -31,6 +33,7 @@ class PaymentmethodsController extends Controller
     {
         $this -> validate($request,[
             "name" => "required|max:50|unique:paymentmethods,name",
+            "paymenttype_id" => "required",
             "status_id" => "required|in:3,4" 
 
         ]);
@@ -42,9 +45,11 @@ class PaymentmethodsController extends Controller
 
         try {
             $paymentmethod = new Paymentmethod();
+            
             $paymentmethod -> name = $request["name"];
             $paymentmethod -> slug = Str::slug($request["name"]);  // Str ထဲရှီ slug ဟူသော metho dထဲသို့ firstname အား ပေးမည် ၄င်းသည် route name ဖြစ်သွ းမည်ဖြစ်သည် 
             $paymentmethod -> status_id = $request["status_id"];  
+            $paymentmethod -> paymenttype_id = $request["paymenttype_id"];  
             $paymentmethod -> user_id = $user_id;  
 
             
@@ -91,8 +96,9 @@ class PaymentmethodsController extends Controller
 
             // method 2 -> array ဖြင့် လဲ ပေးနိုင်သည် pipe နေရာတွင် comer  ထည့်ပီး single code double code ထည့်ပေးနိုင်သည် // မှားနိုင်သည် 
             "name" => ["required","max:50","unique:paymentmethods,name,". $id],
-            "status_id" => ["required","in:3,4"]  // 3 နှင့် 4 ဘဲ လက်ခံမည် // fontend နှင့် ချိန်ပြီးထည့်ရမည် 
-
+            
+            "status_id" => ["required","in:3,4"] , // 3 နှင့် 4 ဘဲ လက်ခံမည် // fontend နှင့် ချိန်ပြီးထည့်ရမည် 
+            "editpaymenttype_id" => "required",
         ]);
 
  
@@ -106,6 +112,7 @@ class PaymentmethodsController extends Controller
             $paymentmethod -> name = $request["name"];
             $paymentmethod -> slug = Str::slug($request["name"]); 
             $paymentmethod -> status_id = $request["status_id"];  
+            $paymentmethod -> paymenttype_id = $request["editpaymenttype_id"];  
             $paymentmethod -> user_id = $user_id;  
     
     

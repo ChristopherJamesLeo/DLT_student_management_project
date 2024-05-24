@@ -17,11 +17,21 @@
 
 
                      <div class="row">
-                         <div class="col-md-6 col-sm-12 form-group mb-1">
+                         <div class="col-md-4 col-sm-12 form-group mb-1">
                              <label for="name">Name <span class="text-danger">*</span></label>
                              <input type="text" name="name" id="name" class="form-control rounded-0" placeholder="Enter Type Name" value="{{old('name')}}">
                          </div>
-                         <div class="col-md-6 col-sm-12 form-group mb-1">
+                         <div class="col-md-4 col-sm-12 form-group mb-1">
+                            <label for="paymenttype_id">Payment Type</label>
+                            <select name="paymenttype_id" id="paymenttype_id" class="form-control rounded-0">
+                                <option value="" selected disabled>Select Payment Type</option>
+                               @foreach($paymenttypes as $paymenttype)
+                                   <option value="{{$paymenttype->id}}">{{$paymenttype['name']}}</option>
+                               @endforeach
+
+                            </select>
+                        </div>
+                         <div class="col-md-4 col-sm-12 form-group mb-1">
                              <label for="status_id">Status</label>
                              <select name="status_id" id="status_id" class="form-control rounded-0">
                                 @foreach($statuses as $status)
@@ -51,6 +61,7 @@
                 <tr>
                     <th>No</th>
                     <th>Name</th>
+                    <th>Payment Type</th>
                     <th>Status</th>
                     <th>By</th>
                     <th>Create At</th>
@@ -66,6 +77,8 @@
 
                     <td>{{++$idx}}</td>
                     <td>{{$paymentmethod->name}}</td>
+                    <td>{{$paymentmethod->paymenttype->name}}</td>
+                    {{-- paymenttype id သည် 0 ဖြစ်နေပါက attempt to null ထွက်လာမည်ဖြစ်သည် --}}
                     <td>
                         <div class="form-checkbox form-switch">
                             <input type="checkbox" name="" id="" class="form-check-input change-btn" {{$paymentmethod->status_id == "3" ? "checked" : ""}}
@@ -79,8 +92,9 @@
                      
                     <td>{{$paymentmethod->created_at->format('d m Y')}}</td>
                     <td>{{$paymentmethod->updated_at->format('d M Y')}}</td>
+
                     <td>
-                        <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" data-id="{{$paymentmethod->id}}" data-name="{{$paymentmethod->name}}" data-status="{{$paymentmethod->status_id}}"><i class="fas fa-pen"></i></a>
+                        <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" data-id="{{$paymentmethod->id}}" data-name="{{$paymentmethod->name}}" data-status="{{$paymentmethod->status_id}}" data-paymenttype="{{$paymentmethod->paymenttype_id}}"><i class="fas fa-pen"></i></a>
                         
                         {{-- <a href="javascript:void(0)" class="text-danger me-3 delete-btns" 
 
@@ -127,6 +141,16 @@
                                 <div class="col-md-12 col-sm-12 form-group mb-1">
                                     <label for="name">Name <span class="text-danger">*</span></label>
                                     <input type="text" name="name" id="editname" class="form-control rounded-0" placeholder="Enter Status Name" value="{{old('name')}}">
+                                </div>
+                                <div class="col-md-12 col-sm-12 form-group mb-1">
+                                    <label for="editpaymenttype_id">Payment Type</label>
+                                    <select name="editpaymenttype_id" id="editpaymenttype_id" class="form-control rounded-0">
+                                        <option value="" selected disabled>Select Payment Type</option>
+                                       @foreach($paymenttypes as $paymenttype)
+                                           <option value="{{$paymenttype->id}}">{{$paymenttype['name']}}</option>
+                                       @endforeach
+        
+                                    </select>
                                 </div>
                                 <div class="col-md-12 col-sm-12 form-group mb-1">
                                      <label for="editstatus_id">Status</label>
@@ -197,12 +221,14 @@
                         // console.log(response.data);
 
                         const data = response.data;
+                        console.log(data);
 
                         $("#mytable tbody").prepend(
                             `<tr id="${'delete_'+data.id}">
 
                                 <td>${data.id}</td>
                                 <td>${data.name}</td>
+                                <td>${data.paymenttype_id}</td>
                                 <td>
                                     <div class="form-checkbox form-switch">
                                         <input type="checkbox" name="" id="" class="form-check-input change-btn" 
@@ -227,7 +253,7 @@
 
                                     <a href="javascript:void(0)" class="text-danger me-3 delete-btns" 
 
-                                    data-id = "{{$paymentmethod->id}}" ><i class="fas fa-trash"></i></a>
+                                    data-id = "${data.id}" ><i class="fas fa-trash"></i></a>
 
                                 </td>
 
@@ -302,6 +328,7 @@
                 // console.log($(this).data("id"));
                 $("#editname").val($(this).data("name"));
                 $("#editstatus_id").val($(this).data("status"));
+                $("#editpaymenttype_id").val($(this).data("paymenttype"));
 
                 const getid = $(this).data("id");
 

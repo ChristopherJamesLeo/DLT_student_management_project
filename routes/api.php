@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\WarehousesController;
 use App\Http\Controllers\Api\CitiesController;
+use App\Http\Controllers\Api\StatusesController;
 
 // api route ကို ခေါ်ပါက http://127.0.0.1:8000/api/warehouses ဟုပြန်ခေါ်ပေးရမည်
 /*
@@ -32,3 +33,6 @@ Route::get("/warehousesstatus",[WarehousesController::class,"warehousesstatus"])
 
 Route::apiResource("cities", CitiesController::class,["as"=>"api"]);
 Route::get("/citiesstatus",[CitiesController::class,"citiesstatus"]);
+
+Route::apiResource("statuses",StatusesController::class,['as'=>'api']);
+Route::get("/statusessearch", [StatusesController::class,"search"]);

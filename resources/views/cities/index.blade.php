@@ -60,6 +60,7 @@
 
             <div>
                 <a href="javascript:void(0)" id="bulkdeletebtn" class="btn btn-primary rounded-0 btn-sm ">Bulk Delete</a>
+                <a href="javascript:void(0)" id="generateotpbtn" class="btn btn-secondary rounded-0 btn-sm ">Generate OTP</a>
             </div>
             <div >
                 <form action="" method="">
@@ -654,7 +655,23 @@
             })
             // end bulk delete
 
-                        // $(".change-btn").click(function(){ // js မှလှမ်းပို့ပါက အလုပ်မလုပ်တော့ပေ
+            // Start OTP
+            $("#generateotpbtn").on('click',function(){
+                $.ajax({
+                    url : "/generateotps",
+                    type : "POST",
+                    success : function(response){
+                        console.log(response);
+                    },
+                    error: function(response){
+                        console.log("Error",response);
+                    }
+                })
+            })
+
+            // End OTP
+
+            // $(".change-btn").click(function(){ // js မှလှမ်းပို့ပါက အလုပ်မလုပ်တော့ပေ
             $(document).on("change",".change-btn",function(){ // ထို့ကြောင့် document ကို သံုးပေးရသည် 
                 // console.log($(this).data("id"));
                 // console.log("hello");

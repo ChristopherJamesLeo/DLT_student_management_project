@@ -19,6 +19,7 @@ use App\Http\Controllers\StagesController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\RelativesController;
 use App\Http\Controllers\TypesController;
+use App\Http\Controllers\OtpsController;
 use App\Http\Controllers\PostsController;
 
 use App\Http\Controllers\PostsLikeController;
@@ -116,6 +117,10 @@ Route::middleware('auth')->group(function () {
 
     Route::resource("relatives",RelativesController::class);
     Route::get("relativestatus",[RelativesController::class,"relativestatus"]);
+
+    // OTP
+    Route::post("/generateotps",[OtpsController::class,"generate"]); // post method ကိုverify မလုပ်ပေ 
+    Route::post("/verifyotps",[OtpsController::class,"verify"]);
     
     Route::resource("posts",PostsController::class);
 

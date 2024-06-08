@@ -107,6 +107,7 @@
                     <th>No</th>
                     <th>Class</th>
                     <th>URL</th>
+                    <th>Counter</th>
                     <th>By</th>
                     <th>Class Date</th>
                     <th>Create At</th>
@@ -131,6 +132,10 @@
                             {{Str::limit($edulink ->url,30)}}
                         </a>
                     </td>
+                    <td>
+                        {{$edulink->counter}}
+                    </td>
+                    
                     
                     <td>{{$edulink['user']['name']}}</td>
                     <td>{{date("d m y",strtotime($edulink->classdate))}}</td>
@@ -138,10 +143,12 @@
                     <td>{{$edulink->created_at->format('d M Y | h:m A')}}</td>
                     <td>{{$edulink->updated_at->format('d M Y')}}</td>
                     <td>
-                        <a href="{{$edulink ->url}}" class="me-3 btn btn-outline-info btn-sm text-primary ms-2 " target="_blank" download="downloadname">
-                        
+                        {{-- download counter --}}
+                        <a href="{{route('edulinks.download',$edulink->id)}}" class="me-3 btn btn-outline-info btn-sm text-primary ms-2 me-2 " target="_blank" >
+                            download
                             <i class="fas fa-download"></i>
                         </a>
+                        {{-- download counter --}}
                         <a href="#editmodal" data-bs-toggle="modal" class="me-3 btn btn-outline-info btn-sm edit_form"
                         data-id="{{$edulink ->id}}"
                         data-classdate="{{$edulink ->classdate}}"

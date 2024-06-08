@@ -156,4 +156,18 @@ class EdulinksController extends Controller
         session()->flash("success","Delete Successfully");
         return redirect()->back();
     }
+
+
+    // download counter
+    public function download($id){
+        $edulink = Edulink::findOrFail($id);
+
+        $edulink -> increment("counter"); // counter ဆိုသော column ထဲရှီ value ကို တိုးသွားစေမည်ဖြစ်သည် 
+
+        return redirect($edulink->url); // counter ပြီးပါက url ကို return ပြန်ပေးချင်းဖြစ် a tag ရှီ ့href ထဲတွင် return ပြန်ထားသော link ဝင်သွားမည်ဖြစ်သည် 
+
+        
+    }
+
+    // download counter
 }

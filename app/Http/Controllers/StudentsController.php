@@ -47,7 +47,7 @@ class StudentsController extends Controller
 
         // create validatin လုပ်ခြင်းဟုခေါ်သည် 
         $this -> validate($request,[
-            "regnumber" => "required|unique:students,regnumber", // students table ထဲ၇ှီ regnumber ည်  unique ဖြစ်ရမည် 
+            // "regnumber" => "required|unique:students,regnumber", // students table ထဲ၇ှီ regnumber ည်  unique ဖြစ်ရမည် 
             "firstname" => "required",
             "lastname" => "required", 
             //"remark" => "max:200" // စာလံးု size ၁၀၀၀ရှိ ရမည် 
@@ -59,7 +59,7 @@ class StudentsController extends Controller
         $student = new Student();
 
         
-        $student -> regnumber = $request["regnumber"];
+        // $student -> regnumber = $request["regnumber"]; // system မှ အလိုအေလှာက်ထည့်ပေးမည်ဖြစသ်ည်
         $student -> firstname = $request["firstname"];
         $student -> lastname = $request["lastname"];
         $student -> slug = Str::slug($request["firstname"]);  // Str ထဲရှီ slug ဟူသော metho dထဲသို့ firstname အား ပေးမည် ၄င်းသည် route name ဖြစ်သွ းမည်ဖြစ်သည် 

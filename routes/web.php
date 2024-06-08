@@ -79,7 +79,10 @@ Route::middleware('auth')->group(function () {
 
     Route::resource("enrolls",EnrollsController::class);
 
+    // search 
     Route::resource("edulinks",EdulinksController::class);
+    Route::get("/edulinks/download/{id}",[EdulinksController::class,"download"])->name("edulinks.download");
+
 
     Route::resource("students",StudentsController::class);
     // mail ပို့ရန် route သတ်မှတ်သည် 

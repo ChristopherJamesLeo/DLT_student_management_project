@@ -14,18 +14,18 @@
                 
                 {{-- old('firstname')  သည် refresh ဖြစ်ပြီး data reject ဖြစ်၍ ပြန်လာပါက မူလပေးခဲ့သောစာသားကို မပြောက်ဘဲ invalit ဖြစ်နေသော data input box တစ်ခုတည်းသာ blank ဖြစ်ပြီး အရင် ထည့်ခဲ့သော data ကိူ ပြန်ဖော်ပြပေးနေမည် --}}
                 <div class="row">
-                    <div class="col-md-4 col-sm-12 form-group mb-1">
+                    <div class="col-md-6 col-sm-12 form-group mb-1">
                         <label for="firstname">First name <span class="text-danger">*</span></label>
                         <input type="text" name="firstname" id="firstname" class="form-control rounded-0" placeholder="First Name" value="{{old('firstname')}}">
                     </div>
-                    <div class="col-md-4 col-sm-12 form-group mb-2">
+                    <div class="col-md-6 col-sm-12 form-group mb-2">
                         <label for="lastname">Last Name</label>
                         <input type="text" name="lastname" id="lastname" class="form-control  rounded-0" placeholder="last name" value="{{old('lastname')}}">
                     </div>
-                    <div class="col-md-4 col-sm-12 form-group mb-3">
+                    {{-- <div class="col-md-4 col-sm-12 form-group mb-3">
                         <label for="regnumber">Register Number</label>
                         <input type="text" name="regnumber" id="regnumber" class="form-control  rounded-0" placeholder="reg number" value="{{old('regnumber')}}">
-                    </div>
+                    </div> --}}
                     
                     <div class="form-group mb-4 col-md-12 col-sm-12">
                         <label for="remark">Remark</label>

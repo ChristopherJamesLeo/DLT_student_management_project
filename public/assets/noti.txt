@@ -104,3 +104,8 @@ Queue method 2  -> method 2 ဖြင့်သာရနေသည်
 Jobs တစ်ခုဖန်တီးပေးရမည် 
 job တစ်ခု ဖန်တီးတိုင်း ပြုလုပ်ပေးရမည်
 php artisan make:job MailBoxJob
+
+
+=> pusher 
+
+cluter သည်အနီးစပ်ဆုံး server ကို ချိတ်ပေးရမည် 

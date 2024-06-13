@@ -221,9 +221,28 @@
                                 <div class="row gap-0 mb-2">
                                     <div class="col-auto">
                                         <i class="fas fa-info"></i>
+
                                     </div>
                                     <div class="col">
                                         {{$post->likes()->count()}}
+                                    </div>
+                                    
+                                </div>
+                                <div class="row gap-0 mb-2">
+                                    <div class="col-auto">
+                                        <i class="fas fa-info"></i>
+                                        
+                                    </div>
+                                    <div class="col">
+                                        @php
+                                            // $getpageurl = url(); array ကို string အဖြစ် convert ပြောင်းနေသော error ောကြာ်င့ current ကို သံုးပေးရမည် 
+                                            $getpageurl = url()->current();
+
+                                            // dd($getpageurl);
+                                            $pageview = App\Models\Pageview::where("pageurl",$getpageurl)->first()->counter; // Pageview သည် blade file မှဖြစ်သောကြောင့် File route တစ်ခုလံုးပေးရမည်
+
+                                        @endphp
+                                        Viewed {{$pageview}} Times
                                     </div>
                                     
                                 </div>

@@ -209,10 +209,19 @@
                             <p class="text-small text-muted text-uppercase mb-2">Personal Info</p>
                             <div class="row gap-0 mb-2">
                                 <div class="col-auto">
-                                    <i class="fas fa-info"></i>
+                                    <i class="fas fa-eye"></i>
                                 </div>
                                 <div class="col">
-                                    Sample Date
+                                    {{-- page ဘယ္်နခေါက်ဝင်ကြည်သလဲ မျတ်ထားနိုင်သည်  --}}
+                                    @php
+                                        // $getpageurl = url(); array ကို string အဖြစ် convert ပြောင်းနေသော error ောကြာ်င့ current ကို သံုးပေးရမည် 
+                                        $getpageurl = url()->current();
+
+                                        // dd($getpageurl);
+                                        $pageview = App\Models\Pageview::where("pageurl",$getpageurl)->first()->counter; // Pageview သည် blade file မှဖြစ်သောကြောင့် File route တစ်ခုလံုးပေးရမည်
+
+                                    @endphp
+                                    Viewed {{$pageview}} Times
                                 </div>
                                 
                             </div>

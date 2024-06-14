@@ -33,6 +33,10 @@ use App\Http\Controllers\WarehousesController;
 
 
 
+use App\Http\Controllers\ChatsController;
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -161,9 +165,24 @@ Route::middleware('auth')->group(function () {
     Route::get("/warehousesstatus",[WarehousesController::class,"warehousesstatus"]);
     Route::get("/warehousesfatchalldatas",[WarehousesController::class,"fatchalldates"])->name("warehouses.fatchalldatas");
 
-    
-    
+    // pusher outer route
+    Route::get("/pushers",function(){
+        return view("pushers");
+    });
+
+    Route::get("/chatboxs",function(){
+        return view("chatbox");
+    });
+
+
+    // pusher chat event
+    Route::post("/chatmessage",[ChatsController::class, "sendmessage"]);  
+  
 });
+
+
+
+
 
 
 require __DIR__.'/auth.php';

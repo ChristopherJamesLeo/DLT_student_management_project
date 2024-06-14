@@ -109,3 +109,52 @@ php artisan make:job MailBoxJob
 => pusher 
 
 cluter သည်အနီးစပ်ဆုံး server ကို ချိတ်ပေးရမည် 
+
+channel ကို တည်ဆောက် 
+manage ထဲဝင်
+app -> getting started -> 
+
+git hub မှ ပြန် pull ပါက install ပြန်လုပ်ပေးရမဘ် package ကို 
+
+composer require pusher/pusher-php-server 
+
+-> env file
+PUSHER_APP_ID=1819218
+PUSHER_APP_KEY=a3714922c14fb66ed312
+PUSHER_APP_SECRET=8caecdce05f1dd1e7e23
+
+
+step 1 on env file
+QUEUE_CONNECTION=sync   -> sync for pusher database နေရာတွင် sync ပြောင်းပေးရမည် // database for database
+BROADCAST_DRIVER=pusher 
+PUSHER_APP_ID=1819218
+PUSHER_APP_KEY=a3714922c14fb66ed312
+PUSHER_APP_SECRET=8caecdce05f1dd1e7e23
+PUSHER_HOST=   #ထည့်စရာမလိုပေ
+PUSHER_PORT=443
+PUSHER_SCHEME=https
+PUSHER_APP_CLUSTER=ap1 # singapoer server ကို ဆိုလိုသည် ap1 နှင့် ap2 // server ေပါ်မူတည်ပြီးေပြာင်းနုိင်သည် 
+
+
+config/broadcasting.php ထဲတွင် 
+option ချိတ်ပေးရမည် 
+
+driver ထည့်ပေးရမ်ည်
+'default' => env('BROADCAST_DRIVER', 'pusher'),  // driver ကို pusher ထည့်ပေးရမည် 
+
+
+web ထဲတွင် pusher တွက် test လုပ်ဖုိ့ route ဖန်တီးမည်
+
+view ထဲတွင် pusher.blade.php တည်ဆောက်ပြီးစမ်းမည်
+
+pusher ထဲတွင် 
+channel နှင့် event အား နမည်ပေးထားတဲ့အတို်ငး debug cosolew ထဲတွင် သွားပေးရမည် 
+
+backend 
+
+
+laravel ထဲတွင် event တစ်ခုဖန်တီးပေးရမည်
+php artisan make:event ChatEvent
+
+controller ထဲတွင် broadcasting( new EventMethod (value)); 
+

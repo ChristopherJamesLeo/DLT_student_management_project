@@ -24,6 +24,9 @@
         {{-- toastr notification css1 js1 --}}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
         
+        {{-- pusher js 1 --}}
+        <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+        
         <!-- Extra Css  -->
         @yield("css")
     </head>

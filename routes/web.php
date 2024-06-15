@@ -34,6 +34,7 @@ use App\Http\Controllers\WarehousesController;
 
 
 use App\Http\Controllers\ChatsController;
+use App\Http\Controllers\PostLiveViewersController;
 
 
 
@@ -177,6 +178,10 @@ Route::middleware('auth')->group(function () {
 
     // pusher chat event
     Route::post("/chatmessage",[ChatsController::class, "sendmessage"]);  
+
+    // request ဖြင့် တောင်းထားတာမဟုတ်ဘဲ post ဖြင့် တောင်းထားသောကြောင့် variable name ဖြစ်သော post ဖြစ်သာ ေခါ်ပေးရမည် ဖြစ်သ်ည 
+    Route::post("/postliveviewersinc/{post}",[PostLiveViewersController::class,"incrementviewer"]);
+    Route::post("/postliveviewerdec/{post}",[PostLiveViewersController::class,"decrementviewer"]);
   
 });
 

@@ -230,7 +230,7 @@
                                 </div>
                                 <div class="row gap-0 mb-2">
                                     <div class="col-auto">
-                                        <i class="fas fa-info"></i>
+                                        <i class="fas fa-hand-pointer"></i>
                                         
                                     </div>
                                     <div class="col">
@@ -243,6 +243,16 @@
 
                                         @endphp
                                         Viewed {{$pageview}} Times
+                                    </div>
+                                    
+                                </div>
+                                <div class="row gap-0 mb-2">
+                                    <div class="col-auto">
+                                        <i class="fas fa-eye"></i>
+
+                                    </div>
+                                    <div class="col">
+                                        <span id="liveviewer">0</span> Watching
                                     </div>
                                     
                                 </div>
@@ -398,6 +408,12 @@
     </div>
     <!--End Content Area-->
 
+
+    {{-- start hidden area --}}
+    {{-- pusher အတွက် post Id အား dynamic ဖြစ်နေစေရန် --}}
+    <input type="hidden" name="" id="post_id" data-id="{{$post->id}}">
+    {{-- end hidde area --}}
+
     {{-- start model area --}}
         <!-- start create modal -->
         <div id="createmodel" class="modal fade">
@@ -538,5 +554,70 @@
         document.getElementById("autoclick").click(); // page စ run သည် နှင့် click ခေါက်ထားမည်ဟုဆိုလိုသည်
 
         // end tabs box
+
+
+
+
+
+        // start live post viewer pusher
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('a3714922c14fb66ed312', {
+            cluster: 'ap1'
+        });
+
+        function mainchannel(post_id){
+            var channel = pusher.subscribe(`postliveviewer-channel_${post_id}`);
+                channel.bind('postliveviewer-event', function(data) {
+                // alert(JSON.stringify(data));
+                console.log(data);
+                document.getElementById("liveviewer").textContent = data.count;
+            });
+        }
+
+        // mainchannel(1);
+
+
+        function incrementviewer(post_id){
+            $.ajax({
+                url : `/postliveviewersinc/${post_id}`,
+                type : "POST",
+                data : {
+                    _token : $('meta[name="csrf-token"]').attr('content')
+                },
+                success : function(response){
+                    console.log("Increment Status = " , response.success);
+                }
+            })
+        }
+
+        function decrementviewer(post_id){
+            $.ajax({
+                url : `/postliveviewerdec/${post_id}`,
+                type : "POST",
+                data : {
+                    _token : $('meta[name="csrf-token"]').attr('content')
+                },
+                success : function(response){
+                    console.log("Decrement Status = " , response.success);
+                }
+            })
+        }
+
+        window.addEventListener("DOMContentLoaded",function(){
+            // console.log("I am loaded");
+
+            const getpostid = document.getElementById("post_id").getAttribute("data-id");
+            incrementviewer(getpostid);
+            mainchannel(getpostid);
+        })// page ထဲဝင်လာပါက အလုပ်လုပ်မည် D O M load ဖြစ်ပါက အလုပ်လုပ်မည်
+        
+        window.addEventListener("beforeunload",function(){
+            // console.log("I am unloaded");
+            const getpostid = document.getElementById("post_id").getAttribute("data-id");
+            decrementviewer(getpostid);
+        })// page မှထွက်သွားပါက အလုပ်လုပ်မည် D O M load ဖြစ်ပါက အလုပ်လုပ်မည်
+        
+        // end live post viewer pusher
     </script>
 @endsection

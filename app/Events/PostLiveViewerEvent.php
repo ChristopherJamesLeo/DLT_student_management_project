@@ -34,12 +34,13 @@ class PostLiveViewerEvent implements ShouldBroadcast
         ];
     }
 
-    public function broadcastAs()
-    {
-        return 'postliveviewer-event';
-    }
+    // public function broadcastAs()  // channel.bind('APP\\Events\\PostLiveViewerEvent', function(data) { ဖြင့်သုံးထားသောကြာေင့် ထည့်စရာမလိုပေ
+    // {
+    //     return 'postliveviewer-event';
+    // }
 
 }
 
 
 // php artisan make:event PostLiveViewerEvent
+

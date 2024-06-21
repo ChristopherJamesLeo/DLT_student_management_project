@@ -39,6 +39,7 @@ class Kernel extends HttpKernel
 
 
             \App\Http\Middleware\PageViewMid::class,
+            \App\Http\Middleware\PostViewDurationMid::class,
         ],
 
         'api' => [ // Api မှထုတ်ရန် 

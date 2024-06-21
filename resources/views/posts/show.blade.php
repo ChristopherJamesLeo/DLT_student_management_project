@@ -523,6 +523,10 @@
                 previewimages(this,".gallery")
             })
             // start preview img
+
+
+
+
         })
 
         document.querySelector("#back_btn").addEventListener("click",function(){
@@ -568,7 +572,10 @@
 
         function mainchannel(post_id){
             var channel = pusher.subscribe(`postliveviewer-channel_${post_id}`);
-                channel.bind('postliveviewer-event', function(data) {
+                // channel.bind('postliveviewer-event', function(data) {
+
+                    // use ခေါ်သည့် ပံုစံဖြင့် သံုးပါက Events ထဲတွင် broadcastAs ကို ထည့်သံုးစရာမလိုပေ
+            channel.bind('App\\Events\\PostLiveViewerEvent', function(data) {
                 // alert(JSON.stringify(data));
                 console.log(data);
                 document.getElementById("liveviewer").textContent = data.count;
@@ -612,12 +619,39 @@
             mainchannel(getpostid);
         })// page ထဲဝင်လာပါက အလုပ်လုပ်မည် D O M load ဖြစ်ပါက အလုပ်လုပ်မည်
         
-        window.addEventListener("beforeunload",function(){
-            // console.log("I am unloaded");
-            const getpostid = document.getElementById("post_id").getAttribute("data-id");
-            decrementviewer(getpostid);
-        })// page မှထွက်သွားပါက အလုပ်လုပ်မည် D O M load ဖြစ်ပါက အလုပ်လုပ်မည်
+        // window.addEventListener("beforeunload",function(){
+        //     // console.log("I am unloaded");
+        //     const getpostid = document.getElementById("post_id").getAttribute("data-id");
+        //     decrementviewer(getpostid);
+        // })// page မှထွက်သွားပါက အလုပ်လုပ်မည် D O M load ဖြစ်ပါက အလုပ်လုပ်မည်
         
         // end live post viewer pusher
+
+        // WITH Jquery
+        // beforeunload = working in reload
+        // unload = working in reload
+        // start post duration 
+        $(window).on("beforeunload",function(){ // pusher  နဲံ ညိနေသည် 
+        // $(document).ready(function(){
+            // const exittime = new Date().toString(); // object ကို string ေပြာင်းမ်  // Fri Jun 21 2024 03:59:43 GMT+0630 (Myanmar Time)
+            const exittime = new Date().toISOString(); // String ချင်းတူသော်လည်း format တူရန် ISO ကို သံုးပေးရမည် //2024-06-20T21:30:24.445Z
+
+            // console.log(exittime);
+
+            $.ajax({
+                url : "/trackduration",
+                method : "POST",
+                data : {
+                    exittime : exittime,
+                    _token : "{{ csrf_token() }}"
+                },
+                success: function(response){
+                    console.log(response);
+                }
+            })
+        })
+        // end post duration
+
+
     </script>
 @endsection

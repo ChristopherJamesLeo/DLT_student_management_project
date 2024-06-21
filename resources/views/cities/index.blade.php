@@ -183,6 +183,48 @@
 
         </div>
         <!-- end edit modal -->
+
+
+        <!-- start OTP modal -->
+        <div id="otpmodal" class="modal fade">
+            <div class="modal-dialog modal-sm modal-dialog-center">
+                <div class="modal-content">
+                    
+                    <div class="modal-body">
+                        {{-- <form id="form_action" action="" method="POST" enctype="multipart/form-data" class="">  --}}
+                        <form id="verifyform" > 
+
+                            {{-- {{csrf_field()}}
+                            {{ method_field("PUT") }} --}}
+                            <input type="hidden" name="edituser_id" id="user_id" value="{{$userdata['id']}}">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 form-group mb-3">
+                                    <label for="otpcode">OTP Code <span class="text-danger">*</span></label>
+                                    <input type="text" name="otpcode" id="otpcode" class="form-control rounded-0" placeholder="Enter Status Name" >
+                                </div>
+
+                                 <input type="hidden" name="otpuser_id" id="otpuser_id" value="{{$userdata['id']}}">
+
+                                <div class="col-md-12">
+                                    <div class="d-flex justify-content-end">
+
+                                        <button type="submit" class="btn btn-primary btn-sm rounded-0 ms-3">Submit</button>
+                                    </div>
+                                </div>
+
+                               
+
+                            </div>
+
+                            <p id="optmessage"></p>
+                            <p>Exprie in : <span id="otptimer"></span>Seconds</p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- end OTP modal -->
     <!-- END MODAL AREA -->
 
 

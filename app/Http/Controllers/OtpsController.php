@@ -23,7 +23,7 @@ class OtpsController extends Controller
     }
 
     public function verify(Request $request){
-        $userid = $request->input("user_id");
+        $userid = $request->input("otpuser_id");
         $otp = $request->input('otpcode');
         $isvalidotp = $this -> otpservice -> verifyotp($userid,$otp);
 

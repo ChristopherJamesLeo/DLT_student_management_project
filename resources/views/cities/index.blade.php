@@ -703,10 +703,39 @@
                     url : "/generateotps",
                     type : "POST",
                     success : function(response){
-                        console.log(response);
+                        console.log(response.otp);
+
+                        $("#optmessage").text("your otp code is " + response.otp);
+                        $("#otpmodal").modal("show");
+                        startotptimer(); // otp will expire at 300 minutes ( 5 minutes)
                     },
                     error: function(response){
                         console.log("Error",response);
+                    }
+                })
+            })
+
+            function startotptimer(){
+
+            }
+
+            $("#verifyform").on("submit",function(e){
+                e.preventDefault();
+                $.ajax({
+                    url : "/verifyotps",
+                    type : "POST",
+                    data: $(this).serialize(),
+                    success : function(response){
+                        if(response.message){
+                            console.log("Dulk Delete Successful");
+                        }else {
+                            console.log("invalid OTP");
+                        }
+                        
+
+                    },
+                    error : function(response){
+                        console.log("error at OTP", response);
                     }
                 })
             })

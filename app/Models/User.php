@@ -72,5 +72,18 @@ class User extends Authenticatable
         return $this -> followings() -> where("user_id",$following_id)->exists(); 
     }
 
+    // check online 
+    public function scopeOnlineusers($query){  // query ဟု ရေးလိုက်တာနဲ့ use modal ကို လှမ်းခေါ်မည်ဆိုတာ အလို အလေှာက်သိထားပြိးသာ်း
+        return $query -> where("is_online",1)->get();
+    }
 
+    public function scopeOfflineusers($query){  // query ဟု ရေးလိုက်တာနဲ့ use modal ကို လှမ်းခေါ်မည်ဆိုတာ အလို အလေှာက်သိထားပြိးသာ်း
+        return $query -> where("is_online",0)->get();
+        
+
+    }
+
+    // log in log out သိစေရန် provider တစ်ခု listener တစ်ခု ဖန်တီးပေးရမည် 
+    // php artisan make:provider OnOffUserStatusServiceProvider  // provider အား config -> app ထဲတွင် သွားရောက်အသက်သွင်းပေးရမည် 
+    // php artisan make:listener OnOffUserStatusListener // listener အား Provider ထဲရှီ eventserviceprovider ထဲရှီ listen ထဲတွင် အသက်သွင်းပေးရမ် 
 }

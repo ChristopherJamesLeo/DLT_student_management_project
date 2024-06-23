@@ -29,3 +29,7 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrapFive(); // paginatin ကို bootstrap 5 ကို default ပြောင်းရန် 
     }
 }
+
+
+// Create custom provide
+// php artisan make:provider OnOffUserStatusServiceProvider

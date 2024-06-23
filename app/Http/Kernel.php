@@ -40,6 +40,7 @@ class Kernel extends HttpKernel
 
             \App\Http\Middleware\PageViewMid::class,
             \App\Http\Middleware\PostViewDurationMid::class,
+            \App\Http\Middleware\OnOffUserStatusMid::class,
         ],
 
         'api' => [ // Api မှထုတ်ရန် 

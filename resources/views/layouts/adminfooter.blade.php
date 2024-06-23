@@ -1,10 +1,35 @@
    <!--Start Footer Section-->
-   {{-- <footer class="footers">
+   <footer class="footers">
         <div class="d-flex justify-content-between align-items-center">
             <h2>Ninth Programming</h2>
             <span>copy right 2024</span>
         </div>
-   </footer> --}}
+   </footer>
+
+   {{-- {{$onlineusers}} --}}
+   {{-- start right navbar --}}
+   <div class="right_panel">
+        <form action="" method="">
+            <input type="text" name="usersearch" id="usersearch" class="form-control form-control-sm rounded-0 my-2 shadow-none outline-none" placeholder="Search..."/>
+        </form>
+        <ul id="onoffusers" class="list-group rounded-0">
+            @foreach ($onlineusers as $onlineuser)
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="small">{{$onlineuser->name}}</div>
+                            {{-- diffForHumans() ကို သုံးမရပေ ထို့ေကြာင့် Carbon သံုးပြီူ date object ပြန်ပေြာင်းပေးရမည် --}}
+                            <div class="text-muted">{{\Carbon\Carbon::parse($onlineuser->last_active)->diffForHumans()}}</div>
+                        </div>
+                        <div class="text-success">
+                            <i class="fas fa-circle fa-xs"></i>
+                        </div>
+                    </div>
+                </li>   
+            @endforeach
+        </ul>
+   </div>
+   {{-- end right navbar --}}
     <!--End Footer Section-->
     
     {{-- Start Modeal Area --}}

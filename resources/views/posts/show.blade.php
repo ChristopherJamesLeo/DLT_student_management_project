@@ -367,6 +367,7 @@
                         <li class="nav-item"><button type="button" id="" class="tablinks" onclick="gettab(event,'following')">Following</button></li>
                         <li class="nav-item"><button type="button" id="" class="tablinks" onclick="gettab(event,'liked')">Liked</button></li>
                         <li class="nav-item"><button type="button" id="" class="tablinks" onclick="gettab(event,'remark')">Remark</button></li>
+                        <li class="nav-item"><button type="button" id="" class="tablinks" onclick="gettab(event,'postviewduration')">Post View</button></li>
                     </ul>
 
 
@@ -396,6 +397,27 @@
                             <p>
                                 {!! $post->content !!}
                             </p>
+                        </div>
+                        <div id="postviewduration" class="tab-pane">
+                           <table class="table table-sm table-hover border">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Duration</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($postviewdurations as $postviewduration)
+                                        <tr>
+                                            <td>{{$postviewduration->user_id}}</td>
+                                            <td>{{$postviewduration->duration}} s</td>
+                                            <td>{{$postviewduration->created_at->format("d M Y h:m:s")}}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                                
+                           </table>
                         </div>
                     </div>
 

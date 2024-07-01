@@ -160,6 +160,35 @@
                 quicksearch();
             })
             // End quick search
+
+            // start on off user 
+            var getInput = document.getElementById("usersearch");
+
+            var getUl = document.getElementById("onoffusers");
+            var getLis = getUl.getElementsByTagName("li"); // variable မှတစ်ဆင့် parent အား ခေါ်ယူလိုက်ခြင်း ဖြစ်သည် members ထဲတွင် ရှီသော li ကို ခေါ်ယူခြင်းဖြစ်သည်
+
+            getInput.addEventListener("keyup",filter);
+
+
+            function filter(){
+                var getdivs;
+
+                var filter = this.value.toLowerCase();
+
+                for(let i = 0 ; i < getLis.length ; i++){
+                    getdivs = getLis[i].getElementsByClassName("small")[0].textContent.toLowerCase();
+                    var getatext = getdivs;
+                    // console.log(getatext);
+                    if(getatext.indexOf(filter) > -1){ // -1 ထပ်ကြီးမှဟုပြောသောကြောင့် filter သည် getatext ထဲတွင် ရှိနေမှ 
+                        getLis[i].style.display = "block";
+                    }else {
+                        getLis[i].style.display="none";
+                    }
+                }
+                
+            }
+
+            // end on off user 
         </script>
 
         @yield("scripts")

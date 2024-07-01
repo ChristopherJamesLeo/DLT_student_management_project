@@ -72,4 +72,8 @@ class Post extends Model
         // return $this -> belongsToMany(Post::class,"post_like");
         return $this -> belongsToMany(User::class,"post_like"); // timestamp ပါ ထည့်ပေးရန် ေပြာသည် 
     }
+
+    public function postviewdurations(){
+        return $this -> hasMany(PostViewDuration::class);
+    }
 }

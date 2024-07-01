@@ -200,7 +200,7 @@ a{
 
 .right_panel {
     width: 200px;
-    height: 70vh;
+    height: 30vh;
     background-color: #fff;
     border: 1px solid #000;
     overflow-y: scroll;

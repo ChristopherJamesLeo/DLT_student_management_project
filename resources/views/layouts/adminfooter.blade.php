@@ -8,11 +8,11 @@
 
    {{-- {{$onlineusers}} --}}
    {{-- start right navbar --}}
-   <div class="right_panel">
+   <div class="right_panel d-none">
         <form action="" method="">
             <input type="text" name="usersearch" id="usersearch" class="form-control form-control-sm rounded-0 my-2 shadow-none outline-none" placeholder="Search..."/>
         </form>
-        <ul id="onoffusers" class="list-group rounded-0">
+        <ul id="onoffusers" class="list-group rounded-0 ">
             @foreach ($onlineusers as $onlineuser)
                 <li class="list-group-item">
                     <div class="d-flex justify-content-between">

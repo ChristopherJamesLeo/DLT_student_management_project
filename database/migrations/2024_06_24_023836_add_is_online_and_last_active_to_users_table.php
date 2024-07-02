@@ -28,3 +28,6 @@ return new class extends Migration
         });
     }
 };
+
+
+// php artisan make:migration add_package_id_and_add_subscription_expires_at_to_users_table --table=users

@@ -37,6 +37,7 @@ use App\Http\Controllers\ChatsController;
 use App\Http\Controllers\PostLiveViewersController;
 
 use App\Http\Controllers\PostViewDurationsController;
+use App\Http\Controllers\SubscriptionsController;
 
 
 
@@ -189,6 +190,10 @@ Route::middleware('auth')->group(function () {
     // post page ထဲ view duration ဘယ်လောက်ရှိလဲ ကြည့်နိုင်ရန်
     Route::post("/trackduration",[PostViewDurationsController::class,"trackduration"]);
     // အလိုအလျောက်လုပ်ဆောင်ပေးနိုင်ရန် Middle ware တစ်ခုဖန်တီးရန် လိုအပ်လာသည် 
+
+
+    // package သတ်မှတ်ရန် 
+    Route::get("/subscribesexpired",[SubscriptionsController::class,"expire"])->name("subscriptions.expire");
 });
 
 

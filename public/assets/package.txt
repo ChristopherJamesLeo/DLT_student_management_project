@@ -1,0 +1,15 @@
+မည်သည့် pack ကို သံုးနေသလဲ 
+user ထဲတွင် ထည့်ရန်နှင့် မည်သည့် အချိန်တွင် expire ဖြစ်မည်ကို သတ်မှတ်ရန် column နှစ်ခု ပေးရမည် 
+php artisan make:migration add_package_id_and_add_subscription_expires_at_to_users_table --table=users
+
+ $table -> string("name");
+            $table -> decimal("price",8,2);
+            $table -> integer("duration"); // by day count
+            $table->timestamps();
+
+            $table -> dropForeign(["package_id"]); // rollback ပြန်ခေါ်တာနှင့် foreign key ပါ ဖြုတ်ခဲ့မည် array ဖြင့် ထည့်ရမည် 
+            $table -> dropColumn("package_id");
+            $table -> dropColumn("subscription_expires_at");
+
+            $table -> foreignId('package_id')->nullable()->after("last_active")->constrained()->onDelete("set null")->onUpdate(); // set null delete လုပ်ပါက package_id အားး ဖျက်ပါက ၄င်း value အား null ထားမည် // after သည် contrained နောက်တွင်ထားမရပေ
+            $table -> timestamp('subscription_expires_at')->nullable()->after("package_id");

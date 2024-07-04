@@ -39,6 +39,8 @@ use App\Http\Controllers\PostLiveViewersController;
 use App\Http\Controllers\PostViewDurationsController;
 use App\Http\Controllers\SubscriptionsController;
 
+use App\Http\Controllers\PackagesController;
+
 
 
 /*
@@ -194,6 +196,8 @@ Route::middleware('auth')->group(function () {
 
     // package သတ်မှတ်ရန် 
     Route::get("/subscribesexpired",[SubscriptionsController::class,"expire"])->name("subscriptions.expire");
+    Route::resource("/packages",PackagesController::class);
+    
 });
 
 

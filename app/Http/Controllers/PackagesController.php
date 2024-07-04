@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Package;
+use App\Models\Status;
+
 class PackagesController extends Controller
 {
     /**
@@ -11,7 +14,8 @@ class PackagesController extends Controller
      */
     public function index()
     {
-        //
+        $packages = Package::all();
+        return view('packages.index',compact("packages"));
     }
 
     /**
@@ -27,7 +31,15 @@ class PackagesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request -> validate([
+            'name' => "required|string|max:100",
+            'price' => 'required|numeric',
+            'duration' => 'required|integer'
+        ]);
+
+        Package::create($request->all()); // request ထဲက အားလုံးstore လုပ်မည်
+
+        return response()->json(['message'=>'New package created'],201);
     }
 
     /**

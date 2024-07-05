@@ -3,7 +3,7 @@
     
     <!--End Site Setting-->
 
-<div>
+<div id="app">
     
     <!-- start left side bar -->
     @include("layouts.adminleftsidebar")

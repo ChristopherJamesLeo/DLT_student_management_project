@@ -1,0 +1,57 @@
+=> to install bootstrap 
+check node version
+npm install bootstrap 
+npm install @popperjs/core     or    npm install bootstrap @popperjs/core 
+
+npm audit (update package )
+num audit fix ( fix update package )
+
+
+vite.config.js တွင် config လုပ်ပေးရမည်
+
+resources အောက်ရှိ js ထဲရှိ app.js ထဲတွင် import လုပ်ပေးရမည် 
+
+import 'bootstrap/dist/css/bootstrap.min.css'; // bootstrap အားခေါ်ပေးရမည်
+import './../css/app.css'; // css ထဲရှိ bootstarp အား ခေါ်ပေးရမည်
+
+
+resources ထဲရှိ app.css တွငိလဲ config လုပ်ပေးရမည် 
+@import 'bootstrap/dist/css/bootstrap.min.css'; 
+/* import ဖြင့် bootstrap အား ခေါ်ပေးရမည် */
+
+config လုပ်ပြီး header ထဲတွင် vite ဖြင့် array ပံုစံ ယူသံုးပေးရမည် 
+
+@vite(['resources/css/app.css','resources/js/app.js'])
+
+---------------------
+npm run build
+---------------------
+npm run dev
+---------------------
+
+popper js ရရှိရန် content တစ်ခုလံုး side တစ်ခုလံုးအား app ဟူသော id ထဲတည့်ပေးရမည် 
+<div id="app"> 
+    all executed codes must be here
+</div>
+import 'bootstrap';  // bootstrap ေရှ့ရှီ (.) အားဖြုတ်ပေးရမည် 
+
+----------------------------
+custom css အား vite ထဲတည့်ရန် 
+
+step at vite.config 
+export default defineConfig({
+    plugins: [
+        laravel({
+            input: [
+                'resources/css/app.css',
+                'resources/js/app.js',
+                'public/assets/dist/css/style.css', // custom css ချိတ်ဆက်ရန် 
+                'public/assets/dist/js/app.js'
+            ],
+            refresh: true,
+        }),
+    ],
+});
+
+step 2 resourece / app.js
+import './../../public/assets/dist/css/style.css' ; // custom css

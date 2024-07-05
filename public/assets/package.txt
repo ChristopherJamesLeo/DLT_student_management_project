@@ -13,3 +13,7 @@ php artisan make:migration add_package_id_and_add_subscription_expires_at_to_use
 
             $table -> foreignId('package_id')->nullable()->after("last_active")->constrained()->onDelete("set null")->onUpdate(); // set null delete လုပ်ပါက package_id အားး ဖျက်ပါက ၄င်း value အား null ထားမည် // after သည် contrained နောက်တွင်ထားမရပေ
             $table -> timestamp('subscription_expires_at')->nullable()->after("package_id");
+
+
+
+

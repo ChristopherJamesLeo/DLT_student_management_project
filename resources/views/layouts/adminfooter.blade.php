@@ -56,8 +56,9 @@
 
 
         <!--bootstrap js 1 version 5.3.0-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+        {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script> --}}
 
+        {{-- @vite(['public/assets/dist/js/app.js']) --}}
         <!--jquery js 1-->
         <script src="https://code.jquery.com/jquery-3.6.4.min.js" type="text/javascript"></script>
 
@@ -105,7 +106,9 @@
                 @endforeach
             @endif
         <!--custom js-->
-        <script src="{{asset('assets/dist/js/app.js')}}" type="text/javascript"></script>
+        {{-- <script src="{{asset('assets/dist/js/app.js')}}" type="text/javascript"></script> --}}
+        @vite(['public/assets/dist/js/app.js']) 
+        {{-- vite သည် code များ အား compress လုပ်ထားပေးသည်  --}}
         <script>
 
 

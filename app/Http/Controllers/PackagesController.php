@@ -14,8 +14,18 @@ class PackagesController extends Controller
      */
     public function index()
     {
-        $packages = Package::all();
-        return view('packages.index',compact("packages"));
+        //  ajax ဖြင့် လှမ်းခေါ်ပါက  list ကို ဆွဲထုတ်မည် လှမ်းမခေါ်ပါက view ဖြင့် blade ကို ဆွဲတင်မည်ဖြစ်သည် 
+
+        if(request()->ajax()){ // ajax ဖြင့် request လုပ်ခဲ့သလား စစ်နိုင်သည် 
+            $packages = Package::all();
+            return view('packages.list',compact("packages")); // package list ဖိုင်ထဲသို့ ပို့ပေးမည်ဖြစ်ပြီး ၄င်း ဖိုင်အား return ဖြင့် json အား ပို့ပေးလိုက်မည်ဖြစ်သည် 
+            return view('packages.list',compact("packages"))->render(); // render သုံးပေးလဲရသည်
+        }
+
+        return view('packages.index');
+
+        // package index ထဲသို့ package.list ဖိုင်ထဲရှိ data များအား ajax request ထဲသို့ ထည့်ပေးလိုက်မည်ဖြစ်သည် 
+        
     }
 
     /**
@@ -47,7 +57,9 @@ class PackagesController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $package = Package::findOrFail($id);
+
+        return response()->json($package);
     }
 
     /**
@@ -63,7 +75,10 @@ class PackagesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $package = Package::findOrFail($id);
+        $package -> update($request->all());
+
+        return response()->json(["message"=>"successfully"]);
     }
 
     /**

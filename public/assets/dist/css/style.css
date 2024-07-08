@@ -212,3 +212,12 @@ a{
 .right_panel::-webkit-scrollbar{
     width: 0px;
 }
+
+table#mytable {
+    background-color: transparent;
+
+}
+
+table#mytable th ,table#mytable td{
+    background-color: transparent;
+}

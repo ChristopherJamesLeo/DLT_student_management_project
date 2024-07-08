@@ -10,84 +10,56 @@
         
         <div class="row">
             <div class="col-md-12">
-                <a href="javascript:void(0)" id="modal-btn" class="btn btn-primary btn-sm rounded-0">Create</a>
+                <a href="javascript:void(0)" id="createmodal-btn" class="btn btn-primary btn-sm rounded-0">Create</a>
+                <a href="javascript:void(0)" id="set-btn" class="btn btn-info btn-sm rounded-0">Set To User</a>
             </div>
         </div>
 
         <hr>
     
-        <table id="mytable" class="table table-hover border">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Name</th>
-                    <th>Status</th>
-                    <th>By</th>
-                    <th>Create At</th>
-                    <th>Updated at</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
+        <div class="loader_container">
 
-            <tbody>
-                {{-- @foreach($socialapplications as $idx=>$socialapplication) 
-                
-                <tr id="delete_{{$socialapplication->id}}">
+        
+            <table id="mytable" class="table table-hover border">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Duration/Day</th>
+                        <th>Create At</th>
+                        <th>Updated at</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
 
-                    <td>{{++$idx}}</td>
-                    <td>{{$socialapplication->name}}</td>
-                    <td>
-                        <div class="form-checkbox form-switch">
-                            <input type="checkbox" name="" id="" class="form-check-input change-btn" {{$socialapplication->status_id == "3" ? "checked" : ""}} --}}
-                            {{-- type ကိုပြင်ရန် id သတ်မှတ်ရမည်
-                            data-id = {{$socialapplication->id}}
-                            >
-                        </div>
-                    </td>
-
-                    <td>{{$socialapplication["user"]["name"]}}</td>
-                     
-                    <td>{{$socialapplication->created_at->format('d m Y')}}</td>
-                    <td>{{$socialapplication->updated_at->format('d M Y')}}</td>
-                    <td>
-                        <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" data-id="{{$socialapplication->id}}" data-name="{{$socialapplication->name}}" data-status="{{$socialapplication->status_id}}"><i class="fas fa-pen"></i></a> --}}
-                        
-                        {{-- <a href="javascript:void(0)" class="text-danger me-3 delete-btns" 
-
-                        data-idx = "{{$type->$idx}}" ><i class="fas fa-trash"></i></a> --}}
-
-                        {{-- <a href="javascript:void(0)" class="text-danger me-3 delete-btns" 
-
-                        data-id = "{{$socialapplication->id}}" ><i class="fas fa-trash"></i></a>
-
-                    </td> --}}
-
-                    {{-- <form id="formdelete{{$type->$idx}}" action="{{route('types.destroy',$type->id)}}" method="POST">
-                        {{ csrf_field() }}
-                        {{ method_field('DELETE') }}
-                    </form> --}}
-
+                <tbody id="tabledata">
                     
-                {{-- </tr>
-                @endforeach --}}
-            </tbody>
-            
-        </table>
+                </tbody>
+
+                <div class=" loader">
+                    <div class="loader-item"></div>
+                    <div class="loader-item"></div>
+                    <div class="loader-item"></div>
+                </div>
+                
+            </table>
+        </div>
         
     </div>
     <!--End Content Area-->
 
         <!-- START MODAL AREA-->
          <!-- start create modal -->
-        <div id="createmodel" class="modal fade">
-            <div class="modal-dialog modal-sm modal-dialog-center">
+        <div id="createmodal" class="modal fade">
+            <div class="modal-dialog modal-md modal-dialog-center">
                 <div class="modal-content rounded-0">
                     <div class="modal-header">
                         <h6 class="modal-title">Create Form</h6>
                         <button type="type" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="form_action"  method="POST" enctype="multipart/form-data" class=""> 
+                        <form id="createform"  method="POST" enctype="multipart/form-data" class=""> 
 
                             
                             <div class="row">
@@ -95,28 +67,20 @@
                                     <label for="name">Name <span class="text-danger">*</span></label>
                                     <input type="text" name="name" id="name" class="form-control rounded-0" placeholder="Enter Package Name" value="{{old('name')}}">
                                 </div>
-                                <div class="col-md-12 col-sm-12 form-group mb-1">
+                                <div class="col-md-6 col-sm-12 form-group mb-1">
                                     <label for="name">Price <span class="text-danger">*</span></label>
                                     <input type="number" name="price" id="price" class="form-control rounded-0" placeholder="Enter Price" value="{{old('price')}}">
                                 </div>
-                                <div class="col-md-12 col-sm-12 form-group mb-1">
+                                <div class="col-md-6 col-sm-12 form-group mb-1">
                                     <label for="duration">Duration <span class="text-danger">*</span></label>
                                     <input type="number" name="duration" id="duration" class="form-control rounded-0" placeholder="Enter Duration" value="{{old('duration')}}">
                                 </div>
-                                <div class="col-md-12 col-sm-12 form-group mb-1">
-                                     <label for="status_id">Status</label>
-                                     <select name="status_id" id="status_id" class="form-control rounded-0">
-                                        {{-- @foreach($statuses as $status)
-                                            <option value="{{$status->id}}">{{$status['name']}}</option>
-                                        @endforeach --}}
-
-                                     </select>
-                                 </div>
+                                <input type="hidden" name="packageid" id="packageid">
 
                                 <div class="col-md-12">
                                     <div class="d-flex justify-content-end">
 
-                                        <button type="submit" id="" class="btn btn-primary btn-sm rounded-0 ms-3">Submit</button>
+                                        <button type="submit" id="create-btn" class="btn btn-primary btn-sm rounded-0 ms-3" value="action-type">Submit</button>
                                     </div>
                                 </div>
 
@@ -128,9 +92,47 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <!-- end create modal -->
+
+        {{-- start set modal --}}
+        <div id="setmodal" class="modal fade">
+            <div class="modal-dialog modal-sm modal-dialog-center">
+                <div class="modal-content rounded-0">
+                    <div class="modal-header">
+                        <h6 class="modal-title">Title</h6>
+                        <button type="type" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="setform"  method="POST" enctype="multipart/form-data" class=""> 
+
+                            
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 form-group mb-1">
+                                    <label for="setuser_id">User Id <span class="text-danger">*</span></label>
+                                    <input type="text" name="setuser_id" id="setuser_id" class="form-control rounded-0" placeholder="Enter User Id" value="{{old('setuser_id')}}">
+                                </div>
+                                <div class="col-md-12 col-sm-12 form-group mb-1">
+                                    <label for="package_id">Package Id <span class="text-danger">*</span></label>
+                                    <input type="number" name="package_id" id="package_id" class="form-control rounded-0" placeholder="Enter Package Id" value="{{old('package_id')}}">
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="d-flex justify-content-end">
+
+                                        <button type="submit" id="set-btn" class="btn btn-primary btn-sm rounded-0 ms-3">Submit</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- end set modal --}}
 
         <!-- start edit modal -->
         <div id="editmodal" class="modal fade">
@@ -190,7 +192,7 @@
 
 @section("scripts")
 {{-- jquyer validate --}}
-<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script> --}}
 
 {{-- datatable css1 js1 --}}
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
@@ -215,62 +217,22 @@
             // start fetch all data
             function fetchalldata(){
                 $.ajax({
-                    url: "{{route('socialapplications.fatchalldatas')}}",
+                    url: "{{route('packages.index')}}",
                     method : "GET",
-                    type : "JSON",
+                    beforeSend: function(){
+                        // loading ပြန်*ရန် 
+                        console.log('before');
+                        $(".loader").addClass('show');
+                    },
+
                     success : function(response){
                         // console.log(response);
-                        const datas = response.data;
-                        console.log(datas);
-                        let html;
-                        
-                        datas.forEach(function(data,idx){
-                            // console.log(data);
-                            console.log(data.status_id);
+                        $("#tabledata").html(response);
+                    },
+                    complete : function(){ // complete ဖြစ်လှျင် ပြမည် 
+                        console.log("complete");
+                        $(".loader").removeClass('show');
 
-                            html +=  `<tr id="${'delete_'+data.id}">
-
-                                        <td>${++idx}</td>
-                                        <td>${data.name}</td>
-                                        <td>
-                                            <div class="form-checkbox form-switch">
-                                                <input type="checkbox" name="" id="" class="form-check-input change-btn" 
-                                                ${data.status_id === 3 ? "checked" : " "}
-                                            
-                                                
-                                                data-id = ${data.id}
-                                                >
-                                            </div>
-                                        </td>
-
-                                        <td>${data.user_id}</td>
-
-                                        <td>${data.created_at}</td>
-                                        <td>${data.updated_at}</td>
-                                        <td>
-                                            <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" data-id="${data.id}" data-name="${data.name}" data-status="${data.status_id}"><i class="fas fa-pen"></i></a>
-                                            
-                                            {{-- <a href="javascript:void(0)" class="text-danger me-3 delete-btns" 
-
-                                            data-idx = "{{$type->$idx}}" ><i class="fas fa-trash"></i></a> --}}
-
-                                            <a href="javascript:void(0)" class="text-danger me-3 delete-btns" 
-
-                                            data-id = "${data.id}" ><i class="fas fa-trash"></i></a>
-
-                                        </td>
-
-                                        {{-- <form id="formdelete{{$type->$idx}}" action="{{route('types.destroy',$type->id)}}" method="POST">
-                                            {{ csrf_field() }}
-                                            {{ method_field('DELETE') }}
-                                        </form> --}}
-
-
-                                        </tr>`;
-                                    // console.log(html);
-                        })
-                        $("#mytable tbody").prepend(html);
-                        
                     }
                 })
             }
@@ -280,47 +242,154 @@
             // end fetch all data
 
 
-            // start create form 
+            // start create package 
             $("#modal-btn").click(function(){
                 $("#createmodel").modal("show");
             })
-            $("#form_action").validate({  // form သည် validate ဖြစ်ခဲ့လျှင် jquery ေအာက်တွင်ရှိသည် တိုက်ရိုက်မဟုတ်ဘဲ သူ့အတွက်သက်သက်ချိတ်ပေးရမည်
 
-                // validate rule ေပးရန် 
-                rules : {
-                    name : "required",
+            $("#createmodal-btn").click(function(){
+                $("#createform").trigger('reset');
+                $("#createmodal .modal-title").text("Create Package");
+                $("#create-btn").html('Add New Package');
 
-                },
-                messages : {
-                    name : "Enter Application Name",
-                },
-                submitHandler:function(form){
-                    // let formdata = $("#form_action").serialize();
-                    // let formdata = $("#form_action").serializeArray();
-                    let formdata = $(form).serializeArray(); // parameter ကို ပြန်သံုးထားသည် 
+                $("#create-btn").val("action-type");
+                $("#createmodal").modal("show");
+            })
+
+            $("#create-btn").click(function(e){
+                e.preventDefault();
+                console.log("hi");
+
+                let actiontype = $(this).val();
+                console.log(actiontype);
+                $(this).html("Sending...");
+
+                if(actiontype === "action-type"){
+                    // do crate
                     $.ajax({
-                        // data:$("#form_action").serialize(),
-                        data: formdata,
                         url : "{{route('packages.store')}}",
                         type : "POST",
-                        dataType : "json",
+                        dataType : "JSON",
+                        data : $("#createform").serialize(),
                         success : function(response){
-                            console.log(response);
-                            if(response && response.status === "success"){
-                                $("#createmodel").modal("hide");
-                                Swal.fire({
-                                    title: "Updated",
-                                    text: "Update Successful",
-                                    icon: "success"
-                                });
-                            }
+                            console.log(response.message);
+                            // $("#createform")[0].reset();
+                            // or
+                            $("#createform").trigger('reset');
+                            $("#createmodal").modal("hide");
+                            $("#create-btn").html("Save Change");
+                            fetchalldata();
+                            Swal.fire({
+                                        title: "Added!",
+                                        text: "Added Successful.",
+                                        icon: "success"
+                                    });
+                            
+
                         },
-                        error:function(response){
-                            console.log("Error ",response);
+                        error : function(response){
+                            console.log("Error: ", response);
+                            $("#create-btn").html("Try Again");
                         }
+
+                    })
+                }else if(actiontype === "edit-type"){
+
+                    // do edit
+                    const getid = $("#packageid").val();
+                    $.ajax({
+                        url : `packages/${getid}`,
+                        type : "PUT",
+                        dataType : "JSON",
+                        data : $("#createform").serialize(),
+                        success : function(response){
+                            console.log(response.message);
+                            // $("#createform")[0].reset();
+                            // or
+                            $("#createform").trigger('reset');
+                            $("#createmodal").modal("hide");
+                            $("#create-btn").html("Save Change");
+                            fetchalldata();
+                            Swal.fire({
+                                        title: "Update!",
+                                        text: "Update Successful.",
+                                        icon: "success"
+                                    });
+                            
+
+                        },
+                        error : function(response){
+                            console.log("Error: ", response);
+                            $("#create-btn").html("Try Again");
+                        }
+
                     })
                 }
             })
+
+
+            // start edit 
+            $(document).on("click",".edit-btns",function(e){
+                e.preventDefault();
+
+                const getid = $(this).data('id');
+                
+                $.get(`packages/${getid}`,function(response){ // အရင်ဆုံး db မှ data ကို ဆွဲထုတ်ယူမည်  
+                    console.log(response); 
+                    $("#createmodal .modal-title").text("Edit Package");
+                    $("#create-btn").html('Update Package');
+                    $("#create-btn").val("edit-type");
+                    $("#createmodal").modal("show");
+                    $("#name").val(response.name);
+                    $("#price").val(response.price);
+                    $("#duration").val(response.duration);
+                    $("#packageid").val(response.id);
+                })
+            })
+
+
+            // end edit
+            
+
+            // $("#form_action").validate({  // form သည် validate ဖြစ်ခဲ့လျှင် jquery ေအာက်တွင်ရှိသည် တိုက်ရိုက်မဟုတ်ဘဲ သူ့အတွက်သက်သက်ချိတ်ပေးရမည်
+
+            //     // validate rule ေပးရန် 
+            //     rules : {
+            //         name : "required",
+
+            //     },
+            //     messages : {
+            //         name : "Enter Application Name",
+            //     },
+            //     submitHandler:function(form){
+            //         // let formdata = $("#form_action").serialize();
+            //         // let formdata = $("#form_action").serializeArray();
+            //         let formdata = $(form).serializeArray(); // parameter ကို ပြန်သံုးထားသည် 
+            //         $.ajax({
+            //             // data:$("#form_action").serialize(),
+            //             data: formdata,
+            //             url : "{{route('packages.store')}}",
+            //             type : "POST",
+            //             dataType : "json",
+            //             success : function(response){
+            //                 console.log(response);
+            //                 if(response && response.status === "success"){
+            //                     $("#createmodel").modal("hide");
+            //                     Swal.fire({
+            //                         title: "Updated",
+            //                         text: "Update Successful",
+            //                         icon: "success"
+            //                     });
+            //                 }
+            //             },
+            //             error:function(response){
+            //                 console.log("Error ",response);
+            //             }
+            //         })
+            //     }
+            // })
+
+
             // end create form
             // ---------------------
             // $(".delete-btns").click(function(){
@@ -355,7 +424,7 @@
                     if (result.isConfirmed) {
 
                         $.ajax({
-                            url : `socialapplications/${getid}`,
+                            url : `packages/${getid}`,
                             type : "DELETE",
                             dataType : "json",
                             // data : {_token : "{{csrf_token()}}"},
@@ -369,6 +438,7 @@
                                         text: "Your file has been deleted.",
                                         icon: "success"
                                     });
+
                                 }
                             },
                             error: function(response){

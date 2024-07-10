@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Package;
 use App\Models\Status;
+use App\Models\User;
 
 class PackagesController extends Controller
 {
@@ -86,6 +87,27 @@ class PackagesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $package = Package::findOrFail($id);
+        $package -> delete();
+        return response()->json(["message"=>"delete successfully"],201);
+    }
+
+    public function setpackage(Request $request){
+        $request -> validate([
+            'setuser_id' => "required|exists:users,id", // user ထဲရှိ id ရှိနေရမည်
+            'package_id' => 'required|exists:packages,id',
+        ]);
+
+        $user = User::find($request->input('setuser_id'));
+        $package = Package::find($request->input('package_id'));
+
+        if( $user && $package){
+            $user -> package_id = $package->id;
+            $user -> subscription_expires_at = now()->addDay($package->duration); // ရက်တိုးမည် package ထဲရှိ duration အတိုင်း ရက်ထပ်ပေါင်းမည် 
+            $user -> save();
+            return response()->json(['message' => 'Updated'],201);
+        }else {
+            return response()->json(['message' => 'fail'],405);
+        }
     }
 }

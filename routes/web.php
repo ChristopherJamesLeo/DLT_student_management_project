@@ -146,7 +146,7 @@ Route::middleware('auth')->group(function () {
     Route::post("users/{user}/follow",[UsersFollwerController::class,"follow"])->name("users.follow");
     Route::post("users/{user}/unfollow",[UsersFollwerController::class,"unfollow"])->name("users.unfollow");
 
-    Route::resource("attendances",AttendancesController::class);
+    // Route::resource("attendances",AttendancesController::class);
 
     Route::resource("stages",StagesController::class);
     Route::get("/stagestatus",[StagesController::class,"stagestatus"]);
@@ -195,9 +195,16 @@ Route::middleware('auth')->group(function () {
 
 
     // package သတ်မှတ်ရန် 
-    Route::get("/subscribesexpired",[SubscriptionsController::class,"expire"])->name("subscriptions.expire");
+    Route::get("/subscribesexpired",[SubscriptionsController::class,"expire"])->name("subscription.expired");
     Route::resource("/packages",PackagesController::class);
+    Route::post("/packages/setpackage",[PackagesController::class,"setpackage"])->name('packages.setpackage');
     
+});
+
+
+// login လည်း ဝင်ရမည် middleware ကကောင်ကိုလဲ if မှ return ပေးမှာသာ Attendance route အလုပ်လုပ်မည် // if မှ condition ှားပါက expire page ကို ညွန်းမည်ဖြစ်သည် 
+Route::middleware(['auth','validate.subscriptions'])->group(function(){ 
+    Route::resource("attendances",AttendancesController::class);
 });
 
 

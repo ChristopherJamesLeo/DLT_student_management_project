@@ -12,7 +12,7 @@ class SubscriptionsController extends Controller
     }
 
     public function expire(){
-        return view("subscription.expired");
+        return view("subscriptions.expired");
     }
 
 

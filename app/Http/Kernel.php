@@ -28,6 +28,8 @@ class Kernel extends HttpKernel
      *
      * @var array<string, array<int, class-string|string>>
      */
+
+    // page တိုင်းကို ဖြစ်စေချင်ပါက web အောက်တွင်သွားပေးမည် page တိုင်းကို မဖြစ်စေချင်ပါက Auth ထဲတွင် နမည်ပေးပြီး ၄င်း ပေးထားသော route အား web ထဲတွင်ပြန်သံုးမည်
     protected $middlewareGroups = [
         'web' => [  // web မှထုတ်ရန်
             \App\Http\Middleware\EncryptCookies::class,
@@ -57,6 +59,8 @@ class Kernel extends HttpKernel
      *
      * @var array<string, class-string|string>
      */
+
+
     protected $middlewareAliases = [
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
@@ -69,5 +73,8 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+
+        // page တိုင်းကို မဖြစ်စေချင်ဘဲ မိမိ ဖြစ်စေချင်သော page ကိုသာ ဖြစ်စေချင်သော ကြောင့် Auth ထဲတွင် alias name ပေးပြီး ၄င်း name အား web ထဲတွင်သွားရေးမည်ဖြစ်သည် 
+        'validate.subscriptions' => \App\Http\Middleware\ValidateSubscriptionMid::class, // 'validate.subscriptions' ၄င်း name အား web ထဲတွင်ပြန်သံုးမည် 
     ];
 }

@@ -119,7 +119,7 @@
                                 <div class="col-md-12">
                                     <div class="d-flex justify-content-end">
 
-                                        <button type="submit" id="set-btn" class="btn btn-primary btn-sm rounded-0 ms-3">Submit</button>
+                                        <button type="submit" id="setpackage-btn" class="btn btn-primary btn-sm rounded-0 ms-3">Submit</button>
                                     </div>
                                 </div>
 
@@ -349,6 +349,53 @@
 
 
             // end edit
+
+
+            // start set package
+            $("#set-btn").click(function(){
+                $("#setform").trigger('reset');
+                $("#setmodal .modal-title").text("Set Package");
+                $("#set-btn").html('Set Package');
+
+                $("#setmodal").modal("show");
+            })
+
+            $("#setpackage-btn").click(function(e){
+                e.preventDefault();
+                console.log("hi");
+
+                let actiontype = $(this).val();
+                console.log(actiontype);
+                $(this).html("Sending...");
+                console.log("hello");
+                $.ajax({
+                    url : "{{route('packages.setpackage')}}",
+                    type : "POST",
+                    dataType : "JSON",
+                    data : $("#setform").serialize(),
+                    success : function(response){
+                        console.log(response.message);
+                        // $("#createform")[0].reset();
+                        // or
+                        $("#setform").trigger('reset');
+                        $("#setmodal").modal("hide");
+                        $("#set-btn").html("Save Change");
+                        Swal.fire({
+                                    title: "Access!",
+                                    text: "Package Set Successful.",
+                                    icon: "success"
+                                });
+                        
+                    },
+                    error : function(response){
+                        console.log("Error: ", response);
+                        $("#setpackage-btn").html("Try Again");
+                    }
+                })
+            })
+
+            // end set package
+
             
 
             // $("#form_action").validate({  // form သည် validate ဖြစ်ခဲ့လျှင် jquery ေအာက်တွင်ရှိသည် တိုက်ရိုက်မဟုတ်ဘဲ သူ့အတွက်သက်သက်ချိတ်ပေးရမည်
@@ -405,16 +452,17 @@
             //     }
             // })
 
-            // start delete
+            // start single delete
             // using default laravel route
             // $(".delete-btns").click(function(){
             $(document).on("click",".delete-btns",function(e){
                 let getid = $(this).data("id");
+                let getidx = $(this).data("idx");
                 console.log(getid);
 
                 Swal.fire({
                     title: "Are you sure?",
-                    text: `You won't be able to revert this! for ${getid}`,
+                    text: `You won't be able to revert this! for ${getidx}`,
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
@@ -431,8 +479,7 @@
                             success : function(response){
                                 // console.log(response); ၁
                                 if(response){
-                                    // const getdata = response.data;
-                                    $(`#delete_${getid}`).remove();
+                                    fetchalldata();
                                     Swal.fire({
                                         title: "Deleted!",
                                         text: "Your file has been deleted.",
@@ -464,19 +511,19 @@
 
                 
             });
-            // end delete
+            // end single delete
 
-            $(document).on("click",".edit_form",function(e){
-                e.preventDefault();
-                console.log("hello");
-                // console.log($(this).attr("data-name"));
-                // console.log($(this).data("id"));
-                $("#editname").val($(this).data("name"));
-                $("#editstatus_id").val($(this).data("status"));
+            // $(document).on("click",".edit_form",function(e){
+            //     e.preventDefault();
+            //     console.log("hello");
+            //     // console.log($(this).attr("data-name"));
+            //     // console.log($(this).data("id"));
+            //     $("#editname").val($(this).data("name"));
+            //     $("#editstatus_id").val($(this).data("status"));
 
-                const getid = $(this).data("id");
+            //     const getid = $(this).data("id");
 
-                $("#form_action").attr("data-id",getid);
+            //     $("#form_action").attr("data-id",getid);
 
                 // $("#form_action").attr('action',`\{\{route('statuses.update',$status->id)\}\}`); // error 
 
@@ -487,65 +534,65 @@
                 // $("#form_action").attr('action',`/socialapplications/${getid}`);
 
                 
-            })
+            // })
 
-            $("#form_action").submit(function(e){
-                e.preventDefault();
-                // console.log("hello");
-                const getid = $(this).attr("data-id");
-                console.log(getid);
-                $.ajax({
-                    url : `socialapplications/${getid}`,
-                    type : "PUT",
-                    dataType : "json",
-                    data : $("#form_action").serialize(), // form action ထဲရှိ data အကုန်ပို့မည် 
-                    success : function(response){
-                        // console.log(response);
-                        let data = response.data;
-                        console.log(response.status);
-                        console.log(data);
-                        $("#editmodal").modal('hide'); // to close modal 
-                    }
+            // $("#form_action").submit(function(e){
+            //     e.preventDefault();
+            //     // console.log("hello");
+            //     const getid = $(this).attr("data-id");
+            //     console.log(getid);
+            //     $.ajax({
+            //         url : `socialapplications/${getid}`,
+            //         type : "PUT",
+            //         dataType : "json",
+            //         data : $("#form_action").serialize(), // form action ထဲရှိ data အကုန်ပို့မည် 
+            //         success : function(response){
+            //             // console.log(response);
+            //             let data = response.data;
+            //             console.log(response.status);
+            //             console.log(data);
+            //             $("#editmodal").modal('hide'); // to close modal 
+            //         }
 
-                })
-            });
+            //     })
+            // });
 
-            $("#mytable").DataTable();
+            // $("#mytable").DataTable();
 
 
             // start change status btn
             // $(".change-btn").click(function(){ // js မှလှမ်းပို့ပါက အလုပ်မလုပ်တော့ပေ
-            $(document).on("change",".change-btn",function(){ // ထို့ကြောင့် document ကို သံုးပေးရသည် 
-                // console.log($(this).data("id"));
-                // console.log("hello");
-                var getid = $(this).data("id");
+            // $(document).on("change",".change-btn",function(){ // ထို့ကြောင့် document ကို သံုးပေးရသည် 
+            //     // console.log($(this).data("id"));
+            //     // console.log("hello");
+            //     var getid = $(this).data("id");
 
-                // prop ဖြင့် checkbox သည် prop ဖြင့် check ဖြစ်သလား ဖြစ်လှျင်3 မဖြစ်လှျင် 4
-                var setstatus = $(this).prop("checked") === true ? 3 : 4;
+            //     // prop ဖြင့် checkbox သည် prop ဖြင့် check ဖြစ်သလား ဖြစ်လှျင်3 မဖြစ်လှျင် 4
+            //     var setstatus = $(this).prop("checked") === true ? 3 : 4;
 
-                // console.log(setstatus);
-                // change API 
-                $.ajax({
-                    url : "socialapplicationstatus", //route list ထဲရှီ route name ကို ပို့ပေးရမည်
-                    type : "GET", // route ကို ဖမ်းတီးရာတွင် GET ဖြစ်သော ကြောင့် GET ဖြင့် သ့ဒဂပေးရမည်
+            //     // console.log(setstatus);
+            //     // change API 
+            //     $.ajax({
+            //         url : "socialapplicationstatus", //route list ထဲရှီ route name ကို ပို့ပေးရမည်
+            //         type : "GET", // route ကို ဖမ်းတီးရာတွင် GET ဖြစ်သော ကြောင့် GET ဖြင့် သ့ဒဂပေးရမည်
                     
-                    dataType : "json",
-                    data : {
-                        // columnName : value
-                        "id" : getid,
-                        "status_id" : setstatus
-                    },
-                    success : function(response){
-                        console.log(response.success); // return ပြန်လာသော data အား ယူမည် 
-                        Swal.fire({
-                            title: "Updated",
-                            text: "Update Successful",
-                            icon: "success"
-                        });
-                    }
+            //         dataType : "json",
+            //         data : {
+            //             // columnName : value
+            //             "id" : getid,
+            //             "status_id" : setstatus
+            //         },
+            //         success : function(response){
+            //             console.log(response.success); // return ပြန်လာသော data အား ယူမည် 
+            //             Swal.fire({
+            //                 title: "Updated",
+            //                 text: "Update Successful",
+            //                 icon: "success"
+            //             });
+            //         }
                     
-                });
-            })
+            //     });
+            // })
             // end change status btn
 
 

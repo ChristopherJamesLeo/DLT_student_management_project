@@ -56,3 +56,7 @@ class MailBox extends Mailable  //
         return [];  // logo များ ထည့်ရန် သူံးသည် Templaet ထဲတွင် တစ်ခါတည်းထည့်သံုးလဲရသည် 
     }
 }
+
+
+// php artisan make:mail
+// php artisan make:job 

@@ -6,6 +6,12 @@
     use App\Notifications\OtpEmailNotify;
     use Illuminate\Support\Facades\Notification;
     use Illuminate\Support\Facades\Auth;
+
+    use Illuminate\Support\Facades\Mail;
+
+    use App\Jobs\OtpMailJob;
+
+    
    
 
     class otpservice {
@@ -20,11 +26,19 @@
                 'expires_at' => $expires_at,
             ]);
 
+
+            $data = [
+                "to" => Auth::user(),
+                "subject" => "OTP",
+                "content" => $randomotp,
+            ];
+        
+            dispatch(new OtpMailJob($data));// Dispatch the email job
             
             // email notification
             // php artisan make:notification OtpEmailNotify
             // Send OTP via to email or SMS // ရလားသော OTP အား email ပို့မလား sms ပို့မလား ရေးနိုင်သည် 
-            Notification::send(Auth::user(),new OtpEmailNotify($randomotp,$expires_at));
+            // Notification::send(Auth::user(),new OtpEmailNotify($randomotp,$expires_at));
 
 
             return $randomotp; // database မှာသိမ်းပြီးနောက် ရလာတဲ့ randomotp ကို return ပြန်မည်

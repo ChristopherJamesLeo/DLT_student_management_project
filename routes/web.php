@@ -41,6 +41,8 @@ use App\Http\Controllers\SubscriptionsController;
 
 use App\Http\Controllers\PackagesController;
 
+use App\Http\Controllers\UserPointsController;
+
 
 
 /*
@@ -199,6 +201,8 @@ Route::middleware('auth')->group(function () {
     Route::resource("/packages",PackagesController::class);
     Route::post("/packages/setpackage",[PackagesController::class,"setpackage"])->name('packages.setpackage');
     
+    // User point သက်မှတ်ရန်
+    Route::resource("userpoints",UserPointsController::class);
 });
 
 

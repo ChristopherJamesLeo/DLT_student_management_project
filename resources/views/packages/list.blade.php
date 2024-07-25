@@ -1,7 +1,7 @@
 
 @foreach ($packages as $idx => $package)
     <tr>
-        <td>{{$package->id}}</td>
+        <td>{{++$idx}}</td>
         <td>{{$package->name}}</td>
         <td>{{$package->price}}</td>
         <td>{{$package->duration}}</td>

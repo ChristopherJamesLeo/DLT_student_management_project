@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-md-12">
                 <a href="javascript:void(0)" id="createmodal-btn" class="btn btn-primary btn-sm rounded-0">Create</a>
-                <a href="javascript:void(0)" id="set-btn" class="btn btn-info btn-sm rounded-0">Set To User</a>
+               
             </div>
         </div>
 
@@ -24,9 +24,8 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Duration/Day</th>
+                        <th>Student ID</th>
+                        <th>Points</th>
                         <th>Create At</th>
                         <th>Updated at</th>
                         <th>Action</th>
@@ -64,16 +63,12 @@
                             
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 form-group mb-1">
-                                    <label for="name">Name <span class="text-danger">*</span></label>
-                                    <input type="text" name="name" id="name" class="form-control rounded-0" placeholder="Enter Package Name" value="{{old('name')}}">
+                                    <label for="name">User Id <span class="text-danger">*</span></label>
+                                    <input type="text" name="user_id" id="name" class="form-control rounded-0" placeholder="Enter User ID" value="{{old('user_id')}}">
                                 </div>
-                                <div class="col-md-6 col-sm-12 form-group mb-1">
-                                    <label for="name">Price <span class="text-danger">*</span></label>
-                                    <input type="number" name="price" id="price" class="form-control rounded-0" placeholder="Enter Price" value="{{old('price')}}">
-                                </div>
-                                <div class="col-md-6 col-sm-12 form-group mb-1">
-                                    <label for="duration">Duration <span class="text-danger">*</span></label>
-                                    <input type="number" name="duration" id="duration" class="form-control rounded-0" placeholder="Enter Duration" value="{{old('duration')}}">
+                                <div class="col-md-12 col-sm-12 form-group mb-1">
+                                    <label for="name">Point <span class="text-danger">*</span></label>
+                                    <input type="number" name="points" id="price" class="form-control rounded-0" placeholder="Enter Point" value="{{old('point')}}">
                                 </div>
                                 <input type="hidden" name="packageid" id="packageid">
 
@@ -217,7 +212,7 @@
             // start fetch all data
             function fetchalldata(){
                 $.ajax({
-                    url: "{{route('packages.index')}}",
+                    url: "{{route('userpoints.index')}}",
                     method : "GET",
                     beforeSend: function(){
                         // loading ပြန်*ရန် 
@@ -267,7 +262,7 @@
                 if(actiontype === "action-type"){
                     // do crate
                     $.ajax({
-                        url : "{{route('packages.store')}}",
+                        url : "{{route('userpoints.store')}}",
                         type : "POST",
                         dataType : "JSON",
                         data : $("#createform").serialize(),
@@ -298,7 +293,7 @@
                     // do edit
                     const getid = $("#packageid").val();
                     $.ajax({
-                        url : `packages/${getid}`,
+                        url : `userpoints/${getid}`,
                         type : "PUT",
                         dataType : "JSON",
                         data : $("#createform").serialize(),
@@ -334,7 +329,7 @@
 
                 const getid = $(this).data('id');
                 
-                $.get(`packages/${getid}`,function(response){ // အရင်ဆုံး db မှ data ကို ဆွဲထုတ်ယူမည်  
+                $.get(`userpoints/${getid}`,function(response){ // အရင်ဆုံး db မှ data ကို ဆွဲထုတ်ယူမည်  
                     console.log(response); 
                     $("#createmodal .modal-title").text("Edit Package");
                     $("#create-btn").html('Update Package');
@@ -472,7 +467,7 @@
                     if (result.isConfirmed) {
 
                         $.ajax({
-                            url : `packages/${getid}`,
+                            url : `userpoints/${getid}`,
                             type : "DELETE",
                             dataType : "json",
                             // data : {_token : "{{csrf_token()}}"},

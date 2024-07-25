@@ -100,6 +100,7 @@
                                     <li class="nav-item nav-categories"><a href="{{route('socialapplications.index')}}" class="nav-link text-white sidebarlinks">Social App</a></li>
 
                                     <li class="nav-item nav-categories"><a href="{{route('warehouses.index')}}" class="nav-link text-white sidebarlinks">Warehouse</a></li>
+                                    <li class="nav-item nav-categories"><a href="{{route('packages.index')}}" class="nav-link text-white sidebarlinks">Packagse</a></li>
                                     
                                 </ul>
 

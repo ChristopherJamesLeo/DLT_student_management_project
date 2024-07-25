@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
-use App\Models\Package;
+// use App\Models\Package;
 use App\Models\User;
-use App\Models\UserPoints;
+use App\Models\UserPoint;
 
 class UserPointsController extends Controller
 {
@@ -18,12 +19,12 @@ class UserPointsController extends Controller
         //  ajax ဖြင့် လှမ်းခေါ်ပါက  list ကို ဆွဲထုတ်မည် လှမ်းမခေါ်ပါက view ဖြင့် blade ကို ဆွဲတင်မည်ဖြစ်သည် 
 
         if(request()->ajax()){ // ajax ဖြင့် request လုပ်ခဲ့သလား စစ်နိုင်သည် 
-            $packages = Package::all();
-            return view('packages.list',compact("packages")); // package list ဖိုင်ထဲသို့ ပို့ပေးမည်ဖြစ်ပြီး ၄င်း ဖိုင်အား return ဖြင့် json အား ပို့ပေးလိုက်မည်ဖြစ်သည် 
-            return view('packages.list',compact("packages"))->render(); // render သုံးပေးလဲရသည်
+            $userpoints = UserPoint::all();
+            // return view('userpoints.list',compact("userpoints")); // package list ဖိုင်ထဲသို့ ပို့ပေးမည်ဖြစ်ပြီး ၄င်း ဖိုင်အား return ဖြင့် json အား ပို့ပေးလိုက်မည်ဖြစ်သည် 
+            return view('userpoints.list',compact("userpoints"))->render(); // render သုံးပေးလဲရသည်
         }
 
-        return view('packages.index');
+        return view('userpoints.index');
 
         // package index ထဲသို့ package.list ဖိုင်ထဲရှိ data များအား ajax request ထဲသို့ ထည့်ပေးလိုက်မည်ဖြစ်သည် 
         
@@ -43,14 +44,12 @@ class UserPointsController extends Controller
     public function store(Request $request)
     {
         $request -> validate([
-            'name' => "required|string|max:100",
-            'price' => 'required|numeric',
-            'duration' => 'required|integer'
+            'points' => 'required|numeric',
         ]);
 
-        Package::create($request->all()); // request ထဲက အားလုံးstore လုပ်မည်
+        UserPoint::create($request->all()); // request ထဲက အားလုံးstore လုပ်မည်
 
-        return response()->json(['message'=>'New package created'],201);
+        return response()->json(['message'=>'New Points created'],201);
     }
 
     /**
@@ -58,9 +57,9 @@ class UserPointsController extends Controller
      */
     public function show(string $id)
     {
-        $package = Package::findOrFail($id);
+        $userpoint = UserPoint::findOrFail($id);
 
-        return response()->json($package);
+        return response()->json($userpoint);
     }
 
     /**
@@ -76,8 +75,8 @@ class UserPointsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $package = Package::findOrFail($id);
-        $package -> update($request->all());
+        $userpoint = UserPoint::findOrFail($id);
+        $userpoint -> update($request->all());
 
         return response()->json(["message"=>"successfully"]);
     }
@@ -87,8 +86,11 @@ class UserPointsController extends Controller
      */
     public function destroy(string $id)
     {
-        $package = Package::findOrFail($id);
-        $package -> delete();
+        $userpoint = UserPoint::findOrFail($id);
+        $userpoint -> delete();
+
+        // UserPoints::destroy($id);
+
         return response()->json(["message"=>"delete successfully"],201);
     }
 

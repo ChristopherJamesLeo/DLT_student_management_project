@@ -58,29 +58,58 @@
                         <button type="type" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="createform"  method="POST" enctype="multipart/form-data" class=""> 
+                        {{-- step 1 --}}
+                        <div id="step1">
+
+                            <form id="verifyform"  method="POST" enctype="multipart/form-data" class=""> 
 
                             
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 form-group mb-1">
-                                    <label for="name">User Id <span class="text-danger">*</span></label>
-                                    <input type="text" name="user_id" id="name" class="form-control rounded-0" placeholder="Enter User ID" value="{{old('user_id')}}">
-                                </div>
-                                <div class="col-md-12 col-sm-12 form-group mb-1">
-                                    <label for="name">Point <span class="text-danger">*</span></label>
-                                    <input type="number" name="points" id="price" class="form-control rounded-0" placeholder="Enter Point" value="{{old('point')}}">
-                                </div>
-                                <input type="hidden" name="packageid" id="packageid">
-
-                                <div class="col-md-12">
-                                    <div class="d-flex justify-content-end">
-
-                                        <button type="submit" id="create-btn" class="btn btn-primary btn-sm rounded-0 ms-3" value="action-type">Submit</button>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 form-group mb-1">
+                                        <label for="name">Student Id <span class="text-danger">*</span></label>
+                                        <input type="text" name="student_id" id="student_id" class="form-control rounded-0" placeholder="Enter Student ID" value="{{old('student_id')}}">
                                     </div>
+                                    <div class="col-md-12">
+                                        <div class="d-flex justify-content-end">
+    
+                                            <button type="button" id="verify-btn" class="btn btn-primary btn-sm rounded-0 ms-3" >Next</button>
+                                        </div>
+                                    </div>
+    
                                 </div>
+                            </form>
+                        </div>
+                        
 
-                            </div>
-                        </form>
+                        {{-- step 2 --}}
+                        <div id="step2" style="display:none">
+                            
+                            <form id="createform" class=""> 
+
+                                <div class="row">
+                                    <ul class="list-group">
+                                       
+                                    </ul>
+                                    
+                                    <div class="col-md-12 col-sm-12 form-group mb-1">
+                                        <label for="name">Points <span class="text-danger">*</span></label>
+                                        <input type="number" name="points" id="points" class="form-control rounded-0" placeholder="Enter Points" value="{{old('point')}}">
+                                    </div>
+                                    
+                                    <input type="hidden" name="user_id" id="user_id">
+                                    <input type="hidden" name="userpointid" id="userpointid">
+
+                                    <div class="col-md-12">
+                                        <div class="d-flex justify-content-end">
+
+                                            <button type="button" id="stepback-btn" class="me-3 btn btn-secondary btn-sm rounded-0 ms-3">Back</button>
+                                            <button type="submit" id="create-btn" class="btn btn-primary btn-sm rounded-0 ms-3" >Submit</button>
+                                        </div>
+                                    </div>
+    
+                                </div>
+                            </form>
+                        </div>
                     </div>
                     <div class="modal-footer">
 
@@ -90,44 +119,6 @@
         </div>
         <!-- end create modal -->
 
-        {{-- start set modal --}}
-        <div id="setmodal" class="modal fade">
-            <div class="modal-dialog modal-sm modal-dialog-center">
-                <div class="modal-content rounded-0">
-                    <div class="modal-header">
-                        <h6 class="modal-title">Title</h6>
-                        <button type="type" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="setform"  method="POST" enctype="multipart/form-data" class=""> 
-
-                            
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 form-group mb-1">
-                                    <label for="setuser_id">User Id <span class="text-danger">*</span></label>
-                                    <input type="text" name="setuser_id" id="setuser_id" class="form-control rounded-0" placeholder="Enter User Id" value="{{old('setuser_id')}}">
-                                </div>
-                                <div class="col-md-12 col-sm-12 form-group mb-1">
-                                    <label for="package_id">Package Id <span class="text-danger">*</span></label>
-                                    <input type="number" name="package_id" id="package_id" class="form-control rounded-0" placeholder="Enter Package Id" value="{{old('package_id')}}">
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="d-flex justify-content-end">
-
-                                        <button type="submit" id="setpackage-btn" class="btn btn-primary btn-sm rounded-0 ms-3">Submit</button>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        {{-- end set modal --}}
 
         <!-- start edit modal -->
         <div id="editmodal" class="modal fade">
@@ -244,12 +235,56 @@
 
             $("#createmodal-btn").click(function(){
                 $("#createform").trigger('reset');
-                $("#createmodal .modal-title").text("Create Package");
-                $("#create-btn").html('Add New Package');
+                $("#verifyform").trigger('reset');
+                $("#step1").show();
+                $("#step2").hide();
+                $("#createmodal .modal-title").text("Verify Student");
+                $("#create-btn").html('Add New Points');
 
                 $("#create-btn").val("action-type");
                 $("#createmodal").modal("show");
             })
+
+            // start verify student
+            $("#verify-btn").click(function(){
+                const student_id = $("#student_id").val();
+                console.log(student_id);
+                $.ajax({
+                    url : "{{route('userpoints.verifystudents')}}",
+                    method : "post",
+                    dataType : "json",
+                    data : {
+                        student_id : student_id,
+                    },
+                    success : function(response){
+                        console.log(response);
+                       
+                        $("#step1").hide();
+                        $("#step2").show();
+                        $("#createmodal .modal-title").text("Adding Point");
+                        $("#user_id").val(response.user.id);
+
+                        let htmlview = ` <li class="list-group-item ">
+                                            <a href="{{URL::to('students/${response.student.id}')}}" target="blank">${response.student.firstname} ${response.student.lastname}</a>
+                                        </li>`;
+
+                        $("#createmodal .modal-body #createform ul.list-group").html(htmlview);
+
+                    },
+                    error: function(response){
+                        console.log(response);
+                        console.log("false");
+                    }
+                })
+            })
+            // end verify student
+
+            $("#stepback-btn").click(function(){
+                $("#step1").show();
+                $("#step2").hide();
+                $("#createmodal .modal-title").text("Verify Student");
+
+            });
 
             $("#create-btn").click(function(e){
                 e.preventDefault();
@@ -291,7 +326,7 @@
                 }else if(actiontype === "edit-type"){
 
                     // do edit
-                    const getid = $("#packageid").val();
+                    const getid = $("#userpointid").val();
                     $.ajax({
                         url : `userpoints/${getid}`,
                         type : "PUT",
@@ -331,14 +366,19 @@
                 
                 $.get(`userpoints/${getid}`,function(response){ // အရင်ဆုံး db မှ data ကို ဆွဲထုတ်ယူမည်  
                     console.log(response); 
-                    $("#createmodal .modal-title").text("Edit Package");
-                    $("#create-btn").html('Update Package');
+                    $("#step1").hide();
+                    $("#step2").show();
+                    $("#step2 #stepback-btn").hide();
+                    $("#createmodal .modal-body #createform ul.list-group").html('');
+
+                    $("#createmodal .modal-title").text("Edit Points");
+                    $("#create-btn").html('Update Points');
                     $("#create-btn").val("edit-type");
                     $("#createmodal").modal("show");
-                    $("#name").val(response.name);
-                    $("#price").val(response.price);
-                    $("#duration").val(response.duration);
-                    $("#packageid").val(response.id);
+
+                    $("#userpointid").val(response.id);
+                    $("#points").val(response.points);
+                    $("#user_id").val(response.user_id);
                 })
             })
 

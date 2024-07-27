@@ -15,12 +15,67 @@
             <!--notify & userlogout-->
             <ul class="navbar-nav me-5 pe-5">
                 <!-- notify -->
+
+                <li class="nav-item  me-1">
+                    <a href="javascript:void(0);" class="nav-link dropbtn" onclick="dropbtn(event)">
+                        <i class="fas fa-shopping-cart"></i>
+                        <sup class="badge bg-dager text-dark">1</sup>
+                       
+                    </a>
+                    
+                    <div class="dropdown-contents mydropdowns">
+                        {{-- noti ရှိနေမှ --}}
+                        @if ($userdata ->unreadNotifications->count() > 0) 
+                            <a href="{{route('leaves.markasread')}}" class="small text-center text-muted ">Mark all as read</a>
+
+                            {{-- @foreach ($userdata->notifications as $notification) --}}
+                            @foreach (Auth::user()->notifications as $notification)
+                            {{-- noti ကို show ပြရန် --}}
+                                <a href="{{route( $notification->type === 'App\Notifications\AnnouncementNotify' ? 'announcements.show' : 'leaves.show' ,$notification->data['id'])}}" class="d-flex">
+                              
+                                    <div class="me-3">
+                                        @if ($notification->type == "App\Notifications\AnnouncementNotify")
+                                            <img src="{{$notification->data["image"]}}" class="rounded-circle" width="30px" height="30px" alt="{{$notification->data['id']}}">
+                                        @else
+                                            <i class="fas fa-bell fa-xs text-primary"></i>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <ul class="list-unstyled">
+                                            @if ($notification->type == "App\Notifications\AnnouncementNotify")
+                                                <li>{{$notification->data["title"]}}</li>
+                                                
+                                            @else
+                                                <li>{{$notification->data["studentId"]}}</li>
+                                                <li>
+                                                    {{Str::limit($notification->data["title"],20)}}
+                                                </li>
+                                                <li>
+                                                    {{$notification ->created_at->format("d M Y h:i:s A")}}
+                                                </li>
+                                            @endif
+                                            
+                                            
+                                        </ul>
+                                    </div>
+                                </a>
+                            @endforeach
+                            
+                            <a href="javascript:void(0);" class="small text-center text-muted">Show All Notification</a>
+
+                        @else
+                            <a href="javascript:void(0);" class="small text-center text-muted">No New Notification</a>
+                        @endif
+                
+                    </div>
+                </li>
+
                 <li class="nav-item dropdowns me-3">
-                    <a href="javascript:void(0);" class="nav-line dropbtn" onclick="dropbtn(event)">
+                    <a href="javascript:void(0);" class="nav-link dropbtn" onclick="dropbtn(event)">
                         <i class="fas fa-bell"></i>
                         <span class="badge bg-danger">{{auth()->user()->unreadNotifications->count()}}</span>
                     </a>
-
+                    
                     <div class="dropdown-contents mydropdowns">
                         {{-- noti ရှိနေမှ --}}
                         @if ($userdata ->unreadNotifications->count() > 0) 

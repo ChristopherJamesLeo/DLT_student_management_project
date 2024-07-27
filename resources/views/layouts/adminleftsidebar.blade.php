@@ -63,6 +63,17 @@
                             </li>
 
                             <li class="nav-item nav-categories">Popus</li>
+                            <li class="nav-item"><a href="javascript:void(0);" class="nav-link text-white p-3 mb-2 sidebarlinks" data-bs-target="#shopping" data-bs-toggle="collapse"><i class="fas fa-share-alt-square fa-lg me-3"></i>Shopping<i class="fas fa-angle-left mores"></i></a>
+                            
+                                <ul id="shopping" class="collapse ps-2">
+                                    <li class="nav-item nav-categories"><a href="{{route('packages.index')}}" class="nav-link text-white sidebarlinks">Plans</a></li>
+                                    <li class="nav-item nav-categories"><a href="{{route('packages.index')}}" class="nav-link text-white sidebarlinks">Billing</a></li>
+                                    <li class="nav-item nav-categories"><a href="{{route('packages.index')}}" class="nav-link text-white sidebarlinks">Payment</a></li>
+                                             
+                                </ul>
+    
+                            </li>
+
 
                             <li class="nav-item"><a href="javascript:void(0);" class="nav-link text-white p-3 mb-2 sidebarlinks" data-bs-target="#iconselement" data-bs-toggle="collapse"><i class="fas fa-share-alt-square fa-lg me-3"></i>Apps<i class="fas fa-angle-left mores"></i></a>
                             
@@ -101,6 +112,8 @@
 
                                     <li class="nav-item nav-categories"><a href="{{route('warehouses.index')}}" class="nav-link text-white sidebarlinks">Warehouse</a></li>
                                     <li class="nav-item nav-categories"><a href="{{route('packages.index')}}" class="nav-link text-white sidebarlinks">Packagse</a></li>
+                                    <li class="nav-item nav-categories"><a href="{{route('userpoints.index')}}" class="nav-link text-white sidebarlinks">User Points</a></li>
+                                    
                                     
                                 </ul>
 

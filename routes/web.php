@@ -203,6 +203,7 @@ Route::middleware('auth')->group(function () {
     
     // User point သက်မှတ်ရန်
     Route::resource("userpoints",UserPointsController::class);
+    Route::post("/userpoints/verifystudents",[UserPointsController::class,"verifystudents"])->name('userpoints.verifystudents');
 });
 
 

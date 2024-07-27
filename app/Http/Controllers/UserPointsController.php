@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Response;
 // use App\Models\Package;
 use App\Models\User;
 use App\Models\UserPoint;
+use App\Models\Student;
 
 class UserPointsController extends Controller
 {
@@ -92,6 +93,20 @@ class UserPointsController extends Controller
         // UserPoints::destroy($id);
 
         return response()->json(["message"=>"delete successfully"],201);
+    }
+
+
+    public function verifystudents(Request $request){
+
+        $student = Student::where('regnumber', $request->student_id)->select(['id', 'firstname', 'lastname', 'user_id'])->first();
+        $user = $student->user()->select(['id'])->first();
+
+        if($user){
+            return response()->json(['student'=>$student,'user'=>$user]);
+            // return response()->json(['student'=>$request->student_id]);
+        }else {
+            return response()->json(['message'=>'No Corresponding user found'],400);
+        }
     }
 
 }

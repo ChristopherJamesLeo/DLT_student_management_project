@@ -17,7 +17,7 @@
                 <!-- notify -->
 
                 <li class="nav-item  me-1">
-                    <a href="javascript:void(0);" class="nav-link dropbtn" onclick="dropbtn(event)">
+                    <a href="{{route('carts.index')}}" class="nav-link dropbtn" onclick="dropbtn(event)">
                         <i class="fas fa-shopping-cart"></i>
                         <sup class="badge bg-dager text-dark">1</sup>
                        

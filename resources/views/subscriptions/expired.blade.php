@@ -8,8 +8,8 @@
     <!-- start content area -->
     <div class="container-fluid">
         <div class="col-md-12">
-            <h1>Soubscription License Expired</h1>
-            <p>Your Lincense has expired. Please contact support or renew licese to continue</p>
+            <h1>Soubscription Expired</h1>
+            <p>Your Lincense has expired. Please contact support or <a href="{{route('plans.index')}}">click here</a> to renew your subscription</p>
         </div>
         
     </div>

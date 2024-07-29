@@ -43,6 +43,10 @@ use App\Http\Controllers\PackagesController;
 
 use App\Http\Controllers\UserPointsController;
 
+use App\Http\Controllers\PlansController;
+
+use App\Http\Controllers\CartsController;
+
 
 
 /*
@@ -204,6 +208,13 @@ Route::middleware('auth')->group(function () {
     // User point သက်မှတ်ရန်
     Route::resource("userpoints",UserPointsController::class);
     Route::post("/userpoints/verifystudents",[UserPointsController::class,"verifystudents"])->name('userpoints.verifystudents');
+
+    // plans ဝယ်ရန် 
+    Route::resource("plans",PlansController::class);
+
+    //carts
+    Route::get("/carts",[CartsController::class,'index'])->name('carts.index');
+
 });
 
 

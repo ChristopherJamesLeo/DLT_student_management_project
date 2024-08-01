@@ -86,4 +86,8 @@ class User extends Authenticatable
     // log in log out သိစေရန် provider တစ်ခု listener တစ်ခု ဖန်တီးပေးရမည် 
     // php artisan make:provider OnOffUserStatusServiceProvider  // provider အား config -> app ထဲတွင် သွားရောက်အသက်သွင်းပေးရမည် 
     // php artisan make:listener OnOffUserStatusListener // listener အား Provider ထဲရှီ eventserviceprovider ထဲရှီ listen ထဲတွင် အသက်သွင်းပေးရမ် 
+
+    public function carts(){
+        return $this -> hasMany(Cart::class);
+    }
 }

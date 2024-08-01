@@ -13,15 +13,33 @@
                 <hr>
 
                 <div class="text-center">
-                    <span>You have 5 items in your carts</span>
+                    <span>You have {{Auth::user()->carts()->count()}} items in your carts</span>
                 </div>
+
+                @foreach ($carts as $idx => $cart)
+                    <div data-packageid = "{{$cart->package['id']}}" id="package_{{$cart->id}}" class="mt-3 p-2 d-flex justify-content-between align-items-center package">
+                        <div>
+                            <span>{{++$idx}}</span>
+                            <span>{{$cart->package->name}}</span>
+                            
+                        </div>
+                        <div>
+                            <span>{{$cart->package->duration}} days</span>
+                        </div>
+                        <div>
+                            <span class="me-3">{{$cart->price}} x {{$cart->quantity}}</span>
+                            <a href="javascript:void(0)" class="removefromcart" data-cartid = "{{$cart->id}}" data-packageid="{{$cart->package->id}}"><i class="fas fa-trash text-danger"></i></a>
+                            
+                        </div>
+                    </div>
+                @endforeach
             </div>
             <div class="col-md-4">
                 <h6>Payment details</h6>
                 <hr>
                 <div class="d-flex justify-content-between px-3">
                     <span>Total</span>
-                    <span class="">0</span>
+                    <span class="">{{$totalcost}}</span>
                 </div>
                 <div class="d-flex justify-content-between px-3">
                     <span>Payment Method</span>
@@ -60,6 +78,34 @@
             }
         }
     )
+    $(document).ready(function(){
+        // remove from cart
+
+        $(document).on("click",".removefromcart",function(){
+            // console.log($(this).data('packageid'));
+            let packageId = $(this).data('packageid');
+            let getcartid = $(this).data("cartid");
+            $.ajax({
+                url : "{{route('carts.remove')}}",
+                type : "POST",
+                data : {
+                    _token : "{{csrf_token()}}",
+                    packageid : packageId
+                },
+                success : function (response){
+                    console.log(response.message);
+                    $("#package_"+getcartid).remove();
+
+                },
+                error : function (respose){
+                    console.log(respose);
+                }
+            })
+        })
+        // end remove from cart
+    })
+
+
 
 </script>
 

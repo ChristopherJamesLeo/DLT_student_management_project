@@ -214,6 +214,11 @@ Route::middleware('auth')->group(function () {
 
     //carts
     Route::get("/carts",[CartsController::class,'index'])->name('carts.index');
+    Route::post("/carts/add",[CartsController::class,"add"])->name('carts.add');
+    Route::post("/carts/remove",[CartsController::class,"remove"])->name('carts.remove');
+    Route::post("/carts/paywithpoint",[CartsController::class,"paywithpoint"])->name('carts.paywithpoint');
+
+
 
 });
 

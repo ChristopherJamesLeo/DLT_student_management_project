@@ -25,7 +25,7 @@
                 
 
                 <div class="text-center">
-                    <button type="button" id="pay-with-point" class="btn btn-sm rounded-0 add-to-cart  {{$userdata->package_id===$package->id ? 'disabled btn-secondary' : 'btn-primary'}}" data-package-id='{{$package->id}}' data-package-price ="{{$package->price}}" > Add Card </button>
+                    <button type="button" class="btn btn-sm rounded-0 add-to-cart {{$userdata->package_id===$package->id ? 'disabled btn-secondary' : 'btn-primary'}}" data-package-id='{{$package->id}}' data-package-price ="{{$package->price}}" > Add Card </button>
                 </div>
             </div>
         </div>

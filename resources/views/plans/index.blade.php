@@ -81,6 +81,30 @@
 
         // end fetch all data
 
+        // Start add cart packate
+        $(document).on("click",".add-to-cart",function(){
+            // console.log("hi");
+            const packageid = $(this).data('package-id');
+            const packageprice = $(this).data('package-price');
+
+            // console.log(packageid,packageprice);
+
+            $.ajax({
+                url : "{{route('carts.add')}}",
+                type : "POST",
+                data : {
+                    package_id : packageid,
+                    quantity : 1,
+                    price : packageprice
+                },
+                success : function(response){
+                    console.log(response.message);
+                }
+            })
+        })
+
+        // end add cart package
+
 
 
     })

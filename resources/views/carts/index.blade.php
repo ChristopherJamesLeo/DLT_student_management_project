@@ -103,6 +103,10 @@
             })
         })
         // end remove from cart
+
+        // start pay by point
+
+        // end pay py point
     })
 
 

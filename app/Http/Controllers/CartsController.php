@@ -25,7 +25,18 @@ class CartsController extends Controller
     }
 
     public function add(Request $request){
+        $user_id = auth()->id();
 
+        Cart::updateOrCreate([
+            "user_id" => $user_id,
+            "package_id" => $request -> package_id,
+            "quantity" => $request -> input('quantity'),
+            // "quantity" => \DB::raw("quantity +" . $request->input("quantity")),
+            "price" => $request -> input('price')
+        ]);
+
+        return response()->json(['message' => "Product added to cart successfully"]);
+        
     }
 
     private function gettotalcost($carts){
@@ -53,6 +64,29 @@ class CartsController extends Controller
     }
 
     public function paywithpoint(Request $request){
+        $user_id = auth()->id();
+
+        $carts = Cart::where("user_id",$user_id)->get();
+
+        // sum of cost
+        $totalcost = $carts->sum(function($cart){
+            return $cart -> price * $cart -> quantity;
+        });
+
+        $packageid = $request->input("package_id");
+
+        $package = Package::findOrFail($packageid);
+
+        $userpoints = Userpoint::where("user_id",$user_id)->first();
+
+        if($userpoints && $userpoints->points >= $totalcost ){
+
+        }else {
+            
+        }
+
+
+
 
     }
 }

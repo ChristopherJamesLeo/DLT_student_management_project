@@ -66,7 +66,7 @@
                             <li class="nav-item"><a href="javascript:void(0);" class="nav-link text-white p-3 mb-2 sidebarlinks" data-bs-target="#shopping" data-bs-toggle="collapse"><i class="fas fa-share-alt-square fa-lg me-3"></i>Shopping<i class="fas fa-angle-left mores"></i></a>
                             
                                 <ul id="shopping" class="collapse ps-2">
-                                    <li class="nav-item nav-categories"><a href="{{route('packages.index')}}" class="nav-link text-white sidebarlinks">Plans</a></li>
+                                    <li class="nav-item nav-categories"><a href="{{route('plans.index')}}" class="nav-link text-white sidebarlinks">Plans</a></li>
                                     <li class="nav-item nav-categories"><a href="{{route('packages.index')}}" class="nav-link text-white sidebarlinks">Billing</a></li>
                                     <li class="nav-item nav-categories"><a href="{{route('packages.index')}}" class="nav-link text-white sidebarlinks">Payment</a></li>
                                              

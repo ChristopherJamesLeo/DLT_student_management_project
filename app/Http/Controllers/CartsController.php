@@ -68,6 +68,8 @@ class CartsController extends Controller
 
         $carts = Cart::where("user_id",$user_id)->get();
 
+        $isextand = false;
+
         // sum of cost
         $totalcost = $carts->sum(function($cart){
             return $cart -> price * $cart -> quantity;
@@ -81,9 +83,37 @@ class CartsController extends Controller
 
         if($userpoints && $userpoints->points >= $totalcost ){
 
-        }else {
-            
+            // deduct points
+            $userpoints->points -= $totalcost ;
+            $userpoints -> save();
+
+            if($user->subscription_expires_at >= Carbon::now()){
+
+                
+
+                $isextand = true;
+                $user -> package_id = $packageid;
+                // carbon::parse() သည် date အား datatype တူစေရန်ဖြစ်သည် 
+                $user->subscription_expires_at = Carbon::parse($user->subscription_expires_at)->addDay($package->duration);
+
+                $user-> save();
+
+               
+            }else{
+                $isextand = false;
+                $user->subscription_expires_at = Carbon::now()->addDay($package->duration);
+                $user->save();
+            }
+
+            // create invoice
+            // $carts->each->delete();  // each is default method  // each သည် တစ်ကြောင်းချင်းစီကို ဖျက်ပေးမည် သို့မဟုတ် where နှင့်ဖျက်လဲရသည် 
+            Cart::where("user_id",$user_id)->delete();
+
+
+            return response()->json(["message" => $isextand ? "Package Extended successfully" : "New package added successfully"]);
         }
+
+        return response()->json(["message" => "Insufficient Point"],400);
 
 
 

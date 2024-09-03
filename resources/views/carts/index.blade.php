@@ -111,22 +111,22 @@
 
             $(".package").each(function(){
                 packageid = $(this).data('packageid');
-                // console.log(packageid);
+                console.log(packageid);
                 $.ajax({
-                    url : "{{route('carts.paybypoints')}}",
-                    type : "POST",
-                    data : {
-                        _token:$('meta[name="csrf-token"]').attr('content'),
-                        packageid : packageid,
+                    url: "{{ route('carts.paybypoints') }}", 
+                    type: "POST",
+                    data: {
+                        _token : "{{csrf_token()}}", 
+                        packageid: packageid,
                     },
                     success : function(response){
                         window.alert(response.massage);
-                        // location.reload();
+                        location.reload();
                         console.log(response.message);
                     },
                     error : function(response){
                         console.log(response);
-                        // window.alert(response.json.message);
+                        window.alert(response.json.message);
                     }
                 })
             })

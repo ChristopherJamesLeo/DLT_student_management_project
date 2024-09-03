@@ -217,7 +217,8 @@ Route::middleware('auth')->group(function () {
     Route::post("/carts/add",[CartsController::class,"add"])->name('carts.add');
     Route::post("/carts/remove",[CartsController::class,"remove"])->name('carts.remove');
     Route::post("/carts/paybypoints",[CartsController::class,"paybypoints"])->name('carts.paybypoints');
-
+    Route::post("/carts/testing",[CartsController::class,"testing"])->name('carts.testing');
+    
 
 
 });

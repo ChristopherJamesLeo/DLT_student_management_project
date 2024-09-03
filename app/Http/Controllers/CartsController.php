@@ -64,7 +64,11 @@ class CartsController extends Controller
     }
 
     public function paybypoints(Request $request){
-        $user_id = auth()->id();
+        
+
+        $user = Auth::user();
+
+        $user_id = $user -> id;
 
         $carts = Cart::where("user_id",$user_id)->get();
 
@@ -75,7 +79,7 @@ class CartsController extends Controller
             return $cart -> price * $cart -> quantity;
         });
 
-        $packageid = $request->input("package_id");
+        $packageid = $request->input("packageid");
 
         $package = Package::findOrFail($packageid);
 
@@ -113,10 +117,12 @@ class CartsController extends Controller
             return response()->json(["message" => $isextand ? "Package Extended successfully" : "New package added successfully"]);
         }
 
-        return response()->json(["message" => "Insufficient Point"],400);
+        return response()->json(["message" => "Insufficient Point".$totalcost]);
 
 
 
 
     }
+
+
 }

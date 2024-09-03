@@ -63,7 +63,7 @@ class CartsController extends Controller
 
     }
 
-    public function paywithpoint(Request $request){
+    public function paybypoints(Request $request){
         $user_id = auth()->id();
 
         $carts = Cart::where("user_id",$user_id)->get();

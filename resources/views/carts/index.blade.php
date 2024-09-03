@@ -46,7 +46,7 @@
                     <span class="">Point Pay</span>
                 </div>
                 <div class="d-grid ">
-                    <button type="button" id="paybypoints" class="btn btn-primary btn-sm mt-3 rounded-0">Pay Now</button>
+                    <button type="button" id="paybypoints" class="btn btn-primary btn-sm mt-3 rounded-0"  >Pay Now</button>
                 </div>
             </div>
         </div>
@@ -105,7 +105,34 @@
         // end remove from cart
 
         // start pay by point
+        $("#paybypoints").click(function(){
+            let packageid;
+            console.log("hi");
 
+            $(".package").each(function(){
+                packageid = $(this).data('packageid');
+                // console.log(packageid);
+                $.ajax({
+                    url : "{{route('carts.paybypoints')}}",
+                    type : "POST",
+                    data : {
+                        _token:$('meta[name="csrf-token"]').attr('content'),
+                        packageid : packageid,
+                    },
+                    success : function(response){
+                        window.alert(response.massage);
+                        // location.reload();
+                        console.log(response.message);
+                    },
+                    error : function(response){
+                        console.log(response);
+                        // window.alert(response.json.message);
+                    }
+                })
+            })
+            // console.log(packageid);
+
+        })
         // end pay py point
     })
 

@@ -32,8 +32,10 @@
     <section>
         <div class="card">
             <div class="card-body">
+                <span></span>
                 {{-- content သည်ဝင်လာမည်ဖြစသ်ည် summer note error ကို ရှင်းထားသည်  --}}
-                <p>{!! $data['content'] !!}</p>
+                <h4>{!! $data['content'] !!}</h4>
+              
             </div>
         </div>
     </section>

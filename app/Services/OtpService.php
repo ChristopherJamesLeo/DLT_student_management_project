@@ -28,12 +28,12 @@
 
 
             $data = [
-                "to" => Auth::user(),
+                "to" => Auth::user(),  // to တွင် email တစ်ခုတည်းထည့်လဲရသည် user တစ်ခုလုံးထည့်လဲရသည် 
                 "subject" => "OTP",
                 "content" => $randomotp,
             ];
         
-            dispatch(new OtpMailJob($data));// Dispatch the email job
+            dispatch(new OtpMailJob($data));// Dispatch the email job // job နှင့် ခေါ်သာကြောင့် dispatch ဖြင့်ပို့ပေးရမည် 
             
             // email notification
             // php artisan make:notification OtpEmailNotify

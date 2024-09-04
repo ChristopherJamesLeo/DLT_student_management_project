@@ -7,9 +7,9 @@
     <title>Document</title>
 </head>
 <body>
-    <span>Your One time password is</span>
+    <span>Enter tihs verification code on your device</span>
     <h1>{!! $data['content'] !!}</h1>
-    <p>Don't share any other one</p>
+    <span>Don't share it with anyone. We will never call or text you for this code.</span>
 
 </body>
 </html>

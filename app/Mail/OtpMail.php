@@ -24,14 +24,15 @@ class OtpMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: $this->data['subject'],
+            // subject: $this->data['subject'], // mail subject ဖြစ်နေမည်
+            subject: "OTP Verification Code", // mail subject ဖြစ်နေမည်
         );
     }
 
     public function content(): Content
     {
         return new Content(
-            view: 'mailtemplate.otpmail',
+            view: 'mailtemplate.otpmail', // mail template ထည့်ပ‌ေးရမည် 
         );
     }
 
@@ -40,3 +41,7 @@ class OtpMail extends Mailable implements ShouldQueue
         return [];
     }
 }
+
+
+// php artisan make:mail OtpMail
+// php artisan make:job OtpMailJob

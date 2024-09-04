@@ -39,3 +39,4 @@ class MailBoxJob implements ShouldQueue
 
 
 // php artisan make:job MailBoxJob
+// php artisan queue:table 

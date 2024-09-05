@@ -47,7 +47,7 @@
 
         function verifyotp ($userid,$otp){
             
-            $checkotp = Otp::where('user_id',$userid)->where('otp',$otp)->where('expires_at', '>' , \Carbon\Carbon::now()->first()); // လက်ရှီ ရှိနေသော အချိန်ထပ်ကို ကြီးနေမှသာ expire ဖြစ်သွားမည်ဖြစ်ည် 
+            $checkotp = Otp::where('user_id',$userid)->where('otp',$otp)->where('expires_at', '>' , \Carbon\Carbon::now())->first(); // လက်ရှီ ရှိနေသော အချိန်ထပ်ကို ကြီးနေမှသာ expire ဖြစ်သွားမည်ဖြစ်ည် 
 
             if($checkotp){
                 // OTP valid 

@@ -59,8 +59,8 @@
         <div class=" col-md-12">
 
             <div>
-                <a href="javascript:void(0)" id="bulkdeletebtn" class="btn btn-primary rounded-0 btn-sm ">Bulk Delete</a>
-                <a href="javascript:void(0)" id="generateotpbtn" class="btn btn-secondary rounded-0 btn-sm ">Generate OTP</a>
+                {{-- <a href="javascript:void(0)" id="bulkdeletebtn" class="btn btn-primary rounded-0 btn-sm ">Bulk Delete</a> --}}
+                <a href="javascript:void(0)" id="generateotpbtn" class="btn btn-danger rounded-0 btn-sm ">Bulk Delete</a>
             </div>
             <div >
                 <form action="" method="">
@@ -657,44 +657,44 @@
                 $(".singlechecks").prop("checked",$(this).prop("checked")); // check လုပ်ထားသလားစစ်ဆေးသည်
             });
 
-            $("#bulkdeletebtn").click(function(){
-                let getselectedids = [];
+            // $("#bulkdeletebtn").click(function(){
+            //     let getselectedids = [];
                 
-                // console.log($("input"));
-                // console.log($("input:checkbox[name=singlechecks ]"));
-                console.log($("input:checkbox[name=singlechecks]:checked"));
-                // $("input:checkbox[name='singlechecks']:checked");
-                $("input:checkbox[name=singlechecks]:checked").each(function(){
-                    getselectedids.push($(this).val());
-                })
-                console.log(getselectedids);
+            //     // console.log($("input"));
+            //     // console.log($("input:checkbox[name=singlechecks ]"));
+            //     console.log($("input:checkbox[name=singlechecks]:checked"));
+            //     // $("input:checkbox[name='singlechecks']:checked");
+            //     $("input:checkbox[name=singlechecks]:checked").each(function(){
+            //         getselectedids.push($(this).val());
+            //     })
+            //     console.log(getselectedids);
 
-                $("#bulkdeletebtn").text("Loading");
+            //     $("#bulkdeletebtn").text("Loading");
 
-                $.ajax({
-                    url:"{{route('cities.bulkdelete')}}",
-                    type : "DELETE",
-                    dataType : "json",
-                    data : {
-                        selectedids : getselectedids,
-                        _token : "{{csrf_token()}}",
-                    },
-                    success : function(response){
-                        console.log(response);
-                        if(response){
-                            $.each(getselectedids,function(key,value){ // each သည် first parameter အား second para ရှိ function ဖြ့် looping ပတ်ပြီး key value ထုတ်ပေးမည် ၄င်း အား ပြန်သံုးနုိငသည် 
-                                $(`#delete_${value}`).remove();
-                                $("#bulkdeletebtn").text("Bulk Delete");
+            //     $.ajax({
+            //         url:"{{route('cities.bulkdelete')}}",
+            //         type : "DELETE",
+            //         dataType : "json",
+            //         data : {
+            //             selectedids : getselectedids,
+            //             _token : "{{csrf_token()}}",
+            //         },
+            //         success : function(response){
+            //             console.log(response);
+            //             if(response){
+            //                 $.each(getselectedids,function(key,value){ // each သည် first parameter အား second para ရှိ function ဖြ့် looping ပတ်ပြီး key value ထုတ်ပေးမည် ၄င်း အား ပြန်သံုးနုိငသည် 
+            //                     $(`#delete_${value}`).remove();
+            //                     $("#bulkdeletebtn").text("Bulk Delete");
 
-                            })
+            //                 })
 
-                        }
-                    },
-                    error : function (response){
-                        console.log("error" , response);
-                    }
-                })
-            })
+            //             }
+            //         },
+            //         error : function (response){
+            //             console.log("error" , response);
+            //         }
+            //     })
+            // })
             // end bulk delete
 
             // Start OTP
@@ -720,7 +720,7 @@
                         Swal.close();
                         $("#optmessage").text("your otp code is " + response.otp);
                         $("#otpmodal").modal("show");
-                        startotptimer(); // otp will expire at 300 minutes ( 5 minutes)
+                        startotptimer(60); // otp will expire at 120 minutes ( 1 minutes)
                     },
                     error: function(response){
                         console.log("Error",response);
@@ -728,8 +728,37 @@
                 })
             })
 
-            function startotptimer(){
+            function startotptimer(duration){
+                // let minutes, seconds;
+                // let timer = duration;
+            
+                let timer = duration,minutes, seconds; // veriable တူတူဘဲဖြစ်သည်
 
+                console.log(timer,minutes,seconds);
+
+                let setinv=setInterval(dectimer, 1000);
+
+                $("#otptimer").text(`${minutes} : ${seconds}`);
+                
+                function dectimer(){
+                    minutes = parseInt(timer/60,10); // 10 သည် default ဖြစ်သည် 
+                    seconds = parseInt(timer%60);
+
+                    // console.log(parseInt("123 hello")) // -> return 123 ဘဲထွက်မည်ဖြစ်သည် 
+                    // console.log(parseInt("123",10)) // -> return 123 ဘဲထွက်မည်ဖြစ်သည်  10 သည် base 10 ကို ဆိုလိုသည်
+                    // console.log(parseInt("    123 ",10)) ; // 123 ဘဲထွက်မည် 
+                    // console.log(parseInt("0123 ",10)) ; // 0 ဘဲထွက်မည် 
+                    minutes = minutes < 10 ? "0"+minutes : minutes;
+                    seconds = seconds < 10 ? "0"+seconds : seconds;
+
+                    $("#otptimer").text(`${minutes} : ${seconds}`);
+
+                    if(timer-- < 0){
+                        clearInterval(setinv);
+                        $("#otpmodal").modal("hide");
+                    }
+                }
+                
             }
 
             $("#verifyform").on("submit",function(e){
@@ -741,6 +770,38 @@
                     success : function(response){
                         if(response.message){
                             console.log("Dulk Delete Successful");
+
+                            // start bulk delete
+                            let getselectedids = [];
+                            $("input:checkbox[name=singlechecks]:checked").each(function(){
+                                getselectedids.push($(this).val());
+                            })
+                            $.ajax({
+                                url:"{{route('cities.bulkdelete')}}",
+                                type : "DELETE",
+                                dataType : "json",
+                                data : {
+                                    selectedids : getselectedids,
+                                    _token : "{{csrf_token()}}",
+                                },
+                                success : function(response){
+                                    console.log(response);
+                                    if(response){
+                                        $.each(getselectedids,function(key,value){ // each သည် first parameter အား second para ရှိ function ဖြ့် looping ပတ်ပြီး key value ထုတ်ပေးမည် ၄င်း အား ပြန်သံုးနုိငသည် 
+                                            $(`#delete_${value}`).remove();
+                                            $("#bulkdeletebtn").text("Bulk Delete");
+
+                                        })
+
+                                    }
+                                },
+                                error : function (response){
+                                    console.log("error" , response);
+                                }
+                            })
+                            // end bulk delete
+
+                            $("#otpmodal").modal("hide");
                         }else {
                             console.log("invalid OTP");
                         }

@@ -16,8 +16,12 @@ class UserPoint extends Model
         "points"
     ];
 
-    public function user(){
-        return $this -> belongsTo(User::class); 
+    public function users(){
+        return $this -> belongsTo(User::class,"user_id","id"); 
+    }
+
+    public function students(){
+        return $this -> belongsTo(Student::class,"user_id","user_id");
     }
 
 }

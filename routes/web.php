@@ -46,6 +46,8 @@ use App\Http\Controllers\UserPointsController;
 use App\Http\Controllers\PlansController;
 
 use App\Http\Controllers\CartsController;
+use App\Http\Controllers\PointTransfersController;
+
 
 
 
@@ -217,7 +219,13 @@ Route::middleware('auth')->group(function () {
     Route::post("/carts/add",[CartsController::class,"add"])->name('carts.add');
     Route::post("/carts/remove",[CartsController::class,"remove"])->name('carts.remove');
     Route::post("/carts/paybypoints",[CartsController::class,"paybypoints"])->name('carts.paybypoints');
-    Route::post("/carts/testing",[CartsController::class,"testing"])->name('carts.testing');
+    // Route::post("/carts/testing",[CartsController::class,"testing"])->name('carts.testing');
+
+
+    // point transfers
+    Route::resource("pointtransfers",PointTransfersController::class);
+    Route::post("/pointtransfers/transfer",[PointTransfersController::class,"transfers"])->name('pointtransfers.transfers');
+
     
 
 

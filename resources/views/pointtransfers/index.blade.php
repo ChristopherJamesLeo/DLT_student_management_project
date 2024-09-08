@@ -168,6 +168,49 @@
 
         </div>
         <!-- end edit modal -->
+
+        {{-- start verification box --}}
+        <!-- start OTP modal -->
+        <div id="otpmodal" class="modal fade">
+            <div class="modal-dialog modal-sm modal-dialog-center">
+                <div class="modal-content">
+                    
+                    <div class="modal-body">
+                        {{-- <form id="form_action" action="" method="POST" enctype="multipart/form-data" class="">  --}}
+                        <form id="verifyOtpForm" > 
+
+                            {{-- {{csrf_field()}}
+                            {{ method_field("PUT") }} --}}
+                            <input type="hidden" name="edituser_id" id="user_id" value="{{$userdata['id']}}">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 form-group mb-3">
+                                    <label for="otpcode">OTP Code <span class="text-danger">*</span></label>
+                                    <input type="text" name="otpcode" id="otpcode" class="form-control rounded-0" placeholder="Enter Status Name" >
+                                </div>
+
+                                 <input type="hidden" name="otpuser_id" id="otpuser_id" value="{{$userdata['id']}}">
+
+                                <div class="col-md-12">
+                                    <div class="d-flex justify-content-end">
+
+                                        <button type="submit" class="btn btn-primary btn-sm rounded-0 ms-3">Submit</button>
+                                    </div>
+                                </div>
+
+                               
+
+                            </div>
+
+                            <p id="optmessage"></p>
+                            <p>Exprie in : <span id="otptimer"></span>Seconds</p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- end OTP modal -->
+    {{-- end verification box --}}
     <!-- END MODAL AREA -->
 
 
@@ -295,37 +338,148 @@
                 $(this).html("Sending...");
 
                 if(actiontype === "action-type"){
+
+                        Swal.fire({
+                            title: "Processing...!",
+                            text: "Please wait while sending your OTP .",
+                            allowOutsideClick: false,
+                            timerProgressBar: true,
+                            didOpen: () => {
+                                Swal.showLoading();
+                                
+                            },
+                        
+                        });
+
+                    
+                        $.ajax({
+                            url : "/generateotps",
+                            type : "POST",
+                            success : function(response){
+                                console.log(response.otp);
+                                Swal.close();
+                                $("#optmessage").text("your otp code is " + response.otp);
+                                $("#otpmodal").modal("show");
+                                $("#createmodal").modal("hide");
+                                startotptimer(60); // otp will expire at 120 minutes ( 1 minutes)
+                            },
+                            error: function(response){
+                                console.log("Error",response);
+                            }
+                        })
+
+                    // console.log(packageid);
+
+              
                     // do crate
-                    $.ajax({
-                        url : "{{route('pointtransfers.transfers')}}",
-                        type : "POST",
-                        dataType : "JSON",
-                        data : $("#createform").serialize(),
-                        success : function(response){
-                            console.log(response.message);
-                            // $("#createform")[0].reset();
-                            // or
-                            $("#createform").trigger('reset');
-                            $("#createmodal").modal("hide");
-                            $("#create-btn").html("Save Change");
-                            fetchalldata();
-                            Swal.fire({
-                                        title: "Transfer!",
-                                        text: "Transfer Successful.",
-                                        icon: "success"
-                                    });
+                    // $.ajax({
+                    //     url : "{{route('pointtransfers.transfers')}}",
+                    //     type : "POST",
+                    //     dataType : "JSON",
+                    //     data : $("#createform").serialize(),
+                    //     success : function(response){
+                    //         console.log(response.message);
+                    //         // $("#createform")[0].reset();
+                    //         // or
+                    //         $("#createform").trigger('reset');
+                    //         $("#createmodal").modal("hide");
+                    //         $("#create-btn").html("Save Change");
+                    //         fetchalldata();
+                    //         Swal.fire({
+                    //                     title: "Transfer!",
+                    //                     text: "Transfer Successful.",
+                    //                     icon: "success"
+                    //                 });
                             
 
-                        },
-                        error : function(response){
-                            console.log("Error: ", response);
-                            $("#create-btn").html("Try Again");
-                        }
+                    //     },
+                    //     error : function(response){
+                    //         console.log("Error: ", response);
+                    //         $("#create-btn").html("Try Again");
+                    //     }
 
-                    })
+                    // })
                 
                 }
             })
+
+
+            // start verification
+            function startotptimer(duration){
+                // let minutes, seconds;
+                // let timer = duration;
+            
+                let timer = duration,minutes, seconds; // veriable တူတူဘဲဖြစ်သည်
+                console.log(timer,minutes,seconds);
+                let setinv=setInterval(dectimer, 1000);
+                $("#otptimer").text(`${minutes} : ${seconds}`);
+                
+                function dectimer(){
+                    minutes = parseInt(timer/60,10); // 10 သည် default ဖြစ်သည် 
+                    seconds = parseInt(timer%60);
+                    // console.log(parseInt("123 hello")) // -> return 123 ဘဲထွက်မည်ဖြစ်သည် 
+                    // console.log(parseInt("123",10)) // -> return 123 ဘဲထွက်မည်ဖြစ်သည်  10 သည် base 10 ကို ဆိုလိုသည်
+                    // console.log(parseInt("    123 ",10)) ; // 123 ဘဲထွက်မည် 
+                    // console.log(parseInt("0123 ",10)) ; // 0 ဘဲထွက်မည် 
+                    minutes = minutes < 10 ? "0"+minutes : minutes;
+                    seconds = seconds < 10 ? "0"+seconds : seconds;
+                    $("#otptimer").text(`${minutes} : ${seconds}`);
+                    if(timer-- < 0){
+                        clearInterval(setinv);
+                        $("#otpmodal").modal("hide");
+                    }
+                }
+                
+            }
+
+            $("#verifyOtpForm").on("submit",function(e){
+                e.preventDefault();
+                console.log("hello");
+                $.ajax({
+                    url : "/verifyotps",
+                    type : "POST",
+                    data: $(this).serialize(),
+                    success : function(response){
+                        if(response.message){
+                            $.ajax({
+                                url : "{{route('pointtransfers.transfers')}}",
+                                type : "POST",
+                                dataType : "JSON",
+                                data : $("#createform").serialize(),
+                                success : function(response){
+                                    console.log(response.message);
+                                    // $("#createform")[0].reset();
+                                    // or
+                                    $("#createform").trigger('reset');
+                                    $("#createmodal").modal("hide");
+                                    $("#otpmodal").modal('hide');
+                                    $("#create-btn").html("Save Change");
+                                    fetchalldata();
+                                    Swal.fire({
+                                                title: "Transfer!",
+                                                text: "Transfer Successful.",
+                                                icon: "success"
+                                            });
+                                    
+
+                                },
+                                error : function(response){
+                                    console.log("Error: ", response);
+                                    $("#create-btn").html("Try Again");
+                                }
+
+                            })
+                        }
+                        
+                    },
+                    error : function(response){
+                        console.log("error at OTP", response);
+                    }
+                })
+            })
+
+        // end verification
+
 
 
 

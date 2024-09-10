@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\UserPoint;
 use App\Models\Student;
+use App\Models\PointsTransfer;
 
 class PointTransfersController extends Controller
 {
@@ -52,7 +53,17 @@ class PointTransfersController extends Controller
             $receiver -> userpoint -> points += $points;
             $receiver->userpoint -> save();
 
+            
+            // point transaction
+
+            PointsTransfer::create([
+                "sender_id" => $sender -> id,
+                "receiver_id" => $receiver -> id,
+                "points" => $points
+            ]);
+
             \DB::commit(); // db ထဲတွင် transaction တစ်ခုလုံးအောင်မြင်လား အောင်မြင်ရင် beginTrasaction ဖွင့်ထားတာကို commit နဲ့ ပြန်ပိတ်လိုက်မည် မအောင်မြင်ရင်တ‌ော့ DB ကို rollback ပြန်လု်မယ် မူလအတိုင်းပြန်ထားမယ်လို့ဆိုလိုတာ
+
 
             return response()->json(["message"=>"Point Transferred Successfully"]);
 

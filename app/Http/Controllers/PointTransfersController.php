@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\UserPoint;
 use App\Models\Student;
 use App\Models\PointsTransfer;
+use App\Models\PointTransferHistory;
 
 class PointTransfersController extends Controller
 {
@@ -16,9 +17,9 @@ class PointTransfersController extends Controller
         //  ajax ဖြင့် လှမ်းခေါ်ပါက  list ကို ဆွဲထုတ်မည် လှမ်းမခေါ်ပါက view ဖြင့် blade ကို ဆွဲတင်မည်ဖြစ်သည် 
 
         if(request()->ajax()){ // ajax ဖြင့် request လုပ်ခဲ့သလား စစ်နိုင်သည် 
-            $userpoints = UserPoint::all();
+            $pointtransferhistorys = PointTransferHistory::all();
             // return view('userpoints.list',compact("userpoints")); // package list ဖိုင်ထဲသို့ ပို့ပေးမည်ဖြစ်ပြီး ၄င်း ဖိုင်အား return ဖြင့် json အား ပို့ပေးလိုက်မည်ဖြစ်သည် 
-            return view('pointtransfers.list',compact("userpoints"))->render(); // render သုံးပေးလဲရသည်
+            return view('pointtransfers.list',compact("pointtransferhistorys"))->render(); // render သုံးပေးလဲရသည်
         }
 
         return view('pointtransfers.index');
@@ -37,6 +38,10 @@ class PointTransfersController extends Controller
 
         $receiver = User::find($request->input("receiver_id"));
         $points = $request -> input("points");
+
+        if($sender->id === $receiver->id){  // မိမိကိုယ် ကို ငွေလွဲမရအောင် restrice လုပ်ထားသည် 
+            return response()->json(["message" => "You cannot transfer points to yourself"],400);
+        }
 
         if($sender -> userpoint -> points < $points ){
             return response()->json(["message"=>"Insufficient Point"],400);
@@ -61,6 +66,9 @@ class PointTransfersController extends Controller
                 "receiver_id" => $receiver -> id,
                 "points" => $points
             ]);
+
+
+            
 
             \DB::commit(); // db ထဲတွင် transaction တစ်ခုလုံးအောင်မြင်လား အောင်မြင်ရင် beginTrasaction ဖွင့်ထားတာကို commit နဲ့ ပြန်ပိတ်လိုက်မည် မအောင်မြင်ရင်တ‌ော့ DB ကို rollback ပြန်လု်မယ် မူလအတိုင်းပြန်ထားမယ်လို့ဆိုလိုတာ
 

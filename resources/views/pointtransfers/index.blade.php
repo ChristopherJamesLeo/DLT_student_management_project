@@ -26,9 +26,9 @@
                         <th>No</th>
                         <th>Student ID</th>
                         <th>Points</th>
+                        <th>Account Type</th>
                         <th>Create At</th>
                         <th>Updated at</th>
-                        <th>Action</th>
                     </tr>
                 </thead>
 
@@ -245,7 +245,7 @@
             // start fetch all data
             function fetchalldata(){
                 $.ajax({
-                    url: "{{route('userpoints.index')}}",
+                    url: "{{route('pointtransfers.index')}}",
                     method : "GET",
                     beforeSend: function(){
                         // loading ပြန်*ရန် 

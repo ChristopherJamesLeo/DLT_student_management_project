@@ -49,7 +49,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="gallery" style="h-100 ">
-                                            <label for="image" class="w-100 h-100 text-center">
+                                            <label for="images" class="w-100 h-100 text-center">
                                                 <span>Choose Images</span>
                                             </label>
                                             
@@ -73,7 +73,7 @@
                     </div>
                     <div class="col-md-8">
                         <div class="row">
-                            <input type="file" name="image" id="image" class="form-control  rounded-0" hidden>
+                            <input type="file" name="images[]" multiple id="images" class="form-control  rounded-0" hidden>
                             <div class="col-md-12 col-sm-12 form-group mb-1">
                                 <label for="name">Title <span class="text-danger">*</span></label>
                                 <input type="text" name="title" id="name" class="form-control rounded-0" placeholder="Enter Leave" value="{{$leave->title}}">
@@ -163,7 +163,7 @@
                         var filereader = new FileReader(); // input တွင် ဝင်လာသော file အား ဖတ်ပေးခြင်းဖြစ်သည် 
 
                         filereader.onload = function(e){ // e သည် file ကို ဖတ်လိုက်သော အခါ input result ကို ပြပေးမည်
-                            $(output).html(" ");
+                            
                             $($.parseHTML("<img>")).attr("src",e.target.result).appendTo(output);
 
                             // image tag အား attr ဖြင့် src တည်ဆောက်သည်  ပတ်လမ်းကြောင်းသည် target အတွင်းရှိ result ကို ထည့်ပေးရမည်
@@ -173,7 +173,7 @@
                     }
                 }
             }
-            $("#image").change(function(){
+            $("#images").change(function(){
                 previewimages(this,".gallery")
             })
         })

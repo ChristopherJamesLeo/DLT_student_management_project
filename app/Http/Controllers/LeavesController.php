@@ -23,6 +23,7 @@ use App\Models\Type;
 use App\Models\Tag;
 use App\Models\User;
 use App\Models\Comment;
+use App\Models\LeaveFile;
 
 use App\Notifications\LeaveNotify;
 
@@ -84,23 +85,44 @@ class LeavesController extends Controller
         $leave -> user_id = $user_id;  
 
         // single img upload
-        if(file_exists($request["image"])){
+        // if(file_exists($request["image"])){
 
-            $file = $request->file("image");
+        //     $file = $request->file("image");
 
-            $fname = $file->getClientOriginalName();
+        //     $fname = $file->getClientOriginalName();
 
-            $imagenewname = uniqid($user_id).$leave["id"].$fname;   
+        //     $imagenewname = uniqid($user_id).$leave["id"].$fname;   
 
-            $file -> move(public_path("assets/img/leaves/"),$imagenewname);
+        //     $file -> move(public_path("assets/img/leaves/"),$imagenewname);
 
-            $filepath = "assets/img/leaves/".$imagenewname;  
+        //     $filepath = "assets/img/leaves/".$imagenewname;  
 
-            $leave -> image = $filepath; 
+        //     $leave -> image = $filepath; 
+
+        // }
+
+        $leave -> save();
+
+        // multi image upload 
+        if($request->hasFile("images")){
+            foreach($request -> file("images") as $image){
+                $leavefile = new LeaveFile();
+                $leavefile -> leave_id = $leave->id;
+
+                $file = $image;
+                $fname = $file -> getClientOriginalName();
+                $imagenewname = uniqid($user_id).$leave["id"].$fname;
+                $file -> move(public_path("assets/img/leaves/"),$imagenewname);
+                $filepath = "assets/img/leaves/".$imagenewname;
+
+                $leavefile->image = $filepath;
+
+                $leavefile->save();
+            }
 
         }
 
-        $leave -> save();
+        
 
         // $users = User::all(); // user အကုန် လံုးကို ပို့မည် 
 
@@ -198,32 +220,62 @@ class LeavesController extends Controller
         // $leave -> user_id = $user_id;  edit လုပ်ပါက yser မဟုတ်ဘဲ admin ဖြစ်သွားမှဆိုးသောေကြာင့် ဖျက်ထားခဲ့သည်
 
         // Remove Old Img 
-        if($request->hasfile("image")){
-            $path = $leave -> image; // ပတ်လမ်းကို ခေါ်ထုတ်မည် 
+        // if($request->hasfile("image")){
+        //     $path = $leave -> image; // ပတ်လမ်းကို ခေါ်ထုတ်မည် 
 
-            if(File::exists($path)){ // ပတ်လမ်းကြောင်းအတိုင်း file ရှိမရှိ စစ်မည်
-                File::delete($path); // file ရှိလျှင်ဖျက်မည် 
+        //     if(File::exists($path)){ // ပတ်လမ်းကြောင်းအတိုင်း file ရှိမရှိ စစ်မည်
+        //         File::delete($path); // file ရှိလျှင်ဖျက်မည် 
+        //     }
+
+        // }
+       
+        // single img update
+        // if($request->hasfile("image")){
+
+        //     $file = $request->file("image");
+        //     $fname = $file->getClientOriginalName();
+        //     $imagenewname = uniqid($user_id).$leave["id"].$fname;  
+
+        //     $file -> move(public_path("assets/img/leaves/"),$imagenewname);
+
+        //     $filepath = "assets/img/leaves/".$imagenewname;  
+
+        //     $leave -> image = $filepath;
+
+
+        // }
+
+        $leave -> save();
+        // MULTI DELETE OLD IMG 
+        $leavefiles = LeaveFile::where("leave_id",$leave->id)->get();
+       
+        if($request->hasFile("images")){
+            foreach($leavefiles as $leavefile){
+                $path = $leavefile->image;
+                if(File::exists($path)){
+                    File::delete($path);
+                }
             }
 
         }
-       
-        // single img update
-        if($request->hasfile("image")){
 
-            $file = $request->file("image");
-            $fname = $file->getClientOriginalName();
-            $imagenewname = uniqid($user_id).$leave["id"].$fname;  
+        // multi upload
+        if($request->hasFile("images")){
+            foreach($request -> file("images") as $image){
+                $leavefile = new LeaveFile();
+                $leavefile -> leave_id = $leave->id;
+                $file = $image;
+                $fname = $file -> getClientOriginalName();
+                $imagenewname = uniqid($user_id).$leave["id"].$fname;
+                $file -> move(public_path("assets/img/leaves/"),$imagenewname);
+                $filepath = "assets/img/leaves/".$imagenewname;
 
-            $file -> move(public_path("assets/img/leaves/"),$imagenewname);
+                $leavefile->image = $filepath;
 
-            $filepath = "assets/img/leaves/".$imagenewname;  
-
-            $leave -> image = $filepath;
-
+                $leavefile->save();
+            }
 
         }
-
-        $leave -> save();
 
         return redirect(route("leaves.index"));
     }
@@ -235,12 +287,17 @@ class LeavesController extends Controller
 
          // Remove Old Image
 
-        $path = $leave -> image; // ပတ်လမ်းကို ခေါ်ထုတ်မည် 
+        $leavefiles = LeaveFile::where("leave_id",$id)->get();
+        foreach($leavefiles as $leavefile){
+            $path = $leavefile -> image; // ပတ်လမ်းကို ခေါ်ထုတ်မည် 
 
-        if(File::exists($path)){ // ပတ်လမ်းကြောင်းအတိုင်း file ရှိမရှိ စစ်မည်
-            File::delete($path); // file ရှိလျှင်ဖျက်မည် 
+            if(File::exists($path)){ // ပတ်လမ်းကြောင်းအတိုင်း file ရှိမရှိ စစ်မည်
+                File::delete($path); // file ရှိလျှင်ဖျက်မည် 
+               
+            }
+
         }
-
+        
         $leave -> delete();
 
         return redirect()->back();

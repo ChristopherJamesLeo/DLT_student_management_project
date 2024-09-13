@@ -44,6 +44,10 @@ class Leave extends Model
         return $this -> belongsTo(User::class,"tag");
     }
 
+    public function leavefiles(){
+        return $this -> hasMany(LeaveFile::class);
+    }
+
     public function scopefilter($query){
         return $query -> where(function($query){
             if($getfilter =  request("filter")){

@@ -7,11 +7,11 @@
 
     <!-- start content area -->
     <div class="container-fluid">
-        
+
         <div class="col-md-12 my-3">
            <div class="col-md-12"></div>
                 {{-- <form action="{{route('cities.store')}}" method="POST" enctype="multipart/form-data" class="">  --}}
-                <form id="createform"> 
+                <form id="createform">
 
                      {{csrf_field()}}
                      @method("POST")
@@ -19,7 +19,7 @@
                      <div class="row">
                          <div class="col-md-12 col-sm-12 form-group mb-1">
                              <label for="name">Name <span class="text-danger">*</span></label>
-                             @error("name") 
+                             @error("name")
                                 <span class="text-danger">{{$message}}</span>
                              @enderror
                              <input type="text" name="name" id="name" class="form-control rounded-0 @error("name") is-invalid @enderror" placeholder="Enter City Name" value="{{old('name')}}">
@@ -46,7 +46,7 @@
                          <input type="hidden" name="user_id" id="user_id" value="{{$userdata['id']}}">
                          <div class="col-md-12">
                              <div class="d-flex justify-content-end">
-                                
+
                                  <button type="reset" class="btn btn-secondary btn-sm rounded-0 ms-3">Cancel</button>
                                  <button type="submit" id="createformbtn" class="btn btn-primary btn-sm rounded-0 ms-3">Submit</button>
                              </div>
@@ -71,7 +71,7 @@
                                 {{-- ရှာထားပြိးသား vlaue ကို ပြန်ယူတည့်ရန်  --}}
                                 {{-- <button type="submit" id="btn-search" class="btn btn-secondary"><i class="fas fa-search"></i></button> --}}
                                 {{-- <button type="submit" id="btn-search" class="btn btn-secondary"><i class="fas fa-search"></i></button> --}}
-    
+
                                 {{-- with javascript --}}
                                 <button type="button" id="btn-search" class="btn btn-secondary"><i class="fas fa-search"></i></button>
                             </div>
@@ -80,10 +80,10 @@
                 </form>
             </div>
 
-            
+
         </div>
         <div class="loader_container">
-    
+
             <table id="mytable"  class="table table-hover border">
                 <thead>
                     <tr>
@@ -91,9 +91,9 @@
                             <input type="checkbox" name="selectalls[]" id="selectalls" class="form-check-input selectalls" value="" >
                         </th>
                         <th>No</th>
-                        
-                        <th>Name</th>
                         <th>Country</th>
+                        <th>Name</th>
+
                         <th>Status</th>
                         <th>By</th>
                         <th>Create At</th>
@@ -102,14 +102,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                   
+
                 </tbody>
-                
-                
+
+
             </table>
-    
+
             {{-- {{$cities->links("pagination::bootstrap-4")}} --}}
-    
+
             <div class=" loader">
                 <div class="loader-item"></div>
                 <div class="loader-item"></div>
@@ -117,7 +117,7 @@
             </div>
         </div>
 
-        
+
     </div>
     <!--End Content Area-->
 
@@ -133,7 +133,7 @@
                     </div>
                     <div class="modal-body">
                         {{-- <form id="form_action" action="" method="POST" enctype="multipart/form-data" class="">  --}}
-                        <form id="editform_action" > 
+                        <form id="editform_action" >
 
                             {{-- {{csrf_field()}}
                             {{ method_field("PUT") }} --}}
@@ -150,7 +150,7 @@
                                        @foreach($countries as $country)
                                            <option value="{{$country->id}}">{{$country['name']}}</option>
                                        @endforeach
-        
+
                                     </select>
                                 </div>
                                 <div class="col-md-6 col-sm-12 form-group mb-1">
@@ -159,7 +159,7 @@
                                        @foreach($statuses as $status)
                                            <option value="{{$status->id}}">{{$status['name']}}</option>
                                        @endforeach
-        
+
                                     </select>
                                 </div>
                                 <input type="hidden" name="edit_id" id="edit_id">
@@ -189,10 +189,10 @@
         <div id="otpmodal" class="modal fade">
             <div class="modal-dialog modal-sm modal-dialog-center">
                 <div class="modal-content">
-                    
+
                     <div class="modal-body">
                         {{-- <form id="form_action" action="" method="POST" enctype="multipart/form-data" class="">  --}}
-                        <form id="verifyform" > 
+                        <form id="verifyform" >
 
                             {{-- {{csrf_field()}}
                             {{ method_field("PUT") }} --}}
@@ -212,7 +212,7 @@
                                     </div>
                                 </div>
 
-                               
+
 
                             </div>
 
@@ -240,10 +240,10 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
 
-        // start filter 
+        // start filter
         let getfilterbtn = document.getElementById("btn-search");
         getfilterbtn.addEventListener("click",function(e){
-           
+
             const getfiltername = document.querySelector("#filtername").value;
             const getcururl = window.location.href;
             // console.log(getcururl);
@@ -254,13 +254,13 @@
             e.preventDefault();
         })
 
-        // end filter 
+        // end filter
 
-        $.ajaxSetup(   // ajax ဖြင့် စကတည်းက ပို့ထားမည် csrf ကို ပို့ထားမည် 
+        $.ajaxSetup(   // ajax ဖြင့် စကတည်းက ပို့ထားမည် csrf ကို ပို့ထားမည်
             {
-                headers : { 
+                headers : {
                     // header အား သံုးနုိင်ရန် html ရှိ header ထဲတွင် meta tag ဖြင့် attribute name = "csrf-token" content="{{csrf_token()}}"
-                    'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr("content"), // meta tag ထဲတွင် ရှိသော value အား ယူမည် 
+                    'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr("content"), // meta tag ထဲတွင် ရှိသော value အား ယူမည်
                 }
             }
         )
@@ -268,7 +268,7 @@
 
         $(document).ready(function(){
 
-            // read 
+            // read
 
             function getNo(){
                 let getTrs = document.querySelectorAll("#mytable tbody tr");
@@ -277,7 +277,7 @@
                     tr.innerText = ++idx;
                 })
             }
-            
+
             // function fetchAllData(){
             //     $.ajax({
             //         url:"api/cities",
@@ -290,7 +290,7 @@
             //             // console.log(datas);
 
             //             let trs ;
-                        
+
             //             datas.forEach(function(data,idx){
             //                 // console.log(data);
             //                 let tr = `<tr id="delete_${data.id}">
@@ -299,39 +299,39 @@
             //                                 </td>
             //                                 <td class="tr_no">${++idx}</td>
             //                                 <td>${data.name}</td>
-                                            
+
             //                                 <td>${data.country.name}</td>
-                                            
+
             //                                 <td>
             //                                         <div class="form-checkbox form-switch">
-            //                                             <input type="checkbox" name="" id="" class="form-check-input change-btn" 
+            //                                             <input type="checkbox" name="" id="" class="form-check-input change-btn"
             //                                             ${data.status_id === 3 ? "checked" : " "}
             //                                             data-id = ${data.id}
             //                                             >
             //                                         </div>
             //                                 </td>
-            //                                 <td>${data.user.name}</td> 
+            //                                 <td>${data.user.name}</td>
             //                                 <td>${data.created_at}</td>
             //                                 <td>${data.updated_at}</td>
             //                                 <td>
-            //                                     <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" 
+            //                                     <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal"
             //                                     data-id="${data.id}"
-            //                                     data-country_id="${data.country_id}" 
-            //                                     data-status_id="${data.status_id}" 
+            //                                     data-country_id="${data.country_id}"
+            //                                     data-status_id="${data.status_id}"
             //                                     data-user_id = "${data.user.id}"
             //                                     data-name="${data.name}"><i class="fas fa-pen"></i></a>
-                                                
-                                                
+
+
             //                                     <a href="#" class="text-danger me-3 delete-btns" data-idx = "${data.id}" ><i class="fas fa-trash"></i></a>
-                        
+
             //                                 </td>
-                                            
+
             //                             </tr>`
             //                     $("#mytable tbody").append(tr);
-                                
+
             //             })
-                        
-                        
+
+
             //         },
             //         error : function (response){
             //             console.log("error");
@@ -375,26 +375,27 @@
                             <input type="checkbox" name="singlechecks" getcheck="siglechecks" id="siglechecks${data.id}" class="form-check-input singlechecks" value="${data.id}" >
                             </td>
                             <td class="tr_no">${++idx}</td>
-                            <td>${data.name}</td>
-                            
                             <td>${data.country.name}</td>
-                            
+                            <td>${data.name}</td>
+
+
+
                             <td>
                                     <div class="form-checkbox form-switch">
-                                        <input type="checkbox" name="" id="" class="form-check-input change-btn" 
+                                        <input type="checkbox" name="" id="" class="form-check-input change-btn"
                                         ${data.status_id === 3 ? "checked" : " "}
                                         data-id = ${data.id}
                                         >
                                     </div>
                             </td>
-                            <td>${data.user.name}</td> 
+                            <td>${data.user.name}</td>
                             <td>${data.created_at}</td>
                             <td>${data.updated_at}</td>
                             <td>
-                                <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" 
+                                <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal"
                                 data-id="${data.id}"
-                                data-country_id="${data.country_id}" 
-                                data-status_id="${data.status_id}" 
+                                data-country_id="${data.country_id}"
+                                data-status_id="${data.status_id}"
                                 data-user_id = "${data.user.id}"
                                 data-name="${data.name}"><i class="fas fa-pen"></i></a>
                                 <a href="#" class="text-danger me-3 delete-btns" data-idx = "${data.id}" ><i class="fas fa-trash"></i></a>
@@ -408,7 +409,7 @@
 
             alldatastodom();
 
-            // show loader & fetch more data 
+            // show loader & fetch more data
             const getloader = document.querySelector(".loader");
 
             function showloader(){
@@ -420,7 +421,7 @@
                     setTimeout(()=>{
                         page++;
                         alldatastodom();
-                        
+
                     },300)
 
                 }, 1000);
@@ -441,8 +442,8 @@
             })
 
             // start fetch data by pagination
-                
-            
+
+
 
             // start create
             $("#createform").validate({
@@ -472,12 +473,12 @@
                                             </td>
                                             <td></td>
                                             <td>${data.name}</td>
-                                            
+
                                             <td>${data.country.name}</td>
-                                            <td>${data.user.name}</td> 
+                                            <td>${data.user.name}</td>
                                             <td>
                                                     <div class="form-checkbox form-switch">
-                                                        <input type="checkbox" name="" id="" class="form-check-input change-btn" 
+                                                        <input type="checkbox" name="" id="" class="form-check-input change-btn"
                                                         ${data.status_id === 3 ? "checked" : " "}
                                                         data-id = ${data.id}
                                                         >
@@ -487,18 +488,18 @@
                                             <td>${data.created_at}</td>
                                             <td>${data.updated_at}</td>
                                             <td>
-                                                <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" 
+                                                <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal"
                                                 data-id="${data.id}"
-                                                data-country_id="${data.country_id}" 
-                                                data-status_id="${data.status_id}" 
+                                                data-country_id="${data.country_id}"
+                                                data-status_id="${data.status_id}"
                                                 data-user_id = "${data.user.id}"
                                                 data-name="${data.name}"><i class="fas fa-pen"></i></a>
-                                                
-                                                
+
+
                                                 <a href="javascript:void(0)" class="text-danger me-3 delete-btns" data-idx = "${data.id}" ><i class="fas fa-trash"></i></a>
-                        
+
                                             </td>
-                                            
+
                                         </tr>`
                                 $("#mytable tbody").append(tr);
 
@@ -510,7 +511,7 @@
                 }
             })
 
-            // start edit 
+            // start edit
             $(document).on("click",".edit_form",function(){
                 let getId = $(this).data("id");
                 // console.log(getId);
@@ -527,7 +528,7 @@
                 $("#user_id").val(getUserId);
                 $("#edit_id").val(getId);
             })
-            
+
             $("#editform_action").submit(function(e){
                 e.preventDefault();
                 // console.log("hello");
@@ -552,43 +553,43 @@
                                                             <td>${data.country.name}</td>
                                                             <td>
                                                                 <div class="form-checkbox form-switch">
-                                                                    <input type="checkbox" name="" id="" class="form-check-input change-btn" 
+                                                                    <input type="checkbox" name="" id="" class="form-check-input change-btn"
                                                                     ${data.status_id === 3 ? "checked" : " "}
-                                                                
-                                                                    
+
+
                                                                     data-id = ${data.id}
                                                                     >
                                                                 </div>
                                                             </td>
 
-                                                            <td>${data.user.name}</td> 
-                                                            
-                                                            
+                                                            <td>${data.user.name}</td>
+
+
                                                             <td>${data.created_at}</td>
                                                             <td>${data.updated_at}</td>
                                                             <td>
-                                                                <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" 
+                                                                <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal"
                                                                 data-id="${data.id}"
-                                                                data-country_id="${data.country_id}" 
-                                                                data-status_id="${data.status_id}" 
+                                                                data-country_id="${data.country_id}"
+                                                                data-status_id="${data.status_id}"
                                                                 data-user_id = "${data.user.id}"
                                                                 data-name="${data.name}"><i class="fas fa-pen"></i></a>
-                                                                
-                                                                
+
+
                                                                 <a href="javascript:void(0)" class="text-danger me-3 delete-btns" data-idx = "${data.id}" ><i class="fas fa-trash"></i></a>
-                                        
+
                                                             </td>
-                                                            
+
                                                         </tr>`;
 
-                                                        
+
                     },
                     error : function(response){
                         console.log("error");
                     }
                 })
             })
-            
+
             // start delete
             $(document).on("click",".delete-btns",function(e){
                 e.preventDefault();
@@ -639,16 +640,16 @@
 
                 // const getid = $(this).data("id");
 
-                // // $("#form_action").attr('action',`\{\{route('statuses.update',$status->id)\}\}`); // error 
+                // // $("#form_action").attr('action',`\{\{route('statuses.update',$status->id)\}\}`); // error
 
                 // // use method 1
                 // // $("#form_action").attr('action',`http://127.0.0.1:8000/statuses/${getid}`);
 
                 // // method 2
                 // $("#form_action").attr('action',`/cities/${getid}`);
-                
+
             // })
-            
+
             // $("#mytable").DataTable();
             // end edit form
 
@@ -659,7 +660,7 @@
 
             // $("#bulkdeletebtn").click(function(){
             //     let getselectedids = [];
-                
+
             //     // console.log($("input"));
             //     // console.log($("input:checkbox[name=singlechecks ]"));
             //     console.log($("input:checkbox[name=singlechecks]:checked"));
@@ -682,7 +683,7 @@
             //         success : function(response){
             //             console.log(response);
             //             if(response){
-            //                 $.each(getselectedids,function(key,value){ // each သည် first parameter အား second para ရှိ function ဖြ့် looping ပတ်ပြီး key value ထုတ်ပေးမည် ၄င်း အား ပြန်သံုးနုိငသည် 
+            //                 $.each(getselectedids,function(key,value){ // each သည် first parameter အား second para ရှိ function ဖြ့် looping ပတ်ပြီး key value ထုတ်ပေးမည် ၄င်း အား ပြန်သံုးနုိငသည်
             //                     $(`#delete_${value}`).remove();
             //                     $("#bulkdeletebtn").text("Bulk Delete");
 
@@ -699,7 +700,7 @@
 
             // Start OTP
             $("#generateotpbtn").on('click',function(){
-           
+
                 Swal.fire({
                     title: "Processing...!",
                     text: "Please wait while sending your OTP .",
@@ -707,11 +708,11 @@
                     timerProgressBar: true,
                     didOpen: () => {
                         Swal.showLoading();
-                        
+
                     },
-                
+
                 });
-                
+
                 $.ajax({
                     url : "/generateotps",
                     type : "POST",
@@ -731,7 +732,7 @@
             function startotptimer(duration){
                 // let minutes, seconds;
                 // let timer = duration;
-            
+
                 let timer = duration,minutes, seconds; // veriable တူတူဘဲဖြစ်သည်
 
                 console.log(timer,minutes,seconds);
@@ -739,15 +740,15 @@
                 let setinv=setInterval(dectimer, 1000);
 
                 $("#otptimer").text(`${minutes} : ${seconds}`);
-                
+
                 function dectimer(){
-                    minutes = parseInt(timer/60,10); // 10 သည် default ဖြစ်သည် 
+                    minutes = parseInt(timer/60,10); // 10 သည် default ဖြစ်သည်
                     seconds = parseInt(timer%60);
 
-                    // console.log(parseInt("123 hello")) // -> return 123 ဘဲထွက်မည်ဖြစ်သည် 
+                    // console.log(parseInt("123 hello")) // -> return 123 ဘဲထွက်မည်ဖြစ်သည်
                     // console.log(parseInt("123",10)) // -> return 123 ဘဲထွက်မည်ဖြစ်သည်  10 သည် base 10 ကို ဆိုလိုသည်
-                    // console.log(parseInt("    123 ",10)) ; // 123 ဘဲထွက်မည် 
-                    // console.log(parseInt("0123 ",10)) ; // 0 ဘဲထွက်မည် 
+                    // console.log(parseInt("    123 ",10)) ; // 123 ဘဲထွက်မည်
+                    // console.log(parseInt("0123 ",10)) ; // 0 ဘဲထွက်မည်
                     minutes = minutes < 10 ? "0"+minutes : minutes;
                     seconds = seconds < 10 ? "0"+seconds : seconds;
 
@@ -758,7 +759,7 @@
                         $("#otpmodal").modal("hide");
                     }
                 }
-                
+
             }
 
             $("#verifyform").on("submit",function(e){
@@ -787,7 +788,7 @@
                                 success : function(response){
                                     console.log(response);
                                     if(response){
-                                        $.each(getselectedids,function(key,value){ // each သည် first parameter အား second para ရှိ function ဖြ့် looping ပတ်ပြီး key value ထုတ်ပေးမည် ၄င်း အား ပြန်သံုးနုိငသည် 
+                                        $.each(getselectedids,function(key,value){ // each သည် first parameter အား second para ရှိ function ဖြ့် looping ပတ်ပြီး key value ထုတ်ပေးမည် ၄င်း အား ပြန်သံုးနုိငသည်
                                             $(`#delete_${value}`).remove();
                                             $("#bulkdeletebtn").text("Bulk Delete");
 
@@ -805,7 +806,7 @@
                         }else {
                             console.log("invalid OTP");
                         }
-                        
+
 
                     },
                     error : function(response){
@@ -817,7 +818,7 @@
             // End OTP
 
             // $(".change-btn").click(function(){ // js မှလှမ်းပို့ပါက အလုပ်မလုပ်တော့ပေ
-            $(document).on("change",".change-btn",function(){ // ထို့ကြောင့် document ကို သံုးပေးရသည် 
+            $(document).on("change",".change-btn",function(){ // ထို့ကြောင့် document ကို သံုးပေးရသည်
                 // console.log($(this).data("id"));
                 // console.log("hello");
                 var getid = $(this).data("id");
@@ -826,11 +827,11 @@
                 var setstatus = $(this).prop("checked") === true ? 3 : 4;
 
                 // console.log(setstatus);
-                // change API 
+                // change API
                 $.ajax({
                     url : "api/citiesstatus", //route list ထဲရှီ route name ကို ပို့ပေးရမည်
                     type : "GET", // route ကို ဖမ်းတီးရာတွင် GET ဖြစ်သော ကြောင့် GET ဖြင့် သ့ဒဂပေးရမည်
-                    
+
                     dataType : "json",
                     data : {
                         // columnName : value
@@ -838,14 +839,14 @@
                         "status_id" : setstatus
                     },
                     success : function(response){
-                        console.log(response.success); // return ပြန်လာသော data အား ယူမည် 
+                        console.log(response.success); // return ပြန်လာသော data အား ယူမည်
                         Swal.fire({
                             title: "Updated",
                             text: "Update Successful",
                             icon: "success"
                         });
                     }
-                    
+
                 });
             })
             // end change status btn
@@ -857,34 +858,34 @@
 
 
 
-        
+
     </script>
 @endsection
 
-{{-- 
-@foreach($cities as $idx=>$city) 
-                    
+{{--
+@foreach($cities as $idx=>$city)
+
 <tr id="delete_{{$city->id}}">
     <td>
         <input type="checkbox" name="singlechecks" getcheck="siglechecks" id="siglechecks{{$city->id}}" class="form-check-input singlechecks" value="{{$city -> id}}" >
     </td>
     <td>{{++$idx}}</td>
     <td>{{$idx+ $cities->firstItem()}}</td>
-    
+
     <td>{{$city->name}}</td>
-    <td>{{$city->user["name"]}}</td> 
+    <td>{{$city->user["name"]}}</td>
 
     <td>{{$city->created_at->format('d m Y')}}</td>
     <td>{{$city->updated_at->format('d M Y')}}</td>
     <td>
-        <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal" 
+        <a href="javascript:void(0)" class="me-3 btn btn-outline-info btn-sm edit_form" data-bs-toggle="modal" data-bs-target="#editmodal"
         data-id="{{$city->id}}"
-        data-country_id="{{$country->id}}" 
-        data-status_id="{{$status->id}}" 
+        data-country_id="{{$country->id}}"
+        data-status_id="{{$status->id}}"
         data-user_id = "{{$city->user['id']}}"
         data-name="{{$city->name}}"><i class="fas fa-pen"></i></a>
-        
-        
+
+
         <a href="#" class="text-danger me-3 delete-btns" data-idx = "{{$city->id}}" ><i class="fas fa-trash"></i></a>
 
     </td>
@@ -892,7 +893,7 @@
         {{ csrf_field() }}
         {{ method_field('DELETE') }}
     </form>
-    
+
 </tr>
 
 @endforeach --}}

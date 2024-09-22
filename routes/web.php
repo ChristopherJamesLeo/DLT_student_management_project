@@ -11,6 +11,7 @@ use App\Http\Controllers\EdulinksController;
 use App\Http\Controllers\EnrollsController;
 use App\Http\Controllers\GenderController;
 use App\Http\Controllers\ProfileController;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\StatusesController;
@@ -30,6 +31,9 @@ use App\Http\Controllers\LeavesController;
 use App\Http\Controllers\PaymentmethodsController;
 use App\Http\Controllers\PaymenttypesController;
 use App\Http\Controllers\WarehousesController;
+
+use App\Http\Controllers\RegionsController;
+use App\Http\Controllers\TownshipsController;
 
 
 
@@ -68,15 +72,15 @@ Route::get('/', function () {
 
 
 
-// dashborad ကို middleware ပေးထားလဲ ရသည် 
-// route ကို တစ်ခုတည်းပေးမည်ဆိုလျှင် ၍ သို့ရျွေးနိုင်သည် 
+// dashborad ကို middleware ပေးထားလဲ ရသည်
+// route ကို တစ်ခုတည်းပေးမည်ဆိုလျှင် ၍ သို့ရျွေးနိုင်သည်
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
 
-// auth လုပ်ထားသော သူသာလျှင် middle အတွင်းရှိနေသောသူများအလုပ်လုပ်မည် 
-// group လုပ်ပြီးလဲ middleware ၏ permission ပေးမှသာ ဝင်နိုင်မည် 
+// auth လုပ်ထားသော သူသာလျှင် middle အတွင်းရှိနေသောသူများအလုပ်လုပ်မည်
+// group လုပ်ပြီးလဲ middleware ၏ permission ပေးမှသာ ဝင်နိုင်မည်
 Route::middleware('auth')->group(function () {
 
     Route::get("dashboards",[DashboardsController::class,"index"])->name("dashboard.index");
@@ -86,7 +90,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 
-    // log in ဝင်ပြီးမှ အသုံးပြုလို့ရစေချင်သောကြောင့် middleware  ထဲမှာ‌ရေးခြင်းဖြစ်သည် 
+    // log in ဝင်ပြီးမှ အသုံးပြုလို့ရစေချင်သောကြောင့် middleware  ထဲမှာ‌ရေးခြင်းဖြစ်သည်
     Route::resource("statuses",StatusesController::class);
 
     Route::resource("announcements",AnnouncementsController::class);
@@ -97,13 +101,13 @@ Route::middleware('auth')->group(function () {
 
     Route::resource("enrolls",EnrollsController::class);
 
-    // search 
+    // search
     Route::resource("edulinks",EdulinksController::class);
     Route::get("/edulinks/download/{id}",[EdulinksController::class,"download"])->name("edulinks.download");
 
 
     Route::resource("students",StudentsController::class);
-    // mail ပို့ရန် route သတ်မှတ်သည် 
+    // mail ပို့ရန် route သတ်မှတ်သည်
     Route::post("compose/mailbox",[StudentsController::class,"mailbox"])->name("students.mailbox");
     // search route
     Route::post("/students/quicksearch",[StudentsController::class,"quicksearch"])->name("students.quicksearch");
@@ -140,13 +144,13 @@ Route::middleware('auth')->group(function () {
     Route::get("relativestatus",[RelativesController::class,"relativestatus"]);
 
     // OTP
-    Route::post("/generateotps",[OtpsController::class,"generate"]); // post method ကိုverify မလုပ်ပေ 
+    Route::post("/generateotps",[OtpsController::class,"generate"]); // post method ကိုverify မလုပ်ပေ
     Route::post("/verifyotps",[OtpsController::class,"verify"]);
-    
+
     Route::resource("posts",PostsController::class);
 
-    // form မှ submt လုပ်ပေးသောကြောင့် post ကို သံုးသည် 
-    // post ထဲမှ မည်သည့် post ကို like လုပ်တာလဲ id တောင်းထားမည် 
+    // form မှ submt လုပ်ပေးသောကြောင့် post ကို သံုးသည်
+    // post ထဲမှ မည်သည့် post ကို like လုပ်တာလဲ id တောင်းထားမည်
     Route::post("posts/{post}/like",[PostsLikeController::class,"like"])->name("posts.like");
     Route::post("posts/{post}/unlike",[PostsLikeController::class,"unlike"])->name("posts.unlike");
 
@@ -158,7 +162,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource("stages",StagesController::class);
     Route::get("/stagestatus",[StagesController::class,"stagestatus"]);
-    
+
 
     Route::resource("socialapplications",SocialapplicationsController::class);
     Route::get("/socialapplicationstatus",[SocialapplicationsController::class,"socialapplicationstatus"]);
@@ -174,7 +178,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource("paymenttypes",PaymenttypesController::class);
     Route::get("/paymenttypesstatus",[PaymenttypesController::class,"paymenttypesstatus"]);
-    
+
     Route::resource("warehouses",WarehousesController::class);
     Route::get("/warehousesstatus",[WarehousesController::class,"warehousesstatus"]);
     Route::get("/warehousesfatchalldatas",[WarehousesController::class,"fatchalldates"])->name("warehouses.fatchalldatas");
@@ -190,28 +194,28 @@ Route::middleware('auth')->group(function () {
 
 
     // pusher chat event
-    Route::post("/chatmessage",[ChatsController::class, "sendmessage"]);  
+    Route::post("/chatmessage",[ChatsController::class, "sendmessage"]);
 
-    // request ဖြင့် တောင်းထားတာမဟုတ်ဘဲ post ဖြင့် တောင်းထားသောကြောင့် variable name ဖြစ်သော post ဖြစ်သာ ေခါ်ပေးရမည် ဖြစ်သ်ည 
+    // request ဖြင့် တောင်းထားတာမဟုတ်ဘဲ post ဖြင့် တောင်းထားသောကြောင့် variable name ဖြစ်သော post ဖြစ်သာ ေခါ်ပေးရမည် ဖြစ်သ်ည
     Route::post("/postliveviewersinc/{post}",[PostLiveViewersController::class,"incrementviewer"]);
     Route::post("/postliveviewerdec/{post}",[PostLiveViewersController::class,"decrementviewer"]);
-  
+
 
     // post page ထဲ view duration ဘယ်လောက်ရှိလဲ ကြည့်နိုင်ရန်
     Route::post("/trackduration",[PostViewDurationsController::class,"trackduration"]);
-    // အလိုအလျောက်လုပ်ဆောင်ပေးနိုင်ရန် Middle ware တစ်ခုဖန်တီးရန် လိုအပ်လာသည် 
+    // အလိုအလျောက်လုပ်ဆောင်ပေးနိုင်ရန် Middle ware တစ်ခုဖန်တီးရန် လိုအပ်လာသည်
 
 
-    // package သတ်မှတ်ရန် 
+    // package သတ်မှတ်ရန်
     Route::get("/subscribesexpired",[SubscriptionsController::class,"expire"])->name("subscription.expired");
     Route::resource("/packages",PackagesController::class);
     Route::post("/packages/setpackage",[PackagesController::class,"setpackage"])->name('packages.setpackage');
-    
+
     // User point သက်မှတ်ရန်
     Route::resource("userpoints",UserPointsController::class);
     Route::post("/userpoints/verifystudents",[UserPointsController::class,"verifystudents"])->name('userpoints.verifystudents');
 
-    // plans ဝယ်ရန် 
+    // plans ဝယ်ရန်
     Route::resource("plans",PlansController::class);
 
     //carts
@@ -226,14 +230,18 @@ Route::middleware('auth')->group(function () {
     Route::resource("pointtransfers",PointTransfersController::class);
     Route::post("/pointtransfers/transfer",[PointTransfersController::class,"transfers"])->name('pointtransfers.transfers');
 
-    
+    Route::resource("/regions",RegionsController::class);
+    Route::get("/regionsstatus",[RegionsController::class,"regionsstatus"]);
+    Route::resource("/townships",TownshipsController::class);
+    Route::get("/townshipsstatus",[TownshipsController::class,"townshipsstatus"]);
+
 
 
 });
 
 
-// login လည်း ဝင်ရမည် middleware ကကောင်ကိုလဲ if မှ return ပေးမှာသာ Attendance route အလုပ်လုပ်မည် // if မှ condition ှားပါက expire page ကို ညွန်းမည်ဖြစ်သည် 
-Route::middleware(['auth','validate.subscriptions'])->group(function(){ 
+// login လည်း ဝင်ရမည် middleware ကကောင်ကိုလဲ if မှ return ပေးမှာသာ Attendance route အလုပ်လုပ်မည် // if မှ condition ှားပါက expire page ကို ညွန်းမည်ဖြစ်သည်
+Route::middleware(['auth','validate.subscriptions'])->group(function(){
     Route::resource("attendances",AttendancesController::class);
 });
 
@@ -248,9 +256,9 @@ require __DIR__.'/auth.php';
 // php artisan route:clear
 // php aritsan route:cache
 // php artisan config:clear
-// php artisan config:cache 
-// php artisan optimize 
+// php artisan config:cache
+// php artisan optimize
 
 
-// API ထုတ်ရန် 
+// API ထုတ်ရန်
 // php artisan make:resource WarehousesResource  // resource file ဖန်တီးကေးရမည်

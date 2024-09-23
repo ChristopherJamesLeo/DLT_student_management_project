@@ -38,7 +38,7 @@ class RegionsController extends Controller
         $this -> validate($request,[
             "country_id" => "required",
             "city_id" => "required",
-            "name" => "required|unique:regions,name"
+            "name" => "required"
         ]);
 
         $user_id = Auth::user() -> id;
@@ -66,7 +66,7 @@ class RegionsController extends Controller
     public function update(Request $request, string $id)
     {
         $this -> validate($request,[
-            "editname" => "required|unique:regions,name,".$id,
+            "editname" => "required",
             "editcountry_id" => "required",
             "editcity_id" => "required",
         ]);

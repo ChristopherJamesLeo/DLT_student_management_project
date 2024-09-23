@@ -17,7 +17,7 @@
                     <div class="row">
                         <div class="col-md-2 col-sm-12 form-group mb-1">
                             <label for="country_id">Country</label>
-                            <select name="country_id" id="country_id" class="form-control rounded-0">
+                            <select name="country_id" id="country_id" class="form-control rounded-0 country_id">
                                 <option selected disabled>Choose a Country</option>
                                 @foreach($countries as $country)
                                     <option value="{{$country->id}}">{{$country['name']}}</option>
@@ -27,7 +27,7 @@
                         </div>
                         <div class="col-md-2 col-sm-12 form-group mb-1">
                             <label for="city_id">City</label>
-                            <select name="city_id" id="city_id" class="form-control rounded-0">
+                            <select name="city_id" id="city_id" class="form-control rounded-0 city_id">
                                 <option selected disabled>Choose a City</option>
                                 @foreach($cities as $city)
                                     <option value="{{$city->id}}">{{$city['name']}}</option>
@@ -37,7 +37,7 @@
                         </div>
                         <div class="col-md-2 col-sm-12 form-group mb-1">
                             <label for="region_id">Region</label>
-                            <select name="region_id" id="region_id" class="form-control rounded-0">
+                            <select name="region_id" id="region_id" class="form-control rounded-0 region_id">
                                 <option selected disabled>Choose a Region</option>
                                 @foreach($regions as $region)
                                     <option value="{{$region->id}}">{{$region['name']}}</option>
@@ -186,7 +186,7 @@
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 form-group mb-1">
                                     <label for="editcountry_id">Country</label>
-                                    <select name="editcountry_id" id="editcountry_id" class="form-control rounded-0">
+                                    <select name="editcountry_id" id="editcountry_id" class="form-control rounded-0 country_id">
                                         <option selected disabled>Choose a Country</option>
                                         @foreach($countries as $country)
                                             <option value="{{$country->id}}">{{$country['name']}}</option>
@@ -196,21 +196,21 @@
                                 </div>
                                 <div class="col-md-12 col-sm-12 form-group mb-1">
                                     <label for="editcity_id">City</label>
-                                    <select name="editcity_id" id="editcity_id" class="form-control rounded-0">
+                                    <select name="editcity_id" id="editcity_id" class="form-control rounded-0 city_id">
                                         <option selected disabled>Choose a City</option>
-                                        @foreach($cities as $city)
-                                            <option value="{{$city->id}}">{{$city['name']}}</option>
-                                        @endforeach
+{{--                                        @foreach($cities as $city)--}}
+{{--                                            <option value="{{$city->id}}">{{$city['name']}}</option>--}}
+{{--                                        @endforeach--}}
 
                                     </select>
                                 </div>
                                 <div class="col-md-12 col-sm-12 form-group mb-1">
                                     <label for="editregion_id">City</label>
-                                    <select name="editregion_id" id="editregion_id" class="form-control rounded-0">
+                                    <select name="editregion_id" id="editregion_id" class="form-control rounded-0 region_id">
                                         <option selected disabled>Choose a City</option>
-                                        @foreach($regions as $region)
-                                            <option value="{{$region->id}}">{{$region['name']}}</option>
-                                        @endforeach
+{{--                                        @foreach($regions as $region)--}}
+{{--                                            <option value="{{$region->id}}">{{$region['name']}}</option>--}}
+{{--                                        @endforeach--}}
 
                                     </select>
                                 </div>
@@ -260,6 +260,66 @@
 
 
         $(document).ready(function(){
+
+            // start dynamic select option
+            $(document).on("change",".country_id",function (){
+                const getcountryid = $(this).val();
+                console.log(getcountryid);
+                let opforcity = '';
+                let opforregion = '';
+                $.ajax({
+                    url: `/api/filter/cities/${getcountryid}`,
+                    type : "GET",
+                    dataType : "json",
+                    success : function (response){
+                        // console.log(response);
+                        $('.city_id').empty();
+                        $('.region_id').empty();
+                        opforcity += `<option selected disabled>Choose a City</option>`;
+                        opforregion += `<option selected disabled>Choose a Region</option>`;
+
+                        for(let x = 0 ; x < response.data.length ; x++){
+                            opforcity += `<option value='${response.data[x].id}'>${response.data[x].name}</option>`;
+                        }
+
+                        $(".city_id").append(opforcity);
+                        $(".region_id").append(opforregion);
+                    },
+                    error: function (response){
+                        console.log("Error", response);
+                    }
+
+                })
+            })
+
+            $(document).on("change",".city_id",function (){
+                const getcityid = $(this).val();
+                console.log(getcityid);
+                let opforregion = '';
+                $.ajax({
+                    url: `/filter/regions/${getcityid}`,
+                    type : "GET",
+                    dataType : "json",
+                    success : function (response){
+                        // console.log(response);
+                        $('.region_id').empty();
+                        opforregion += `<option selected disabled>Choose a Region</option>`;
+
+                        for(let x = 0 ; x < response.data.length ; x++){
+                            opforregion += `<option value='${response.data[x].id}'>${response.data[x].name}</option>`;
+                        }
+
+                        $(".region_id").append(opforregion);
+
+                    },
+                    error: function (response){
+                        console.log("Error", response);
+                    }
+
+                })
+            })
+            // end dynamic select option
+
             // start delete item
             $(".delete-btns").click(function(){
                 // console.log("hello");

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RegionsResource;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Region;
@@ -114,5 +115,10 @@ class TownshipsController extends Controller
         $township->save();
 
         return response()->json(["success"=>"Status Update Successful"]);
+    }
+
+
+    public  function filterbycityid($filter){
+        return RegionsResource::collection(Region::where("city_id",$filter)->where("status_id",3)->get());
     }
 }

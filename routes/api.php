@@ -25,7 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // php artisan route:cache (error)
 // Route::apiResource("warehouses", WarehousesController::class);
 
-// third parameter ထဲတွင် naming ပေးလိုက်ချင်းဖြင့် error ဖေျာက်နုိင်သည် alias ပေးလိုက်ခြင်းဖြစ်သည် 
+// third parameter ထဲတွင် naming ပေးလိုက်ချင်းဖြင့် error ဖေျာက်နုိင်သည် alias ပေးလိုက်ခြင်းဖြစ်သည်
 Route::apiResource("warehouses", WarehousesController::class,["as"=>"api"]);
 // custom api route
 
@@ -33,6 +33,7 @@ Route::get("/warehousesstatus",[WarehousesController::class,"warehousesstatus"])
 
 Route::apiResource("cities", CitiesController::class,["as"=>"api"]);
 Route::get("/citiesstatus",[CitiesController::class,"citiesstatus"]);
+Route::get("/filter/cities/{filter}",[CitiesController::class,"filterbycountryid"])->name("cities.filterbycountryid"); // filter by dynamic select country id
 
 Route::apiResource("statuses",StatusesController::class,['as'=>'api']);
 Route::get("/statusessearch", [StatusesController::class,"search"]);

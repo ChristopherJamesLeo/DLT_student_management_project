@@ -17,7 +17,7 @@
                     <div class="row">
                         <div class="col-md-3 col-sm-12 form-group mb-1">
                             <label for="country_id">Country</label>
-                            <select name="country_id" id="country_id" class="form-control rounded-0">
+                            <select name="country_id" id="country_id" class="form-control rounded-0 country_id">
                                 <option selected disabled>Choose a Country</option>
                                 @foreach($countries as $country)
                                     <option value="{{$country->id}}">{{$country['name']}}</option>
@@ -27,11 +27,11 @@
                         </div>
                         <div class="col-md-3 col-sm-12 form-group mb-1">
                             <label for="city_id">City</label>
-                            <select name="city_id" id="city_id" class="form-control rounded-0">
+                            <select name="city_id" id="city_id" class="form-control rounded-0 city_id">
                                 <option selected disabled>Choose a City</option>
-                                @foreach($cities as $city)
-                                    <option value="{{$city->id}}">{{$city['name']}}</option>
-                                @endforeach
+{{--                                @foreach($cities as $city)--}}
+{{--                                    <option value="{{$city->id}}">{{$city['name']}}</option>--}}
+{{--                                @endforeach--}}
 
                             </select>
                         </div>
@@ -158,7 +158,7 @@
     <!-- START MODAL AREA-->
         <!-- start edit modal -->
         <div id="editmodal" class="modal fade">
-            <div class="modal-dialog modal-sm modal-dialog-center">
+            <div class="modal-dialog modal-md modal-dialog-center">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h6 class="modal-title">Edit Form</h6>
@@ -173,7 +173,7 @@
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 form-group mb-1">
                                     <label for="editcountry_id">Country</label>
-                                    <select name="editcountry_id" id="editcountry_id" class="form-control rounded-0">
+                                    <select name="editcountry_id" id="editcountry_id" class="form-control rounded-0 country_id">
                                         <option selected disabled>Choose a Country</option>
                                         @foreach($countries as $country)
                                             <option value="{{$country->id}}">{{$country['name']}}</option>
@@ -183,11 +183,11 @@
                                 </div>
                                 <div class="col-md-12 col-sm-12 form-group mb-1">
                                     <label for="editcity_id">City</label>
-                                    <select name="editcity_id" id="editcity_id" class="form-control rounded-0">
+                                    <select name="editcity_id" id="editcity_id" class="form-control rounded-0 city_id">
                                         <option selected disabled>Choose a City</option>
-                                        @foreach($cities as $city)
-                                            <option value="{{$city->id}}">{{$city['name']}}</option>
-                                        @endforeach
+{{--                                        @foreach($cities as $city)--}}
+{{--                                            <option value="{{$city->id}}">{{$city['name']}}</option>--}}
+{{--                                        @endforeach--}}
 
                                     </select>
                                 <div class="col-md-12 col-sm-12 form-group mb-1">
@@ -235,6 +235,38 @@
 
 
         $(document).ready(function(){
+
+            // start dynamic select option
+            $(document).on("change",".country_id",function (){
+                const getcountryid = $(this).val();
+                console.log(getcountryid);
+                let opforcity = '';
+                $.ajax({
+                    url: `/api/filter/cities/${getcountryid}`,
+                    type : "GET",
+                    dataType : "json",
+                    success : function (response){
+                        // console.log(response);
+                        $('.city_id').empty();
+                       opforcity += `<option selected disabled>Choose a City</option>`;
+
+                       for(let x = 0 ; x < response.data.length ; x++){
+                           opforcity += `<option value='${response.data[x].id}'>${response.data[x].name}</option>`;
+                       }
+
+                       $(".city_id").append(opforcity);
+
+                    },
+                    error: function (response){
+                        console.log("Error", response);
+                    }
+
+                })
+            })
+            // end dynamic select option
+
+
+
             // start delete item
             $(".delete-btns").click(function(){
                 // console.log("hello");

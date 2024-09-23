@@ -19,7 +19,7 @@ class CitiesController extends Controller
         // $cities = City::all();
         $cities = City::paginate(10);
 
-        return CitiesResource::collection($cities); // collection မဖြစ်မနေထည့်ေပးရမ် 
+        return CitiesResource::collection($cities); // collection မဖြစ်မနေထည့်ေပးရမ်
     }
 
     /**
@@ -57,7 +57,7 @@ class CitiesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        
+
 
         $city = City::findOrFail($id);
         $city -> name = $request["editname"];
@@ -77,7 +77,7 @@ class CitiesController extends Controller
     public function destroy(string $id)
     {
         $city = City::findOrFail($id);
-        
+
         $city -> delete();
 
         return new CitiesResource($city);
@@ -87,7 +87,7 @@ class CitiesController extends Controller
     public function citiesstatus(Request $request){
         // return response()->json(["success" => "Status Change Successful"]);
 
-        $city = City::findOrFail($request["id"]); // id သည် update ကဲ့သို့ route ကနေမရနေသောကြောင့် request မှ id ကို သံုးပေးရမည် 
+        $city = City::findOrFail($request["id"]); // id သည် update ကဲ့သို့ route ကနေမရနေသောကြောင့် request မှ id ကို သံုးပေးရမည်
 
         // dd("hello");
 
@@ -97,5 +97,9 @@ class CitiesController extends Controller
 
         // success ဖြစ်ပါက response ပြန်ရန်
         return new CitiesResource($city);
+    }
+
+    public function filterbycountryid($filter){
+        return CitiesResource::collection(City::where("country_id",$filter)->where("status_id",3)->get());
     }
 }

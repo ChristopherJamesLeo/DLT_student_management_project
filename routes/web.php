@@ -51,6 +51,7 @@ use App\Http\Controllers\PlansController;
 
 use App\Http\Controllers\CartsController;
 use App\Http\Controllers\PointTransfersController;
+use App\Http\Controllers\ReligionsController;
 
 
 
@@ -117,6 +118,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::resource("cities",CityController::class);
+
     // bulk delete
     Route::delete("citiesbulkdeletes",[CityController::class,"bulkdelete"])->name("cities.bulkdelete");
 
@@ -232,9 +234,13 @@ Route::middleware('auth')->group(function () {
 
     Route::resource("/regions",RegionsController::class);
     Route::get("/regionsstatus",[RegionsController::class,"regionsstatus"]);
+
     Route::resource("/townships",TownshipsController::class);
     Route::get("/townshipsstatus",[TownshipsController::class,"townshipsstatus"]);
+    Route::get("/filter/regions/{filter}",[TownshipsController::class,"filterbycityid"]);
 
+    Route::resource("/religions",ReligionsController::class);
+    Route::get("/religionsstatus",[ReligionsController::class,"religionsstatus"]);
 
 
 });

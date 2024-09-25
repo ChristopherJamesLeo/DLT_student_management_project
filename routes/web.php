@@ -55,6 +55,8 @@ use App\Http\Controllers\ReligionsController;
 
 use App\Http\Controllers\StudentPhonesController;
 
+use App\Http\Controllers\LeadsController;
+
 
 
 /*
@@ -243,6 +245,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource("/religions",ReligionsController::class);
     Route::get("/religionsstatus",[ReligionsController::class,"religionsstatus"]);
+
+    Route::resource("/leads",LeadsController::class);
+    Route::post("/leads/pipelines/{id}",[LeadsController::class,"converttostudent"])->name('leads.converttostudent');
 
 
 });

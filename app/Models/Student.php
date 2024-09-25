@@ -42,17 +42,17 @@ class Student extends Model
     // regnumber အား auto generate ထုတ်မည်
 
     // method 1  // custom update မရပေ ( no duplicate )
-    // protected static function boot(){ // boot သညိ default method ဖြစ်ပြီး static method ဖြ်စသော ကြာ်င့ protected ဖြင့် ေခါ်ပေးရမည် 
+    // protected static function boot(){ // boot သညိ default method ဖြစ်ပြီး static method ဖြ်စသော ကြာ်င့ protected ဖြင့် ေခါ်ပေးရမည်
     //     parent::boot();
 
     //     static::creating(function($student){//creating ထဲတွင် လုပ်ဆောင်ချင်သော လုပ်ဆောင်ချက်ကို ရေးပေးရမည်
     //         $lateststudent = \DB::table("students")->orderBy("id","desc")->first();
-    //         $lastestid = $lateststudent ? $lateststudent->id : 0; // latest student ရှိသလား ရှီ ရင်ယူမည်မရှိရင် 0 ကို ယူမည်                   
-    //                                         // မူရင်ကို ၁ ပေါင်း , codeအရှည်, ၀ မှ စမည် , ဘယ္်ဘက်မှစမည် 
+    //         $lastestid = $lateststudent ? $lateststudent->id : 0; // latest student ရှိသလား ရှီ ရင်ယူမည်မရှိရင် 0 ကို ယူမည်
+    //                                         // မူရင်ကို ၁ ပေါင်း , codeအရှည်, ၀ မှ စမည် , ဘယ္်ဘက်မှစမည်
     //         // add column                    str_pad(string,length,pad_string,pad_types);
-    //         $student -> regnumber = "WDF".str_pad($lastestid+1,5,"0",STR_PAD_LEFT); // custom update ပေးပါက error တက်နိုင်သည် 
+    //         $student -> regnumber = "WDF".str_pad($lastestid+1,5,"0",STR_PAD_LEFT); // custom update ပေးပါက error တက်နိုင်သည်
 
-    //     }); 
+    //     });
     // }
 
     // method 2 ( solved duplicated id)
@@ -70,7 +70,7 @@ class Student extends Model
         return \DB::transaction(function(){
             $lateststudent = \DB::table("students")->orderBy("id","desc")->first();
 
-            $lastestid = $lateststudent ? $lateststudent->id : 0 ; 
+            $lastestid = $lateststudent ? $lateststudent->id : 0 ;
 
             $newstudentid = "WDF".str_pad($lastestid+1,5,"0",STR_PAD_LEFT);
 
@@ -83,5 +83,10 @@ class Student extends Model
             return $newstudentid;
         });
     }
-    
+
+    public function studentphones()
+    {
+        return $this -> hasMany(StudentPhone::class);
+    }
+
 }

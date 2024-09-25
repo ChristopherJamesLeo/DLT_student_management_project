@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
+use App\Models\StudentPhone;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Models\Enroll;
@@ -43,14 +44,14 @@ class StudentsController extends Controller
      */
     public function store(Request $request)
     {
-        
 
-        // create validatin လုပ်ခြင်းဟုခေါ်သည် 
+
+        // create validatin လုပ်ခြင်းဟုခေါ်သည်
         $this -> validate($request,[
-            // "regnumber" => "required|unique:students,regnumber", // students table ထဲ၇ှီ regnumber ည်  unique ဖြစ်ရမည် 
+            // "regnumber" => "required|unique:students,regnumber", // students table ထဲ၇ှီ regnumber ည်  unique ဖြစ်ရမည်
             "firstname" => "required",
-            "lastname" => "required", 
-            //"remark" => "max:200" // စာလံးု size ၁၀၀၀ရှိ ရမည် 
+            "lastname" => "required",
+            //"remark" => "max:200" // စာလံးု size ၁၀၀၀ရှိ ရမည်
         ]);
 
 
@@ -58,17 +59,41 @@ class StudentsController extends Controller
         $user_id = $user->id;
         $student = new Student();
 
-        
+
         // $student -> regnumber = $request["regnumber"]; // system မှ အလိုအေလှာက်ထည့်ပေးမည်ဖြစသ်ည်
         $student -> firstname = $request["firstname"];
         $student -> lastname = $request["lastname"];
-        $student -> slug = Str::slug($request["firstname"]);  // Str ထဲရှီ slug ဟူသော metho dထဲသို့ firstname အား ပေးမည် ၄င်းသည် route name ဖြစ်သွ းမည်ဖြစ်သည် 
+        $student -> slug = Str::slug($request["firstname"]);  // Str ထဲရှီ slug ဟူသော metho dထဲသို့ firstname အား ပေးမည် ၄င်းသည် route name ဖြစ်သွ းမည်ဖြစ်သည်
         $student -> remark = $request["remark"];
-        $student -> user_id = $user_id;  // user ၏ data ထဲမှ id အား ခေါ်ရမည် 
+        $student -> user_id = $user_id;  // user ၏ data ထဲမှ id အား ခေါ်ရမည်
 
         // echo $request["regnumber"] . $request["firstname"] .$request["lastname"]  .Str::slug($request["firstname"]).$request["remark"].$user_id;
 
         $student -> save();
+
+//        Create new student phone
+
+
+        if(isset($request["phone"])){
+            //        method 1
+
+//            foreach($request["phone"] as $phone){
+//                $phonedatas = [
+//                    "student_id" => $student->id,
+//                    "phone" => $phone
+//                ];
+//
+//                StudentPhone::insert($phonedatas);
+//            }
+
+//            method 2
+            foreach($request["phone"] as $phone){
+                $student->studentphones()->create([
+                    "phone" => $phone,
+                    "student_id" => $student -> id,
+                ]);
+            }
+        }
 
         return redirect(route("students.index"));
     }
@@ -80,8 +105,9 @@ class StudentsController extends Controller
     {
         $student = Student::findOrFail($id);
         // $enrolls = Enroll::where("user_id",$student->user_id)->get();
-        $enrolls = $student -> enrolls(); // model မှလှမ်းခေါ်လိုက်သည် 
-        // dd($enrolls);   
+        $enrolls = $student -> enrolls(); // model မှလှမ်းခေါ်လိုက်သည်
+        // dd($enrolls);
+
 
         return view("students.show",["student" => $student,"enrolls"=>$enrolls]);
     }
@@ -92,7 +118,8 @@ class StudentsController extends Controller
     public function edit(string $id)
     {
         $student = Student::findOrFail($id);
-        return view("students.edit")->with("student",$student);
+        $studentPhones = StudentPhone::where("student_id",$id)->get();
+        return view("students.edit")->with("student",$student)->with("studentPhones",$studentPhones);
     }
 
     /**
@@ -103,8 +130,8 @@ class StudentsController extends Controller
         $this -> validate($request,[
             "regnumber" => "required|unique:students,regnumber,".$id,  // update တွင် unique ဖြစ်ရမည်ဆိုသောကြောင့် အလုပ်မလုပ်သော်ည်း $id တွင်တော့ unique မဖြစ်လဲရသည် မူလ id ဝင်လာပါက update ပြုလုပ်ခွင့်ပြုမည်ဖြစသ်ည် ဟုဆိုလိုသည် (table column နောက်တွက် (comer ထားကိုထားပေးရမည် ))
             "firstname" => "required",
-            "lastname" => "required", 
-            "remark" => "max:1000" // စာလံးု size ၁၀၀၀ရှိ ရမည် 
+            "lastname" => "required",
+            "remark" => "max:1000" // စာလံးု size ၁၀၀၀ရှိ ရမည်
         ]);
 
 
@@ -112,17 +139,49 @@ class StudentsController extends Controller
         $user_id = $user["id"]; // array သုံးလဲရသည်
         $student = Student::findOrFail($id);
 
-        
+
         $student -> regnumber = $request["regnumber"];
         $student -> firstname = $request["firstname"];
         $student -> lastname = $request["lastname"];
-        $student -> slug = Str::slug($request["firstname"]);  // Str ထဲရှီ slug ဟူသော metho dထဲသို့ firstname အား ပေးမည် ၄င်းသည် route name ဖြစ်သွ းမည်ဖြစ်သည် 
+        $student -> slug = Str::slug($request["firstname"]);  // Str ထဲရှီ slug ဟူသော metho dထဲသို့ firstname အား ပေးမည် ၄င်းသည် route name ဖြစ်သွ းမည်ဖြစ်သည်
         $student -> remark = $request["remark"];
-        $student -> user_id = $user_id;  // user ၏ data ထဲမှ id အား ခေါ်ရမည် 
+        $student -> user_id = $user_id;  // user ၏ data ထဲမှ id အား ခေါ်ရမည်
 
         // echo $request["regnumber"] . $request["firstname"] .$request["lastname"]  .Str::slug($request["firstname"]).$request["remark"].$user_id;
 
         $student -> save();
+
+        //        Create new student phone
+
+
+        if(isset($request["newphone"])){
+
+//            method 2
+            foreach($request["newphone"] as $newphone){
+                $student->studentphones()->create([
+                    "phone" => $newphone,
+                    "student_id" => $student -> id,
+                ]);
+            }
+
+            foreach($request["phone"] as $key => $phone){
+                StudentPhone::findOrFail($request['studentphoneid'][$key])->update([
+                    "phone" => $phone,
+                ]);
+            }
+
+//            extend new phone and update existing phone in same time
+        }else {
+            // update existing phone
+            foreach($request["phone"] as $key => $phone){
+                StudentPhone::findOrFail($request['studentphoneid'][$key])->update([
+                    "phone" => $phone,
+                ]);
+            }
+        }
+
+
+
 
         return redirect(route("students.index"));
     }
@@ -152,11 +211,11 @@ class StudentsController extends Controller
         // $content = $request["cmpcontent"];
         // // Mail::to($to)->send(new MailBox($subject,$content));
 
-        // // data base ထဲတွင်သိမ်းနိုင်သော်လည်း load ကြာသောကြောင့်  အဆင်မပြေနိုင်ပေ 
-        // // email record အား cc ထဲတွင်သွားစစ်နိုင်သည် 
+        // // data base ထဲတွင်သိမ်းနိုင်သော်လည်း load ကြာသောကြောင့်  အဆင်မပြေနိုင်ပေ
+        // // email record အား cc ထဲတွင်သွားစစ်နိုင်သည်
         // Mail::to($to)->cc("admin@dlt.com")->bcc("info@dlt.com")->send(new MailBox($subject,$content));
 
-        // // multi email ပို့ပါကလဲ $to ထဲသို့သာ looping ပတ်ပြီး ပို့ပေးရမည် 
+        // // multi email ပို့ပါကလဲ $to ထဲသို့သာ looping ပတ်ပြီး ပို့ပေးရမည်
 
         // ---------------------
         // -> job method 1
@@ -165,8 +224,8 @@ class StudentsController extends Controller
         // $subject = $request["comsubject"];
         // $content = $request["cmpcontent"];
 
-        // // 
-        // dispatch(new MailBoxJob($to,$subject,$content)); // Mail နှင့်မဟုတ်ဘဲ job ကို သံုးမည် job များအား dispatch ဖြင့်သုံးရမည်  
+        // //
+        // dispatch(new MailBoxJob($to,$subject,$content)); // Mail နှင့်မဟုတ်ဘဲ job ကို သံုးမည် job များအား dispatch ဖြင့်သုံးရမည်
 
 
 
@@ -182,7 +241,7 @@ class StudentsController extends Controller
         $data  = [
             "to" => $request["cmpemail"],
             "subject" => $request["comsubject"],
-            "content" =>$request["cmpcontent"] 
+            "content" =>$request["cmpcontent"]
         ];
 
         // Mail::to($data["to"])->send(new StudentMailBox($data));

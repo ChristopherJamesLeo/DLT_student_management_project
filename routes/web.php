@@ -53,6 +53,7 @@ use App\Http\Controllers\CartsController;
 use App\Http\Controllers\PointTransfersController;
 use App\Http\Controllers\ReligionsController;
 
+use App\Http\Controllers\StudentPhonesController;
 
 
 
@@ -108,6 +109,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::resource("students",StudentsController::class);
+    Route::get("/studentphone/delete/{id}",[StudentPhonesController::class,"destory"])->name("studentsphone.delete");
     // mail ပို့ရန် route သတ်မှတ်သည်
     Route::post("compose/mailbox",[StudentsController::class,"mailbox"])->name("students.mailbox");
     // search route

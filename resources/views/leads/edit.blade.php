@@ -39,17 +39,7 @@
                     </div>
                     <div class="col-md-3 col-sm-12 form-group mb-2">
                         <label for="email">Email</label>
-                        <input type="email" name="email" id="email" class="form-control  rounded-0" placeholder="email" value="{{$lead->emaiil}}">
-                    </div>
-                    <div class="col-md-3 col-sm-12 form-group mb-1">
-                        <label for="city_id">City</label>
-                        <select name="city_id" id="city_id" class="form-control rounded-0 city_id">
-                            <option selected disabled>Choose a City</option>
-                            @foreach($cities as $city)
-                                <option value="{{$city->id}}" {{$city['id']== $lead->city_id ? "selected" : ""}}>{{$city['name']}}</option>
-                            @endforeach
-
-                        </select>
+                        <input type="email" name="email" id="email" class="form-control  rounded-0" placeholder="email" value="{{$lead->email}}">
                     </div>
                     <div class="col-md-3 col-sm-12 form-group mb-1">
                         <label for="country_id">Country</label>
@@ -61,6 +51,17 @@
 
                         </select>
                     </div>
+                    <div class="col-md-3 col-sm-12 form-group mb-1">
+                        <label for="city_id">City</label>
+                        <select name="city_id" id="city_id" class="form-control rounded-0 city_id">
+                            <option selected disabled>Choose a City</option>
+                            @foreach($cities as $city)
+                                <option value="{{$city->id}}" {{$city['id']== $lead->city_id ? "selected" : "hidden"}}>{{$city['name']}}</option>
+                            @endforeach
+
+                        </select>
+                    </div>
+
                     <div class="col-md-12">
                         <div class="d-flex justify-content-end">
                             <a href="{{route('leads.index')}}" class="btn btn-secondary btn-sm rounded-0">Cancel</a>
@@ -80,6 +81,37 @@
 @endsection
 
 @section("scripts")
+    <script>
+        $(document).ready(function(){
+            // start dynamic select option
+            $(document).on("change",".country_id",function (){
+                const getcountryid = $(this).val();
+                console.log(getcountryid);
+                let opforcity = '';
+                $.ajax({
+                    url: `/api/filter/cities/${getcountryid}`,
+                    type : "GET",
+                    dataType : "json",
+                    success : function (response){
+                        // console.log(response);
+                        $('.city_id').empty();
+                        opforcity += `<option selected disabled>Choose a City</option>`;
 
+                        for(let x = 0 ; x < response.data.length ; x++){
+                            opforcity += `<option value='${response.data[x].id}'>${response.data[x].name}</option>`;
+                        }
+
+                        $(".city_id").append(opforcity);
+
+                    },
+                    error: function (response){
+                        console.log("Error", response);
+                    }
+
+                })
+            })
+            // end dynamic select option
+        })
+    </script>
 
 @endsection

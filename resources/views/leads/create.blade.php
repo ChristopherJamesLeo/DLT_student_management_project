@@ -42,6 +42,16 @@
                         <input type="email" name="email" id="email" class="form-control  rounded-0" placeholder="email" value="{{old('email')}}">
                     </div>
                     <div class="col-md-3 col-sm-12 form-group mb-1">
+                        <label for="country_id">Country</label>
+                        <select name="country_id" id="country_id" class="form-control rounded-0 country_id">
+                            <option selected disabled>Choose a Country</option>
+                            @foreach($countries as $country)
+                                <option value="{{$country->id}}">{{$country['name']}}</option>
+                            @endforeach
+
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-sm-12 form-group mb-1">
                         <label for="city_id">City</label>
                         <select name="city_id" id="city_id" class="form-control rounded-0 city_id">
                             <option selected disabled>Choose a City</option>
@@ -51,16 +61,7 @@
 
                         </select>
                     </div>
-                    <div class="col-md-3 col-sm-12 form-group mb-1">
-                        <label for="country_id">Country</label>
-                        <select name="country_id" id="country_id" class="form-control rounded-0 country_id">
-                            <option selected disabled>Choose a Gender</option>
-                            @foreach($countries as $country)
-                                <option value="{{$country->id}}">{{$country['name']}}</option>
-                            @endforeach
 
-                        </select>
-                    </div>
 
                     <div class="col-md-12">
                         <div class="d-flex justify-content-end">

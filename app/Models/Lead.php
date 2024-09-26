@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Psy\Util\Str;
 
 class Lead extends Model
 {
@@ -65,7 +66,7 @@ class Lead extends Model
             while(\DB::table("leads")->where('leadnumber',$newleadid)->exists()){
 
                 $lastestleadid++; // duplicate ဖြစ်နေပါက 1 ထပ်တိုးမည်ဖြစ်ပြီး အောက်တွင် overwrite လုပ်ပေးမ်ည်ဖြစ်သည်
-                $newleadid = "WDF".str_pad($lastestleadid+1,5,"0",STR_PAD_LEFT);
+                $newleadid = "LD".str_pad($lastestleadid+1,5,"0",STR_PAD_LEFT);
             }
 
             return $newleadid;
@@ -75,8 +76,20 @@ class Lead extends Model
 
     // pipe line
 
-    public function converttostudent($studentid){
+    public function convertToStudent($studentid){
 
+//        Student create
+        $student = Student::create([
+            "firstname"=> $this -> firstname,
+            "lastname"=> $this -> lastname,
+            "slug"=> Str::slug($this->firstname),
+        ]);
+//        Lead Update
+        $this -> update([
+            "converted" => true,
+            "student_id" => $student->id,
+        ]);
 
+        return $student;
     }
 }

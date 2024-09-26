@@ -42,14 +42,14 @@ class LeadsController extends Controller
      */
     public function store(Request $request)
     {
-
-
-        // create validatin လုပ်ခြင်းဟုခေါ်သည်
         $this -> validate($request,[
-            // "regnumber" => "required|unique:leads,regnumber", // students table ထဲ၇ှီ regnumber ည်  unique ဖြစ်ရမည်
+
             "firstname" => "required",
-//            "lastname" => "required",
-            //"remark" => "max:200" // စာလံးု size ၁၀၀၀ရှိ ရမည်
+//            "gender_id" => "required|exists,genders.id",
+            "age" => "required|integer|min:13|max:45",
+            "email" => "required|string|email|max:255|unique:leads",
+//            "country_id" => "required|exists,countries.id",
+//            "city_id" => "required|exists,cities.id",
         ]);
 
 
@@ -57,21 +57,18 @@ class LeadsController extends Controller
         $user_id = $user->id;
         $lead = new Lead();
 
-
-        // $lead -> regnumber = $request["regnumber"]; // system မှ အလိုအေလှာက်ထည့်ပေးမည်ဖြစသ်ည်
         $lead -> firstname = $request["firstname"];
         $lead -> lastname = $request["lastname"];
-        $lead -> slug = Str::slug($request["firstname"]);  // Str ထဲရှီ slug ဟူသော metho dထဲသို့ firstname အား ပေးမည် ၄င်းသည် route name ဖြစ်သွ းမည်ဖြစ်သည်
-        $lead -> remark = $request["remark"];
-        $lead -> user_id = $user_id;  // user ၏ data ထဲမှ id အား ခေါ်ရမည်
-
-        // echo $request["regnumber"] . $request["firstname"] .$request["lastname"]  .Str::slug($request["firstname"]).$request["remark"].$user_id;
+        $lead -> gender_id = $request["gender_id"];
+        $lead -> age = $request["age"];
+        $lead -> email = $request["email"];
+        $lead -> country_id = $request["country_id"];
+        $lead -> city_id = $request["city_id"];
+        $lead -> user_id = $user_id;
 
         $lead -> save();
 
-
-
-        return redirect(route("students.index"));
+        return redirect(route("leads.index"));
     }
 
     /**
@@ -80,12 +77,10 @@ class LeadsController extends Controller
     public function show(string $id)
     {
         $lead = Lead::findOrFail($id);
-        // $enrolls = Enroll::where("user_id",$student->user_id)->get();
-        $enrolls = $lead -> enrolls(); // model မှလှမ်းခေါ်လိုက်သည်
         // dd($enrolls);
 
 
-        return view("students.show",["student" => $student,"enrolls"=>$enrolls]);
+        return view("leads.show",["lead" => $lead]);
     }
 
     /**
@@ -94,7 +89,11 @@ class LeadsController extends Controller
     public function edit(string $id)
     {
         $lead = Lead::findOrFail($id);
-        return view("leads.edit")->with("student",$lead);
+        $genders = Gender::orderBy('name',"asc")->get();
+
+        $countries = Country::orderBy('name',"asc")->get();
+        $cities = City::orderBy('name',"asc")->get();
+        return view("leads.edit")->with("lead",$lead)->with("genders",$genders)->with("countries",$countries)->with("cities",$cities);
     }
 
     /**
@@ -103,10 +102,12 @@ class LeadsController extends Controller
     public function update(Request $request, string $id)
     {
         $this -> validate($request,[
-            "regnumber" => "required|unique:students,regnumber,".$id,  // update တွင် unique ဖြစ်ရမည်ဆိုသောကြောင့် အလုပ်မလုပ်သော်ည်း $id တွင်တော့ unique မဖြစ်လဲရသည် မူလ id ဝင်လာပါက update ပြုလုပ်ခွင့်ပြုမည်ဖြစသ်ည် ဟုဆိုလိုသည် (table column နောက်တွက် (comer ထားကိုထားပေးရမည် ))
             "firstname" => "required",
-//            "lastname" => "required",
-            "remark" => "max:1000" // စာလံးု size ၁၀၀၀ရှိ ရမည်
+//            "gender_id" => "required|exists,genders.id",
+            "age" => "required|integer|min:13|max:45",
+            "email" => "required|string|email|max:255|unique:leads,email,".$id,
+//            "country_id" => "required|exists,countries.id",
+//            "city_id" => "required|exists,cities.id",
         ]);
 
 
@@ -114,23 +115,26 @@ class LeadsController extends Controller
         $user_id = $user["id"]; // array သုံးလဲရသည်
         $lead = Lead::findOrFail($id);
 
-
-        $lead -> regnumber = $request["regnumber"];
         $lead -> firstname = $request["firstname"];
         $lead -> lastname = $request["lastname"];
-        $lead -> slug = Str::slug($request["firstname"]);  // Str ထဲရှီ slug ဟူသော metho dထဲသို့ firstname အား ပေးမည် ၄င်းသည် route name ဖြစ်သွ းမည်ဖြစ်သည်
-        $lead -> remark = $request["remark"];
-        $lead -> user_id = $user_id;  // user ၏ data ထဲမှ id အား ခေါ်ရမည်
-
-        // echo $request["regnumber"] . $request["firstname"] .$request["lastname"]  .Str::slug($request["firstname"]).$request["remark"].$user_id;
+        $lead -> gender_id = $request["gender_id"];
+        $lead -> age = $request["age"];
+        $lead -> email = $request["email"];
+        $lead -> country_id = $request["country_id"];
+        $lead -> city_id = $request["city_id"];
+        $lead -> user_id = $user_id;
 
         $lead -> save();
 
-
-
-
-
         return redirect(route("leads.index"));
+    }
+
+    public function converttostudent(string $id){
+        $lead = Lead::findOrFail($id);
+        $lead -> convertToStudent();
+        session()->falsh("success","Pipe Successful");
+
+        return redirect()->back();
     }
 
 }

@@ -20,6 +20,7 @@ return new class extends Migration
             $table -> integer("age");
             $table -> string("email");
             $table -> unsignedBigInteger("country_id");
+            $table -> unsignedBigInteger("city_id");
             $table -> unsignedBigInteger("user_id")->nullable();
             $table -> boolean("converted")->default(false);
             $table -> unsignedBigInteger("student_id")->nullable();

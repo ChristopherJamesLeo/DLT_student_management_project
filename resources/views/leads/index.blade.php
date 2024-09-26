@@ -54,7 +54,7 @@
                     <td>{{$lead->created_at->format('d m Y')}}</td>
                     <td>{{$lead->updated_at->format('d M Y')}}</td>
                     <td>
-                        <a href="{{route('leads.edit',$lead-->id)}}" class="me-3 btn btn-outline-info btn-sm"><i class="fas fa-pen"></i></a>
+                        <a href="{{route('leads.edit',$lead->id)}}" class="me-3 btn btn-outline-info btn-sm"><i class="fas fa-pen"></i></a>
 
                     </td>
 

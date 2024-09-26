@@ -81,12 +81,12 @@
 
     <!-- start content area -->
     <div class="container-fluid">
-        
+
         <div class="col-md-12 my-3">
 
             <a href="javascript:void(0)" id="btn_back" class="btn btn-secondary btn-sm rounded-0">Back</a>
 
-            <a href="{{route('students.index')}}" class="btn btn-secondary btn-sm rounded-0">Close</a>
+            <a href="{{route('leads.index')}}" class="btn btn-secondary btn-sm rounded-0">Close</a>
 
             <hr>
         </div>
@@ -94,43 +94,48 @@
             <div class="col-md-4 col-lg-3 mb-2">
                 <h6>Info</h6>
                 <div class="card border-0 shadow rounded-0">
-            
 
-                    
+
+
                     <div class="card-body">
                         <div class="d-flex flex-column align-items-center mb-3">
-                            <div class="h5 mb-1">{{$student->firstname}} {{$student->lastname}}</div>
+                            <div class="h5 mb-1">{{$lead->firstname}} {{$lead->lastname}}</div>
                             <div class="text-muted">
-                                <span>{{$student->regnumber}}</span>
+                                <span>{{$lead->regnumber}}</span>
                             </div>
                         </div>
                         <div class="w-100 d-flex flex-row justify-content-between mb-3">
-                            @if ($userdata->id != $student->user_id) 
+                            <form action="{{route('leads.converttostudent',$lead->id)}}" method="POST" class="w-100">
+                                @csrf
+                                @method("POST")
+                                <button type="submit"  class="w-100 me-2 btn btn-primary btn-sm rounded-0">Pipeline</button>
+                            </form>
+                            @if ($userdata->id != $lead->user_id)
                                 <button type="button" class="w-100 me-2 btn btn-primary btn-sm rounded-0">Like</button>
                                 {{-- မိမိအကောင့်အား follow မပေါ်ရန် မိမိ id နှင့် student_id မညီမှ follow btn အား ပြမည် --}}
-                            
+
                                     {{-- login ဝင်ထားသော ကောင်ကို လှမ်းခေါ်ပေးရမည် --}}
-                                @if ($userdata->checkuserfollowing($student->user_id))
+                                @if ($userdata->checkuserfollowing($lead->user_id))
                                     {{-- unfollow  --}}
-                                    <form action="{{route('users.unfollow',$student->user_id)}}" method="POST" class="w-100">
+                                    <form action="{{route('users.unfollow',$lead->user_id)}}" method="POST" class="w-100">
                                         @csrf
                                         @method("POST")
                                         <button type="submit" class="w-100 btn btn-outline-primary btn-sm rounded-0">Unfollow</button>
                                     </form>
                                 @else
                                     {{-- follow  --}}
-                                    <form action="{{route('users.follow',$student->user_id)}}" method="POST" class="w-100">
+                                    <form action="{{route('users.follow',$lead->user_id)}}" method="POST" class="w-100">
                                         @csrf
                                         @method("POST")
                                         <button type="submit" class="w-100 btn btn-outline-primary btn-sm rounded-0">Follow</button>
                                     </form>
                                 @endif
                             @endif
-                            
-                           
 
-                            
-                            
+
+
+
+
 
                         </div>
                     </div>
@@ -139,18 +144,6 @@
                             <div class="row gap-0 mb-2">
                                 <div class="col-auto">
                                     <i class="fas fa-user"></i>
-                                </div>
-                                <div class="col">
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="">Status</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <div class="">
-                                                {{$student->status["name"]}}
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                             <div class="row gap-0 mb-2">
@@ -164,7 +157,7 @@
                                         </div>
                                         <div class="col-auto">
                                             <div class="">
-                                                {{$student["user"]["name"]}}
+                                                {{$lead["user"]["name"]}}
                                             </div>
                                         </div>
                                     </div>
@@ -181,7 +174,7 @@
                                         </div>
                                         <div class="col-auto">
                                             <div class="">
-                                                {{date("d M Y ",strtotime($student->created_at))}} | {{date("h:m:s a ",strtotime($student->created_at))}}
+                                                {{date("d M Y ",strtotime($lead->created_at))}} | {{date("h:m:s a ",strtotime($lead->created_at))}}
                                             </div>
                                         </div>
                                     </div>
@@ -198,7 +191,7 @@
                                         </div>
                                         <div class="col-auto">
                                             <div class="">
-                                                {{date("d M Y h:m:s A",strtotime($student->updated_at))}}
+                                                {{date("d M Y h:m:s A",strtotime($lead->updated_at))}}
                                             </div>
                                         </div>
                                     </div>
@@ -214,7 +207,7 @@
                                 <div class="col">
                                     {{-- page ဘယ္်နခေါက်ဝင်ကြည်သလဲ မျတ်ထားနိုင်သည်  --}}
                                     @php
-                                        // $getpageurl = url(); array ကို string အဖြစ် convert ပြောင်းနေသော error ောကြာ်င့ current ကို သံုးပေးရမည် 
+                                        // $getpageurl = url(); array ကို string အဖြစ် convert ပြောင်းနေသော error ောကြာ်င့ current ကို သံုးပေးရမည်
                                         $getpageurl = url()->current();
 
                                         // dd($getpageurl);
@@ -223,7 +216,7 @@
                                     @endphp
                                     Viewed {{$pageview}} Times
                                 </div>
-                                
+
                             </div>
                             <div class="row gap-0 mb-2">
                                 <div class="col-auto">
@@ -232,7 +225,7 @@
                                 <div class="col">
                                     Sample Date
                                 </div>
-                                
+
                             </div>
                             <div class="row gap-0 mb-2">
                                 <div class="col-auto">
@@ -241,7 +234,7 @@
                                 <div class="col">
                                     Sample Date
                                 </div>
-                                
+
                             </div>
                             <div class="row gap-0 mb-2">
                                 <div class="col-auto">
@@ -250,7 +243,7 @@
                                 <div class="col">
                                     Sample Date
                                 </div>
-                                
+
                             </div>
 
 
@@ -265,7 +258,7 @@
                                 <div class="col">
                                     Sample Date
                                 </div>
-                                
+
                             </div>
                             <div class="row gap-0 mb-2">
                                 <div class="col-auto">
@@ -274,7 +267,7 @@
                                 <div class="col">
                                     Sample Date
                                 </div>
-                                
+
                             </div>
                             <div class="row gap-0 mb-2">
                                 <div class="col-auto">
@@ -283,7 +276,7 @@
                                 <div class="col">
                                     Sample Date
                                 </div>
-                                
+
                             </div>
                             <div class="row gap-0 mb-2">
                                 <div class="col-auto">
@@ -292,7 +285,7 @@
                                 <div class="col">
                                     Sample Date
                                 </div>
-                                
+
                             </div>
 
 
@@ -300,7 +293,7 @@
                         </div>
 
                     </div>
-                    
+
                 </div>
             </div>
             <div class="col-md-8 col-lg-9">
@@ -313,15 +306,16 @@
                             <h1 class="acctitle "><i class="fas fa-hand-point-right"></i>Email </h1>
                             <div class="accortent ">
                                 <div class="py-3 col-md-12">
-                                    <form action="{{route('students.mailbox')}}" method="POST">
-                                        @csrf 
+
+                                    <form action="" method="POST">
+                                        @csrf
                                         @method("POST")
                                         <div class="row">
                                             <div class="col-md-6 form-group mb-3">
-                                                <input type="email" name="cmpemail" id="cmpemail" class="form-control form-control-sm border-0 rounded-0 shadow-none" placeholder="To" value="{{$student->user["email"]}}" readonly> 
+                                                <input type="email" name="cmpemail" id="cmpemail" class="form-control form-control-sm border-0 rounded-0 shadow-none" placeholder="To" value="" readonly>
                                             </div>
                                             <div class="col-md-6 form-group mb-3">
-                                                <input type="text" name="comsubject" id="cmpsubject" class="form-control form-control-sm border-0 rounded-0 shadow-none" placeholder="Subject"> 
+                                                <input type="text" name="comsubject" id="cmpsubject" class="form-control form-control-sm border-0 rounded-0 shadow-none" placeholder="Subject">
                                             </div>
                                             <div class="col-md-12 form-group mb-3">
                                                 <textarea style="resize: none" rows="3" name="cmpcontent" id="cmpcontent" class="form-control form-control-sm border-0 rounded-0 shadow-none" placeholder="Your message here..."></textarea>
@@ -336,7 +330,7 @@
                         </div>
                     </div>
                 </div>
-               
+
                 {{-- end accordian --}}
 
 
@@ -344,24 +338,8 @@
                 <div class="mb-4 card border-0 shadow rounded-0">
                     <div class="card-body d-flex flex-wrap gap-3">
 
-                        @foreach($enrolls as $enroll)
-                        <div class="border shadow p-3 mb-3 enrollboxes">
-                            <a href="javascript:void(0)">{{$enroll->post["title"]}}</a>
-                            <div class="text-muted">{{$enroll->stage->name}}</div>
-                            <div class="text-muted">{{date("d M Y",strtotime($enroll ->created_at))}} | {{date("h:i:s A",strtotime($enroll ->created_at))}}</div>
-                            <div class="text-muted">{{$enroll ->updated_at->format("d M Y | h:i:s A")}}</div>
-                            {{-- <div class="mt-1 text-muted" title="{{$enroll ->remark}}">{{Str::limit($enroll ->remark,20)}}</div> --}}
-                            {{-- <div class="mt-1 text-muted" title="{{$enroll ->remark}}">{{Str::limit($enroll ->remark,10,"***")}}</div> --}}
-                            {{-- <div class="mt-1 text-muted" title="{{$enroll ->remark}}">{{Str::of($enroll ->remark)->limit(10)}}</div> --}}
-                            {{-- <div class="mt-1 text-muted" title="{{$enroll ->remark}}">{{Str::of($enroll ->remark)->words(2)}}</div> --}}
-                            {{-- <div class="mt-1 text-muted" title="{{$enroll ->remark}}">{{Str::of($enroll ->remark)->words(2,">>>")}}</div> --}}
-                            {{-- စကားစုနှစ်စု ဘဲလက်ခံမည်  --}}
-                            {{-- <div class="mt-1 text-muted" title="{{$enroll ->remark}}">{{Str::words($enroll ->remark,1)}}</div> --}}
-                            <div class="mt-1 text-muted" title="{{$enroll ->remark}}">{{Str::words($enroll ->remark,1,"--")}}</div>
-                            
-                        </div>
-                        @endforeach
-                        
+
+
 
                     </div>
 
@@ -403,7 +381,7 @@
                         </div>
                         <div id="remark" class="tab-pane">
                             <p>
-                                {{$student->remark}}
+                                {{$lead->remark}}
                             </p>
                         </div>
                     </div>
@@ -426,10 +404,10 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{{$student->remark}}</td>
+                                <td>{{$lead->remark}}</td>
                             </tr>
                         </tbody>
-                        
+
                     </table>
                     <!-- end remark -->
                 </div>
@@ -462,16 +440,16 @@
 
             // start back btn
             $("#btn_back").click(function(){
-                
+
             })
-            
+
             // end back btn
 
         })
         const getBtnBack = document.querySelector("#btn_back");
         getBtnBack.addEventListener("click",function(){
             // window.history.back();
-            window.history.go(-1); // window page history ကို ရြှေနောက် ကြိုက်သလို ပေးလို့ရသည် 
+            window.history.go(-1); // window page history ကို ရြှေနောက် ကြိုက်သလို ပေးလို့ရသည်
         })
 
         // start tabs box
@@ -489,7 +467,7 @@
             for(let i = 0 ; i < gettablinks.length ; i++){
                 gettablinks[i].className = gettablinks[i].className.replace(" active","")
 
-                
+
             }
             document.getElementById(link).style.display = "block";
 
@@ -511,24 +489,24 @@
                 getacctitle[i].addEventListener("click", function(e){
                     // console.log(e)
                     // console.log(e.target) // event နှိပ်လိုက်သော tag ၏ target ကို သိရှိစေရန်
-                    // console.log(this) // this key word သည် နှိပ်လိုက်သော tag အား  သူ့ကိုသူ ပြန်လည်ပြောခြင်းဖြစ်သည် example . event.target နှင့်ညီသည် 
+                    // console.log(this) // this key word သည် နှိပ်လိုက်သော tag အား  သူ့ကိုသူ ပြန်လည်ပြောခြင်းဖြစ်သည် example . event.target နှင့်ညီသည်
                     this.classList.toggle("shown");
                     // console.warn(e.target.children[0]);
-                    // nextElementSibling သည် this တွင်ဝင်နေသော tag နှင့် တစ်တန်းထဲ ရှီနေသော ဖြစ်သူ tag အား ခေါ်ပေးမည်ဖစ်သည် 
+                    // nextElementSibling သည် this တွင်ဝင်နေသော tag နှင့် တစ်တန်းထဲ ရှီနေသော ဖြစ်သူ tag အား ခေါ်ပေးမည်ဖစ်သည်
                     var getcontent = this.nextElementSibling;
                     // console.log(getcontent);
-                    // console.log(getcontent.scrollHeight) // scrollHeight သည် element ၏ height ကို number data type ဖြင့် ဖော်ပြပေးမည်ဖြစ်သည် ထို့ကြောင့် အောက်ပါ အတိုင်း ၄င်း property အား အသုံးချနိုင်သည် 
-                    // getcontent.style.height = getcontent.scrollHeight+"px"; 
+                    // console.log(getcontent.scrollHeight) // scrollHeight သည် element ၏ height ကို number data type ဖြင့် ဖော်ပြပေးမည်ဖြစ်သည် ထို့ကြောင့် အောက်ပါ အတိုင်း ၄င်း property အား အသုံးချနိုင်သည်
+                    // getcontent.style.height = getcontent.scrollHeight+"px";
 
                     if(getcontent.style.height){
                         // getcontent.style.height = "0px"; // ၄င်းသည် 0 px ပေးထားသောကြောင့်  HTML ထဲတွင် သွားထည့်ပေးမည်ဖြစ်သည်။ သို့သော် ပထမတစ်ကြိမ်ကတည်းက ဝင်နေမည်ဖြစ်သောကြောင့် ဒုတိယတစ်ကြိမ် ပြန်လည် run သည့်အခါ ၄င်း height သည် ရှိနေပြီးဖြ့စ်ပြီး tag height porperty သည် 0px သာဖြစ်နေမည် ထို့ကြောင့် ၄င်း height အား ရှိနေပါက အပြီးသတ် css property ပါဖျောက်ရန် NULL တန်ဖိုး‌ပေးရမည်ဖြစ်သည် သို့မှသာ heigt property သည် tag အတွင်းမှ မပြီးပျောက်သွားမည်ဖြစ်သည် ။
                         getcontent.style.height = null;
                     }else {
-                        getcontent.style.height = getcontent.scrollHeight+"px"; 
+                        getcontent.style.height = getcontent.scrollHeight+"px";
                     }
-                })     
+                })
                 if(getacctitle[i].classList.contains("shown")) {
-                    // contains() သည် classList အတွင်း () အထဲရှိ class ပါသလားကို စစ်ပေးသော method ဖြစ်သည် 
+                    // contains() သည် classList အတွင်း () အထဲရှိ class ပါသလားကို စစ်ပေးသော method ဖြစ်သည်
                     getactiveacctitle[i].style.height = getactiveacctitle[i].scrollHeight+ "px";
                 }
             }

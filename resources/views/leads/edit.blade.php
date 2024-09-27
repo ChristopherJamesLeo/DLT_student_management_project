@@ -62,10 +62,14 @@
                         </select>
                     </div>
 
+                    @if($lead->converted)
+                        <small>This lead have already been converted to a student. Editiong is diabled</small>
+                    @endif
+
                     <div class="col-md-12">
                         <div class="d-flex justify-content-end">
                             <a href="{{route('leads.index')}}" class="btn btn-secondary btn-sm rounded-0">Cancel</a>
-                            <button type="submit" class="btn btn-primary btn-sm rounded-0 ms-3">Update</button>
+                            <button type="submit" class="btn btn-primary btn-sm rounded-0 ms-3"  {{$lead->isconverted() ? "disabled" : " "}}>Update</button>
                         </div>
                     </div>
                 </div>

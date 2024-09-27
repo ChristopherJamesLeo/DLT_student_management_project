@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Psy\Util\Str;
+use Illuminate\Support\Str;
 
 class Lead extends Model
 {
@@ -17,6 +17,7 @@ class Lead extends Model
         "firstname",
         "lastname",
         "gender_id",
+        "age",
         "email",
         "country_id",
         "city_id",
@@ -61,7 +62,7 @@ class Lead extends Model
 
             $lastestleadid = $lastestlead ? $lastestlead->id : 0 ;
 
-            $newleadid = "WDF".str_pad($lastestleadid+1,5,"0",STR_PAD_LEFT);
+            $newleadid = "LD".str_pad($lastestleadid+1,5,"0",STR_PAD_LEFT);
 
             while(\DB::table("leads")->where('leadnumber',$newleadid)->exists()){
 
@@ -76,13 +77,25 @@ class Lead extends Model
 
     // pipe line
 
-    public function convertToStudent($studentid){
+    public function convertToStudent(){
 
 //        Student create
         $student = Student::create([
             "firstname"=> $this -> firstname,
             "lastname"=> $this -> lastname,
             "slug"=> Str::slug($this->firstname),
+            "gender_id" => $this -> gender_id,
+            "age" => $this ->age,
+            "email" => $this -> email,
+            "country_id" => $this -> country_id,
+            "city_id" => $this -> city_id,
+            "user_id" => $this -> user_id
+        ]);
+
+//        create empty phone
+        StudentPhone::create([
+            "student_id" => $student -> id,
+            "phone" => null
         ]);
 //        Lead Update
         $this -> update([
@@ -92,4 +105,12 @@ class Lead extends Model
 
         return $student;
     }
+
+    public function isconverted(){
+        return $this -> converted === 1;
+    }
+
+
 }
+
+

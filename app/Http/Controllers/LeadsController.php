@@ -115,6 +115,12 @@ class LeadsController extends Controller
         $user_id = $user["id"]; // array သုံးလဲရသည်
         $lead = Lead::findOrFail($id);
 
+        if($lead -> isconverted()){
+
+            return redirect()->back()->with("error","Edition is disabled");
+
+        }
+
         $lead -> firstname = $request["firstname"];
         $lead -> lastname = $request["lastname"];
         $lead -> gender_id = $request["gender_id"];
@@ -126,13 +132,14 @@ class LeadsController extends Controller
 
         $lead -> save();
 
+
         return redirect(route("leads.index"));
     }
 
     public function converttostudent(string $id){
         $lead = Lead::findOrFail($id);
         $lead -> convertToStudent();
-        session()->falsh("success","Pipe Successful");
+        session()->flash("success","Pipe Successful");
 
         return redirect()->back();
     }

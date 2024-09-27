@@ -83,7 +83,6 @@
     <div class="container-fluid">
 
         <div class="col-md-12 my-3">
-
             <a href="javascript:void(0)" id="btn_back" class="btn btn-secondary btn-sm rounded-0">Back</a>
 
             <a href="{{route('leads.index')}}" class="btn btn-secondary btn-sm rounded-0">Close</a>
@@ -108,7 +107,7 @@
                             <form action="{{route('leads.converttostudent',$lead->id)}}" method="POST" class="w-100">
                                 @csrf
                                 @method("POST")
-                                <button type="submit"  class="w-100 me-2 btn btn-primary btn-sm rounded-0">Pipeline</button>
+                                <button type="submit"  class="w-100 me-2 btn btn-primary btn-sm rounded-0" {{$lead-> isconverted() ? "disabled" : "" }}>Pipeline</button>
                             </form>
                             @if ($userdata->id != $lead->user_id)
                                 <button type="button" class="w-100 me-2 btn btn-primary btn-sm rounded-0">Like</button>

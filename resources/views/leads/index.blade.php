@@ -7,6 +7,7 @@
     <div class="container-fluid">
 
         <div class="col-md-12 my-3">
+            <a href="{{route('students.index')}}" class="btn btn-info btn-sm rounded-0">Students</a>
             <a href="{{route('leads.create')}}" class="btn btn-primary btn-sm rounded-0">Create</a>
 
             <hr>

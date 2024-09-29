@@ -101,8 +101,6 @@
                                     <li class="nav-item nav-categories"><a href="{{route('religions.index')}}" class="nav-link text-white sidebarlinks">Religions</a></li>
                                     <li class="nav-item nav-categories"><a href="{{route('regions.index')}}" class="nav-link text-white sidebarlinks">Regions</a></li>
 
-
-
                                     <li class="nav-item nav-categories"><a href="{{route('paymentmethods.index')}}" class="nav-link text-white sidebarlinks">Payment Method</a></li>
 
                                     <li class="nav-item nav-categories"><a href="{{route('genders.index')}}" class="nav-link text-white sidebarlinks">Genders</a></li>

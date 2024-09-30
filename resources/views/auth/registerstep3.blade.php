@@ -6,43 +6,9 @@
 
     <div class="w-100 d-flex justify-content-center align-items-center" style="height: 100vh">
         <div class="p-3 bg-white" style="width:500px" >
-            <h5 class="display-6">Register</h5>
-            <form class="mt-3" action="{{route('register')}}"  method="POST" style="width: 100%" class="border-1">
+            <h5 class="display-6">Contact Info</h5>
+            <form class="mt-3" action="{{route('register.storestep3')}}"  method="POST" style="width: 100%" class="border-1">
                 @csrf
-                <div class="form-group mb-3">
-                    <input name="firstname" type="text" class="form-control @error('firstname') is-invalid @enderror" placeholder="Enter your firstname"/>
-                </div>
-                <div class="form-group mb-3">
-                    <input name="lastname" type="text" class="form-control @error('lastname') is-invalid @enderror" placeholder="Enter your lastname"/>
-
-                </div>
-
-                <div class="form-group mb-3">
-                    <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Enter your email"/>
-
-                </div>
-                <div class="form-group mb-3">
-                    <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Enter your password">
-
-                </div>
-                <div class="form-group mb-3">
-                    <input type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" placeholder="confirm your password">
-                </div>
-
-                <div class="form-group mb-3">
-                    <select name="gender_id" id="gender_id" class="form-control">
-                        <option value="" selected disabled>Choose a gender</option>
-                        @foreach($genders as $gender)
-                            <option value="{{$gender->id}}">{{$gender->name}}</option>
-
-                        @endforeach
-                    </select>
-
-                </div>
-                <div class="form-group mb-3">
-                    <input name="age" type="number" class="form-control @error('age') is-invalid @enderror" placeholder="Enter your age"/>
-
-                </div>
                 <div class="form-group mb-3">
                     <select name="country_id" id="country_id" class="form-control">
                         <option value="" selected disabled>Choose a Country</option>
@@ -94,7 +60,7 @@
 
             </div>
 
-{{--            data ppolicy--}}
+            {{--            data ppolicy--}}
             <div class="row">
 
                 <div class="col-12 mb-2 text-center text-muted">

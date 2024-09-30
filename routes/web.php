@@ -1,4 +1,7 @@
 <?php
+
+use App\Http\Controllers\Auth\RegisteredUserController;
+
 use App\Http\Controllers\AnnouncementsController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CityController;
@@ -82,6 +85,15 @@ Route::get('/', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
+
+Route::get("/register/step1",[RegisteredUserController::class,'createstep1'])->name("register.step1");
+Route::post("/register/step1",[RegisteredUserController::class,'storestep1'])->name("register.storestep1");
+
+Route::get("/register/step2",[RegisteredUserController::class,'createstep2'])->name("register.step2");
+Route::post("/register/step2",[RegisteredUserController::class,'storestep2'])->name("register.storestep2");
+
+Route::get("/register/step3",[RegisteredUserController::class,'createstep3'])->name("register.step3");
+Route::post("/register/step3",[RegisteredUserController::class,'storestep3'])->name("register.storestep3");
 
 // auth လုပ်ထားသော သူသာလျှင် middle အတွင်းရှိနေသောသူများအလုပ်လုပ်မည်
 // group လုပ်ပြီးလဲ middleware ၏ permission ပေးမှသာ ဝင်နိုင်မည်

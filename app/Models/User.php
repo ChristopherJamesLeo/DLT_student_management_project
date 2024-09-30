@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+ use Illuminate\Contracts\Auth\MustVerifyEmail;   // user များ၏ email များ အာ  verify လုပ်ရန် ဖွင့်ပေးရမည် ထို့နောက် implement လုပ်ပေးရမည်
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail   // user email verify လုပ်ရန်
 {
     use HasApiTokens, HasFactory, Notifiable;
 

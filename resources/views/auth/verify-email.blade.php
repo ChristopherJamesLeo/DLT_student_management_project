@@ -29,3 +29,57 @@
         </form>
     </div>
 </x-guest-layout>
+
+
+
+@include("layouts.adminheader")
+
+<div id="app">
+
+    <div class="w-100 d-flex justify-content-center align-items-center" style="height: 100vh">
+        <div class="p-3 bg-white" style="width:500px" >
+            <h5 class="">Email Verification</h5>
+            <div class="row">
+                <div>
+                    <p>Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn't receive the email, we will gladly send you another.</p>
+                </div>
+
+                @if (session('status') == 'verification-link-sent')
+                    <small class="mb-4 font-medium text-sm ">'A new verification link has been sent to the email address you provided during registration.</small>
+
+                @endif
+
+                <form class="mt-3" method="POST" action="{{ route('verification.send') }}">
+                    @csrf
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-info">Resend Verification Email</button>
+                    </div>
+                </form>
+
+                {{--            Login --}}
+                <div class="col-12 mt-2 text-center">
+                    <small>Don't have an action?</small>
+                    <form action="{{route('logout')}}" method="POST">
+                        @csrf
+                        <a href="{{route('logout')}}" onclick="event.preventDefault(); this.closest('form').submit();" class="mx-1 text-primary">Sign Out</a>
+                    </form>
+
+                </div>
+
+            </div>
+
+
+
+
+
+
+        </div>
+
+    </div>
+
+</div>
+
+@include('layouts.adminfooter')
+
+
+

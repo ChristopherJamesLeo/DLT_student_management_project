@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\CheckRegisterationStepMid;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -43,9 +44,10 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\PageViewMid::class,
             \App\Http\Middleware\PostViewDurationMid::class,
             \App\Http\Middleware\OnOffUserStatusMid::class,
+
         ],
 
-        'api' => [ // Api မှထုတ်ရန် 
+        'api' => [ // Api မှထုတ်ရန်
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
@@ -74,7 +76,9 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
-        // page တိုင်းကို မဖြစ်စေချင်ဘဲ မိမိ ဖြစ်စေချင်သော page ကိုသာ ဖြစ်စေချင်သော ကြောင့် Auth ထဲတွင် alias name ပေးပြီး ၄င်း name အား web ထဲတွင်သွားရေးမည်ဖြစ်သည် 
-        'validate.subscriptions' => \App\Http\Middleware\ValidateSubscriptionMid::class, // 'validate.subscriptions' ၄င်း name အား web ထဲတွင်ပြန်သံုးမည် 
+        // page တိုင်းကို မဖြစ်စေချင်ဘဲ မိမိ ဖြစ်စေချင်သော page ကိုသာ ဖြစ်စေချင်သော ကြောင့် Auth ထဲတွင် alias name ပေးပြီး ၄င်း name အား web ထဲတွင်သွားရေးမည်ဖြစ်သည်
+        'validate.subscriptions' => \App\Http\Middleware\ValidateSubscriptionMid::class, // 'validate.subscriptions' ၄င်း name အား web ထဲတွင်ပြန်သံုးမည်
+
+        "check.registration.step" => \App\Http\Middleware\CheckRegisterationStepMid::class,
     ];
 }

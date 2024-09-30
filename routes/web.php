@@ -88,16 +88,18 @@ Route::get('/', function () {
 
 Route::get("/register/step1",[RegisteredUserController::class,'createstep1'])->name("register.step1");
 Route::post("/register/step1",[RegisteredUserController::class,'storestep1'])->name("register.storestep1");
-
-Route::get("/register/step2",[RegisteredUserController::class,'createstep2'])->name("register.step2");
+//                                                                                                                                        middleware alias name : parameter ( ပါရာကို ကြိုက်နှငစ်သက်ရာ နမည်ပေးနိုင်သည် )
+Route::get("/register/step2",[RegisteredUserController::class,'createstep2'])->name("register.step2")->middleware("check.registration.step:step2");
 Route::post("/register/step2",[RegisteredUserController::class,'storestep2'])->name("register.storestep2");
 
-Route::get("/register/step3",[RegisteredUserController::class,'createstep3'])->name("register.step3");
+Route::get("/register/step3",[RegisteredUserController::class,'createstep3'])->name("register.step3")->middleware("check.registration.step:step3");
 Route::post("/register/step3",[RegisteredUserController::class,'storestep3'])->name("register.storestep3");
 
 // auth လုပ်ထားသော သူသာလျှင် middle အတွင်းရှိနေသောသူများအလုပ်လုပ်မည်
 // group လုပ်ပြီးလဲ middleware ၏ permission ပေးမှသာ ဝင်နိုင်မည်
-Route::middleware('auth')->group(function () {
+
+//Route::middleware('auth')->group(function () {  // auth တစ်ခုဘဲစစ်ပြီး page ထဲဝင်မည်
+Route::middleware(["auth","verified"])->group(function () {  // email အ;ာ verify လုပ်ပြီးမှ page ထဲဝင်ခိုင်းမည် s
 
     Route::get("dashboards",[DashboardsController::class,"index"])->name("dashboard.index");
 
@@ -269,6 +271,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth','validate.subscriptions'])->group(function(){
     Route::resource("attendances",AttendancesController::class);
 });
+
+
 
 
 

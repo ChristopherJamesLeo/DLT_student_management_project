@@ -116,6 +116,9 @@ class RegisteredUserController extends Controller
         $regdatas["lead"] = $request->only("firstname","lastname","gender_id","age");
 //      session ထဲတွင်   [email,password, "lead" => [firstname,lastname,gender_id,age]] ပုံစံဖြစ်သွားမည်
         $request->session()->put("registerationdatas",$regdatas);
+
+
+
         return redirect()->route("register.step3");
     }
 
@@ -150,7 +153,7 @@ class RegisteredUserController extends Controller
         //      session ထဲတွင်   [email,password, "lead" => [firstname,lastname,gender_id,age],"contact"=>["country_id,city_id] ပုံစံဖြစ်သွားမည်
 
         $user = User::create([
-            'name' => $regdatas["lead"]["firstname"]." ".$regdatas["lead"]["firstname"], // array form အရ တိုက်ရိုက်မရှိနေသောကြာ်င့ session တွင်ခေါ်ထားသော regdatas ထဲရှိ lead အခန်းထဲတွင် သိမ်းထားသည်
+            'name' => $regdatas["lead"]["firstname"]." ".$regdatas["lead"]["lastname"], // array form အရ တိုက်ရိုက်မရှိနေသောကြာ်င့ session တွင်ခေါ်ထားသော regdatas ထဲရှိ lead အခန်းထဲတွင် သိမ်းထားသည်
             'email' => $regdatas["email"],
             'password' => Hash::make($regdatas["password"]),
         ]);
@@ -182,7 +185,7 @@ class RegisteredUserController extends Controller
         ]);
 
 
-
+        event(new Registered($user)); // log in မဝင်ခင် အရင် verify လုပ်မည်
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);

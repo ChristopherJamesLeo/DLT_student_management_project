@@ -4,6 +4,9 @@ use Illuminate\Support\Str;
 
 return [
 
+
+
+
     /*
     |--------------------------------------------------------------------------
     | Default Session Driver
@@ -18,7 +21,9 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'file'),
+    // auto log out ဖြစ်စေရန် Session ကို သတ်မှတ်ထားသည် 
+
+    'driver' => env('SESSION_DRIVER', 'file'),  // env မှ value နှင့် တူညီရမည် 
 
     /*
     |--------------------------------------------------------------------------
@@ -31,9 +36,10 @@ return [
     |
     */
 
-    'lifetime' => env('SESSION_LIFETIME', 120),
+    'lifetime' => env('SESSION_LIFETIME', 120),  // session time ကို သတ်မှတ်ထားသည်
 
-    'expire_on_close' => false,
+    // 'expire_on_close' => true,  // true သည် session သည် browser ပိတ်ထားသောငြား minute count အား အလုပ်လုပ်နေမည်ဖြစ်သည် // 
+    'expire_on_close' => false,  // false သည် session သည် browser ပိတ်ထားလျှင် minute count အား ရပ်ထားပေးမည်ဖြစ်သည် // 
 
     /*
     |--------------------------------------------------------------------------

@@ -1,75 +1,33 @@
 
 
-@include("layouts.adminheader")
+@extends('layouts.auth.authindex')
 
-<div id="app">
+@section("caption","Access")
 
-    <div class="w-100 d-flex justify-content-center align-items-center" style="height: 100vh">
-        <div class="p-3 bg-white" style="width:500px" >
-            <h5 class="">Access</h5>
-            <form class="mt-3" action="{{route('register.storestep1')}}"  method="POST" style="width: 100%" class="border-1">
-                @csrf
+@section("content")
+    <form id="stepform" class="mt-3" action="{{route('register.storestep1')}}"  method="POST" style="width: 100%" class="border-1">
+        @csrf
 
-                <div class="form-group mb-3">
-                    <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Enter your email"/>
+        <div class="form-group mb-3">
+            <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Enter your email"/>
 
-                </div>
-                <div class="form-group mb-3">
-                    <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Enter your password">
+        </div>
+        <div class="form-group mb-3">
+            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Enter your password">
 
-                </div>
-                <div class="form-group mb-3">
-                    <input type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" placeholder="confirm your password">
-                </div>
-
-
-                <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-info">Next</button>
-                </div>
-            </form>
-
-
-            {{--         social login--}}
-            <div class="row">
-                <small class="text-center text-muted">Sign Up with</small>
-                <div class="col-12 mb-2 text-center">
-                    <a href="javascript:void(0)" title="login with facebook" class="btn"><i class="fab fa-facebook-f"></i></a>
-                    <a href="javascript:void(0)" title="login with google" class="btn"><i class="fab fa-google"></i></a>
-                    <a href="javascript:void(0)" title="login with twitter" class="btn"><i class="fab fa-twitter"></i></a>
-                    <a href="javascript:void(0)" title="login with github" class="btn"><i class="fab fa-github"></i></a>
-
-                </div>
-
-            </div>
-
-            {{--            Login --}}
-            <div class="row">
-
-                <div class="col-12 mb-2 text-center">
-                    <small>Already Have An Account?</small>
-                    <a href="{{route('login')}}" class="mx-1 text-primary">Sign In</a>
-
-
-                </div>
-
-            </div>
-
-            {{--            data ppolicy--}}
-            <div class="row">
-
-                <div class="col-12 mb-2 text-center text-muted">
-                    <small>Bu Clicking Sign Up, you agree to our <a href="javascript:void(0)" class="fw-bold">Terms,</a><a href="javascript:void(0)"  class="fw-bold">Data Policy,</a><a href="javascript:void(0)" class="fw-bold">Cookie Policy</a> You may receive SMS notification from us</small>
-
-
-                </div>
-
-            </div>
+        </div>
+        <div class="form-group mb-3">
+            <input type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror" placeholder="confirm your password">
         </div>
 
-    </div>
 
-</div>
+        <div class="d-grid ">
+            <button type="submit" id="submitbtn" class="btn btn-info">Next</button>
+        </div>
+    </form>
 
-@include('layouts.adminfooter')
+@endsection
+
+
 
 

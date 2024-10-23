@@ -88,7 +88,7 @@
                         <img src="./assets/img/users/user1.jpg" class="rounded-circle" width="25" />
                     </a>
                     <div class="dropdown-menu">
-                        <a href="javascript:void(0);" class="dropdown-item"><i class="fas fa-user fa-sm text-muted me-2"></i> Profile</a>
+                        <a href="{{route('profile.edit')}}" class="dropdown-item"><i class="fas fa-user fa-sm text-muted me-2"></i> Profile</a>
                         <a href="javascript:void(0);" class="dropdown-item"><i class="fas fa-cogs fa-sm text-muted me-2"></i> Settings</a>
                         <a href="javascript:void(0);" class="dropdown-item"><i class="fas fa-list fa-sm text-muted me-2"></i> Avtivity Log</a>
                         <div class="dropdown-divider"></div>

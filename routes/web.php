@@ -99,8 +99,8 @@ Route::post("/register/step3",[RegisteredUserController::class,'storestep3'])->n
 // group လုပ်ပြီးလဲ middleware ၏ permission ပေးမှသာ ဝင်နိုင်မည်
 
 //Route::middleware('auth')->group(function () {  // auth တစ်ခုဘဲစစ်ပြီး page ထဲဝင်မည်
-Route::middleware(["auth","verified"])->group(function () {  // email အ;ာ verify လုပ်ပြီးမှ page ထဲဝင်ခိုင်းမည် s
-
+Route::middleware(["auth","autologout","verified"])->group(function () {  // email အ;ာ verify လုပ်ပြီးမှ page ထဲဝင်ခိုင်းမည် // custom ၇ေးထားသော autologout အား web ထဲ တွင် invoke လုပ်ရမည် 
+    
     Route::get("dashboards",[DashboardsController::class,"index"])->name("dashboard.index");
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

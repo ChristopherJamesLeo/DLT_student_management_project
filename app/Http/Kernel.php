@@ -44,6 +44,8 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\PageViewMid::class,
             \App\Http\Middleware\PostViewDurationMid::class,
             \App\Http\Middleware\OnOffUserStatusMid::class,
+           
+
 
         ],
 
@@ -80,5 +82,7 @@ class Kernel extends HttpKernel
         'validate.subscriptions' => \App\Http\Middleware\ValidateSubscriptionMid::class, // 'validate.subscriptions' ၄င်း name အား web ထဲတွင်ပြန်သံုးမည်
 
         "check.registration.step" => \App\Http\Middleware\CheckRegisterationStepMid::class,
+
+        "autologout" =>  \App\Http\Middleware\AutoLogoutMid::class,  // web route ကို restrist လုပ်နိုင်သည်
     ];
 }

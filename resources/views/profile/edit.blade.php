@@ -130,7 +130,7 @@
                     
                     <div class="card-body">
                         <div class="d-flex flex-column align-items-center mb-3">
-                            <div class="h5 mb-1"></div>
+                            <div class="h5 mb-1">{{$userdata->name}}</div>
                             <div class="text-muted">
                                 <span></span>
                             </div>
@@ -171,11 +171,11 @@
                                 <div class="col">
                                     <div class="row">
                                         <div class="col">
-                                            <div class="">Authorize</div>
+                                            <div class="">Lead ID</div>
                                         </div>
                                         <div class="col-auto">
                                             <div class="">
-                                                
+                                                {{$userdata->lead["leadnumber"]}}
                                             </div>
                                         </div>
                                     </div>
@@ -192,7 +192,7 @@
                                         </div>
                                         <div class="col-auto">
                                             <div class="">
-                                                
+                                                {{date("d M Y ",strtotime($userdata->created_at))}} | {{date("H : m : i ",strtotime($userdata->created_at))}}
                                             </div>
                                         </div>
                                     </div>
@@ -238,10 +238,10 @@
                             </div>
                             <div class="row gap-0 mb-2">
                                 <div class="col-auto">
-                                    <i class="fas fa-info"></i>
+                                    <i class="fas fa-envelope"></i>
                                 </div>
                                 <div class="col">
-                                    Sample Date
+                                    {{$userdata->email}}
                                 </div>
                                 
                             </div>
@@ -368,8 +368,8 @@
                     <ul class="nav">
                         <li class="nav-item "><button type="button" id="autoclick" class="tablinks active" onclick="gettab(event,'personaltab')">Personal</button></li>
                         <!-- event ကို html မှ parameter  ပေးရန် event ဟု အပြည့်အပြည့်စုံရေးပေးရမည် -->
-                        <li class="nav-item"><button type="button" id="" class="tablinks" onclick="gettab(event,'accounttab')">Account</button></li>
-                        <li class="nav-item"><button type="button" id="" class="tablinks" onclick="gettab(event,'linktab')">Linked</button></li>
+                        <li class="nav-item"><button type="button" id="" class="tablinks" onclick="gettab(event,'leadtab')">Lead</button></li>
+                        <li class="nav-item"><button type="button" id="" class="tablinks" onclick="gettab(event,'studenttab')">Student</button></li>
                         <li class="nav-item"><button type="button" id="" class="tablinks" onclick="gettab(event,'signtab')">Sign In</button></li>
                         <li class="nav-item"><button type="button" id="" class="tablinks" onclick="gettab(event,'logtab')">Log</button></li>
                     </ul>
@@ -383,38 +383,141 @@
                                 Provident minima est laudantium fugit dicta atque esse excepturi repudiandae quo iusto ipsam, animi id nulla, consectetur commodi quisquam facilis at accusamus dolorum iste et pariatur odit. Temporibus, dignissimos alias!
                             </p>
                         </div>
-                        <div id="accounttab" class="tab-pane">
-                            <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim id consequuntur explicabo ea eveniet qui ipsum quae commodi similique fuga ipsam reiciendis officia, tempora sapiente porro modi distinctio autem! Repellendus!
-                                Quaerat optio mollitia beatae? Similique est, molestias eius quos voluptas porro necessitatibus sit facere repellat unde beatae accusamus id distinctio dolore tempora dolorem modi earum numquam laborum provident debitis architecto.
-                                Provident minima est laudantium fugit dicta atque esse excepturi repudiandae quo iusto ipsam, animi id nulla, consectetur commodi quisquam facilis at accusamus dolorum iste et pariatur odit. Temporibus, dignissimos alias!
-                            </p>
+                        <div id="leadtab" class="tab-pane">
+                            <div>
+                                <form action="/leads/{{$lead->id}}" method="POST" enctype="multipart/form-data" class="">
+
+                                    @csrf
+                                    @method("PUT")
+                    
+                                    {{-- old('firstname')  သည် refresh ဖြစ်ပြီး data reject ဖြစ်၍ ပြန်လာပါက မူလပေးခဲ့သောစာသားကို မပြောက်ဘဲ invalit ဖြစ်နေသော data input box တစ်ခုတည်းသာ blank ဖြစ်ပြီး အရင် ထည့်ခဲ့သော data ကိူ ပြန်ဖော်ပြပေးနေမည် --}}
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-12 form-group mb-1">
+                                            <label for="firstname">First name <span class="text-danger">*</span></label>
+                                            <input type="text" name="firstname" id="firstname" class="form-control rounded-0" placeholder="First Name" value="{{$lead->firstname}}">
+                                        </div>
+                                        <div class="col-md-4 col-sm-12 form-group mb-2">
+                                            <label for="lastname">Last Name</label>
+                                            <input type="text" name="lastname" id="lastname" class="form-control  rounded-0" placeholder="last name" value="{{$lead->lastname}}">
+                                        </div>
+                                        <div class="col-md-3 col-sm-12 form-group mb-1">
+                                            <label for="gender_id">Gender</label>
+                                            <select name="gender_id" id="gender_id" class="form-control rounded-0 gender_id">
+                    
+                                                @foreach($genders as $gender)
+                    {{--                                <option value="{{$gender->id}}" {{$gender['id'] == $lead->gender->id ? "selected" : ""}}>{{$gender['name']}}</option>--}}
+                                                    <option value="{{$gender->id}}" {{$gender['id'] == old('gender_id',$lead->gender_id) ? "selected" : ""}}>{{$gender['name']}}</option>
+                                                @endforeach
+                    
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 col-sm-12 form-group mb-2">
+                                            <label for="age">Age</label>
+                                            <input type="number" name="age" id="age" class="form-control  rounded-0" placeholder="Age" value="{{$lead->age}}">
+                                        </div>
+                                        <div class="col-md-3 col-sm-12 form-group mb-2">
+                                            <label for="email">Email</label>
+                                            <input type="email" name="email" id="email" readonly class="form-control  rounded-0" placeholder="email" value="{{$lead->email}}">
+                                        </div>
+                                        <div class="col-md-3 col-sm-12 form-group mb-1">
+                                            <label for="country_id">Country</label>
+                                            <select name="country_id" id="country_id" class="form-control rounded-0 country_id">
+                                                <option selected disabled>Choose a Gender</option>
+                                                @foreach($countries as $country)
+                                                    <option value="{{$country->id}}" {{$country["id"]== $lead->country_id ? "selected" : ""}}>{{$country['name']}}</option>
+                                                @endforeach
+                    
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 col-sm-12 form-group mb-1">
+                                            <label for="city_id">City</label>
+                                            <select name="city_id" id="city_id" class="form-control rounded-0 city_id">
+                                                <option selected disabled>Choose a City</option>
+                                                @foreach($cities as $city)
+                                                    <option value="{{$city->id}}" {{$city['id']== $lead->city_id ? "selected" : "hidden"}}>{{$city['name']}}</option>
+                                                @endforeach
+                    
+                                            </select>
+                                        </div>
+                    
+                                        @if($lead->converted)
+                                            <small>This lead have already been converted to a student. Editiong is diabled</small>
+                                        @endif
+                    
+                                        <div class="col-md-12">
+                                            <div class="d-flex justify-content-end">
+                                                <button type="submit" class="btn btn-primary btn-sm rounded-0 ms-3"  {{$lead->isconverted() ? "disabled" : " "}}>Update</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <div id="linktab" class="tab-pane">
-                            <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim id consequuntur explicabo ea eveniet qui ipsum quae commodi similique fuga ipsam reiciendis officia, tempora sapiente porro modi distinctio autem! Repellendus!
-                                Quaerat optio mollitia beatae? Similique est, molestias eius quos voluptas porro necessitatibus sit facere repellat unde beatae accusamus id distinctio dolore tempora dolorem modi earum numquam laborum provident debitis architecto.
-                                Provident minima est laudantium fugit dicta atque esse excepturi repudiandae quo iusto ipsam, animi id nulla, consectetur commodi quisquam facilis at accusamus dolorum iste et pariatur odit. Temporibus, dignissimos alias!
-                            </p>
+                        <div id="studenttab" class="tab-pane">
+                            <div class="col-md-12 my-3">
+                                <h5>Student Information</h5>
+                                <form action="{{route('students.store')}}" method="POST" enctype="multipart/form-data" class="">
+                    
+                                    @csrf
+                                    @method("POST")
+                    
+                                    {{-- old('firstname')  သည် refresh ဖြစ်ပြီး data reject ဖြစ်၍ ပြန်လာပါက မူလပေးခဲ့သောစာသားကို မပြောက်ဘဲ invalit ဖြစ်နေသော data input box တစ်ခုတည်းသာ blank ဖြစ်ပြီး အရင် ထည့်ခဲ့သော data ကိူ ပြန်ဖော်ပြပေးနေမည် --}}
+                                    <div class="row">
+                                        <div class="col-md-3 col-sm-12 form-group mb-1">
+                                            <label for="firstname">First name <span class="text-danger">*</span></label>
+                                            <input type="text" name="firstname" id="firstname" class="form-control rounded-0" placeholder="First Name" value="{{old('firstname')}}">
+                                        </div>
+                                        <div class="col-md-3 col-sm-12 form-group mb-2">
+                                            <label for="lastname">Last Name</label>
+                                            <input type="text" name="lastname" id="lastname" class="form-control  rounded-0" placeholder="last name" value="{{old('lastname')}}">
+                                        </div>
+                                        {{-- <div class="col-md-4 col-sm-12 form-group mb-3">
+                                            <label for="regnumber">Register Number</label>
+                                            <input type="text" name="regnumber" id="regnumber" class="form-control  rounded-0" placeholder="reg number" value="{{old('regnumber')}}">
+                                        </div> --}}
+                    
+                                        <div id="multiphone" class="col-md-3 col-sm-12 form-group mb-2 create_page">
+                                            <label for="phone">Phone</label>
+                                            <div class="input-group phonelimit">
+                                                <input type="text" name="phone[]" id="phone" class="form-control  rounded-0 phone" placeholder="Phone" value="{{old('phone')}}">
+                                                <span id="addphone" class="input-group-text" style="font-size: 10px;cursor: pointer"><i class="fas fa-plus"></i></span>
+                                            </div>
+                    
+                                        </div>
+                                        <div class="form-group mb-4 col-md-12 col-sm-12">
+                                            <label for="remark">Remark</label>
+                                            <textarea name="remark" id="remark" class="form-control rounded-0" placeholder="Remark"></textarea>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="d-flex justify-content-end">
+                                                <a href="{{route('students.index')}}" class="btn btn-secondary btn-sm rounded-0">Cancel</a>
+                                                <button type="submit" class="btn btn-primary btn-sm rounded-0 ms-3">Submit</button>
+                                            </div>
+                                        </div>
+                    
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                         <div id="signtab" class="tab-pane">
                             <h6>Sign-In password</h6>
                             <div class="row">
                                 <div class="col-lg-4 col-md-6 col-sm-12 mx-auto mb-3">
-                                    <form class="mt-3" action="{{ route('password.store') }}"  method="POST" style="width: 100%" class="border-1">
+                                    <form class="mt-3" action="{{ route('password.update') }}"  method="POST" style="width: 100%" class="border-1">
                                         @csrf
+                                        @method('put')
                   
                         
                                         <div class="form-group mb-3">
-                                            <input name="oldpassword" type="password" class="form-control shadow-none @error('password') is-invalid @enderror" placeholder="Old Password"/>
+                                            <input name="current_password" id="current_password" type="password" class="form-control shadow-none @error('password') is-invalid @enderror" placeholder="Old Password"/>
                                         </div>
                         
                                         <div class="form-group mb-3">
-                                            <input name="password" type="password" class="form-control shadow-none @error('password') is-invalid @enderror" placeholder="New Password"/>
+                                            <input name="password" type="password" id="password" class="form-control shadow-none @error('password') is-invalid @enderror" placeholder="New Password"/>
                                         </div>
                         
                                         <div class="form-group mb-3">
-                                            <input name="password_confirmation" type="password" class="form-control shadow-none @error('password_confirmation') is-invalid @enderror" placeholder="Confirm password"/>
+                                            <input name="password_confirmation" id="password_confirmation" type="password" class="form-control shadow-none @error('password_confirmation') is-invalid @enderror" placeholder="Confirm password"/>
                                         </div>
                         
                                         <div class="d-flex justify-content-end">
@@ -556,6 +659,38 @@
                 }
             }
         // end accordian
+
+
+        $(document).ready(function(){
+            // start dynamic select option
+            $(document).on("change",".country_id",function (){
+                const getcountryid = $(this).val();
+                console.log(getcountryid);
+                let opforcity = '';
+                $.ajax({
+                    url: `/api/filter/cities/${getcountryid}`,
+                    type : "GET",
+                    dataType : "json",
+                    success : function (response){
+                        // console.log(response);
+                        $('.city_id').empty();
+                        opforcity += `<option selected disabled>Choose a City</option>`;
+
+                        for(let x = 0 ; x < response.data.length ; x++){
+                            opforcity += `<option value='${response.data[x].id}'>${response.data[x].name}</option>`;
+                        }
+
+                        $(".city_id").append(opforcity);
+
+                    },
+                    error: function (response){
+                        console.log("Error", response);
+                    }
+
+                })
+            })
+            // end dynamic select option
+        })
     </script>
 @endsection
 

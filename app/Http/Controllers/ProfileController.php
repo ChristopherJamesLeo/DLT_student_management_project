@@ -11,9 +11,11 @@ use Illuminate\View\View;
 
 
 use App\Models\Lead;
+use App\Models\Student;
 use App\Models\Gender;
 use App\Models\Country;
 use App\Models\City;
+use App\Models\Religion;
 
 class ProfileController extends Controller
 {
@@ -24,18 +26,23 @@ class ProfileController extends Controller
     {
         $user = $request->user();
         $lead = Lead::findOrFail($user->lead["id"]);
+        $student = Student::findOrFail($user->student["id"]);
         $genders = Gender::orderBy('name',"asc")->get();
         
         $countries = Country::orderBy('name',"asc")->get();
         $cities = City::orderBy('name',"asc")->get();
 
+        $religions = Religion::orderBy("name",'asc')->get();
+
         return view('profile.edit', [
             
             'user' => $user,
             "lead" => $lead,
+            "student" => $student,
             "genders" => $genders,
             "countries" => $countries,
-            "cities" => $cities
+            "cities" => $cities,
+            'religions' => $religions
         ]);
     }
 

@@ -136,32 +136,16 @@
                             </div>
                         </div>
                         <div class="w-100 d-flex flex-row justify-content-between mb-3">
-                            
-                            
-                           
-
-                            
-                            
-
+      
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="mb-5">
                             <div class="row gap-0 mb-2">
-                                <div class="col-auto">
-                                    <i class="fas fa-user"></i>
-                                </div>
                                 <div class="col">
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="">Status</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <div class="">
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <div class="progress" style="height:9px" aria-valuenow="{{$user->student['profile_score']}}" aria-valuemin = "0" aria-valuemax = "100"> 
+                                        <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" style="width: {{$user->student['profile_score']}}%">{{$user->student['profile_score']}}</div>
+                                   </div>
                                 </div>
                             </div>
                             <div class="row gap-0 mb-2">
@@ -377,11 +361,7 @@
 
                     <div class="tab-content">
                         <div id="personaltab" class="tab-pane">
-                            <p>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim id consequuntur explicabo ea eveniet qui ipsum quae commodi similique fuga ipsam reiciendis officia, tempora sapiente porro modi distinctio autem! Repellendus!
-                                Quaerat optio mollitia beatae? Similique est, molestias eius quos voluptas porro necessitatibus sit facere repellat unde beatae accusamus id distinctio dolore tempora dolorem modi earum numquam laborum provident debitis architecto.
-                                Provident minima est laudantium fugit dicta atque esse excepturi repudiandae quo iusto ipsam, animi id nulla, consectetur commodi quisquam facilis at accusamus dolorum iste et pariatur odit. Temporibus, dignissimos alias!
-                            </p>
+                           
                         </div>
                         <div id="leadtab" class="tab-pane">
                             <div>
@@ -416,6 +396,10 @@
                                             <input type="number" name="age" id="age" class="form-control  rounded-0" placeholder="Age" value="{{$lead->age}}">
                                         </div>
                                         <div class="col-md-3 col-sm-12 form-group mb-2">
+                                            <label for="dob">Date of Birth</label>
+                                            <input type="date" name="dob" id="dob" class="form-control  rounded-0" placeholder="DOB" value="{{$lead->dob}}">
+                                        </div>
+                                        <div class="col-md-3 col-sm-12 form-group mb-2">
                                             <label for="email">Email</label>
                                             <input type="email" name="email" id="email" readonly class="form-control  rounded-0" placeholder="email" value="{{$lead->email}}">
                                         </div>
@@ -446,7 +430,7 @@
                     
                                         <div class="col-md-12">
                                             <div class="d-flex justify-content-end">
-                                                <button type="submit" class="btn btn-primary btn-sm rounded-0 ms-3"  {{$lead->isconverted() ? "disabled" : " "}}>Update</button>
+                                                <button type="submit" class="btn btn-primary btn-sm rounded-0 ms-3" {{$lead->converted ? "disabled" : ""}}>Update</button>
                                             </div>
                                         </div>
                                     </div>
@@ -456,37 +440,96 @@
                         <div id="studenttab" class="tab-pane">
                             <div class="col-md-12 my-3">
                                 <h5>Student Information</h5>
-                                <form action="{{route('students.store')}}" method="POST" enctype="multipart/form-data" class="">
+                                @if ($user->lead["converted"])
+                                    
+                                
+                                <form action="/students/{{$student->id}}" method="POST" class="">
                     
                                     @csrf
-                                    @method("POST")
+                                    @method("PUT")
                     
                                     {{-- old('firstname')  သည် refresh ဖြစ်ပြီး data reject ဖြစ်၍ ပြန်လာပါက မူလပေးခဲ့သောစာသားကို မပြောက်ဘဲ invalit ဖြစ်နေသော data input box တစ်ခုတည်းသာ blank ဖြစ်ပြီး အရင် ထည့်ခဲ့သော data ကိူ ပြန်ဖော်ပြပေးနေမည် --}}
                                     <div class="row">
                                         <div class="col-md-3 col-sm-12 form-group mb-1">
+                                            <label for="regnumber">Reg Number <span class="text-danger">*</span></label>
+                                            <input type="text" name="regnumber" id="regnumber" class="form-control rounded-0" readonly placeholder="First Name" value="{{$student->regnumber}}">
+                                        </div>
+                                        <div class="col-md-3 col-sm-12 form-group mb-1">
                                             <label for="firstname">First name <span class="text-danger">*</span></label>
-                                            <input type="text" name="firstname" id="firstname" class="form-control rounded-0" placeholder="First Name" value="{{old('firstname')}}">
+                                            <input type="text" name="firstname" id="firstname" class="form-control rounded-0" placeholder="First Name" value="{{$student->firstname}}">
                                         </div>
                                         <div class="col-md-3 col-sm-12 form-group mb-2">
                                             <label for="lastname">Last Name</label>
-                                            <input type="text" name="lastname" id="lastname" class="form-control  rounded-0" placeholder="last name" value="{{old('lastname')}}">
+                                            <input type="text" name="lastname" id="lastname" class="form-control  rounded-0" placeholder="last name" value="{{$student->lastname}}">
                                         </div>
-                                        {{-- <div class="col-md-4 col-sm-12 form-group mb-3">
-                                            <label for="regnumber">Register Number</label>
-                                            <input type="text" name="regnumber" id="regnumber" class="form-control  rounded-0" placeholder="reg number" value="{{old('regnumber')}}">
-                                        </div> --}}
-                    
-                                        <div id="multiphone" class="col-md-3 col-sm-12 form-group mb-2 create_page">
-                                            <label for="phone">Phone</label>
-                                            <div class="input-group phonelimit">
-                                                <input type="text" name="phone[]" id="phone" class="form-control  rounded-0 phone" placeholder="Phone" value="{{old('phone')}}">
-                                                <span id="addphone" class="input-group-text" style="font-size: 10px;cursor: pointer"><i class="fas fa-plus"></i></span>
-                                            </div>
-                    
+                                        <div class="col-md-3 col-sm-12 form-group mb-2">
+                                            <label for="email">Email</label>
+                                            <input type="email" name="email" id="email" readonly class="form-control  rounded-0" placeholder="email" value="{{$lead->email}}">
                                         </div>
+                                        <div class="col-md-3 col-sm-12 form-group mb-2">
+                                            <label for="nationalid">National ID</label>
+                                            <input type="text" name="nationalid" id="nationalid" class="form-control  rounded-0" placeholder="NRC Number" value="{{$student->nationalid}}">
+                                        </div>
+                                        <div class="col-md-3 col-sm-12 form-group mb-2">
+                                            <label for="address">Address</label>
+                                            <input type="text" name="address" id="address" class="form-control  rounded-0" placeholder="Address" value="{{$student->address}}">
+                                        </div>
+                                        <div class="col-md-3 col-sm-12 form-group mb-2">
+                                            <label for="age">Age</label>
+                                            <input type="number" name="age" id="age" class="form-control  rounded-0" placeholder="Age" value="{{$lead->age}}">
+                                        </div>
+
+                                        <div class="col-md-3 col-sm-12 form-group mb-2">
+                                            <label for="dob">Date of Birth</label>
+                                            <input type="date" name="dob" id="dob" class="form-control  rounded-0" placeholder="DOB" value="{{$student->dob}}">
+                                        </div>
+                                        <div class="col-md-3 col-sm-12 form-group mb-1">
+                                            <label for="gender_id">Gender</label>
+                                            <select name="gender_id" id="gender_id" class="form-control rounded-0 gender_id">
+                    
+                                                @foreach($genders as $gender)
+                    {{--                                <option value="{{$gender->id}}" {{$gender['id'] == $lead->gender->id ? "selected" : ""}}>{{$gender['name']}}</option>--}}
+                                                    <option value="{{$gender->id}}" {{$gender['id'] == old('gender_id',$student->gender_id) ? "selected" : ""}}>{{$gender['name']}}</option>
+                                                @endforeach
+                    
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 col-sm-12 form-group mb-1">
+                                            <label for="religion_id">Religion</label>
+                                            <select name="religion_id" id="religion_id" class="form-control rounded-0 religion_id">
+                                                <option selected disabled>Choose a Religion</option>
+                                                @foreach($religions as $religion)
+                                                    <option value="{{$religion->id}}" {{$religion["id"]== $student->religion_id ? "selected" : ""}}>{{$religion['name']}}</option>
+                                                @endforeach
+                                                
+                    
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 col-sm-12 form-group mb-1">
+                                            <label for="country_id">Country</label>
+                                            <select name="country_id" id="country_id" class="form-control rounded-0 country_id">
+                                                <option selected disabled>Choose a Gender</option>
+                                                @foreach($countries as $country)
+                                                <option value="{{$country->id}}" {{$country["id"]== $student->country_id ? "selected" : ""}}>{{$country['name']}}</option>
+                                            @endforeach
+                    
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3 col-sm-12 form-group mb-1">
+                                            <label for="city_id">City</label>
+                                            <select name="city_id" id="city_id" class="form-control rounded-0 city_id">
+                                                <option selected disabled>Choose a City</option>
+                                                @foreach($cities as $city)
+                                                    <option value="{{$city->id}}" {{$city['id']== $student->city_id ? "selected" : "hidden"}}>{{$city['name']}}</option>
+                                                @endforeach
+                    
+                                            </select>
+                                        </div>
+                                        
+                
                                         <div class="form-group mb-4 col-md-12 col-sm-12">
                                             <label for="remark">Remark</label>
-                                            <textarea name="remark" id="remark" class="form-control rounded-0" placeholder="Remark"></textarea>
+                                            <textarea name="remark" id="remark" class="form-control rounded-0" placeholder="Remark">{{$student->remark}}</textarea>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="d-flex justify-content-end">
@@ -497,6 +540,7 @@
                     
                                     </div>
                                 </form>
+                                @endif
                             </div>
                         </div>
                         <div id="signtab" class="tab-pane">

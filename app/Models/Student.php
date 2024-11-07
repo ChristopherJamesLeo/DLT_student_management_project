@@ -32,7 +32,8 @@ class Student extends Model
         "nationalid",
         "remark",
         "status_id",
-        "user_id"
+        "user_id",
+        "profile_score"
 
     ];
 
@@ -123,6 +124,119 @@ class Student extends Model
     public function studentphones()
     {
         return $this -> hasMany(StudentPhone::class);
+    }
+
+    public function calculateProfileScore(){
+        $score = 0 ;
+
+        // "regnumber",
+        // "image",
+        // "firstname",
+        // "lastname",
+        // "slug",
+        // "dob",
+        // "gender_id",
+        // "age",
+        // "email",
+        // "country_id",
+        // "city_id",
+        // "region_id",
+        // "township_id",
+        // "address",
+        // "religion_id",
+        // "nationalid",
+        // "remark",
+        // "status_id",
+        // "user_id",
+        // "profile_score"
+
+        // profile pricture uploaded or not
+        if($this -> hasprofilepicture()){
+            $score += 10;
+        }
+        // firstname is filled or not 
+        if(!empty($this->firstname)){
+            $score += 10;
+        }
+
+        if(!empty($this->lastname)){
+            $score += 10;
+        }
+
+
+        if(!empty($this->dob)){
+            $score += 10;
+        }
+
+
+        if(!empty($this->gender_id)){
+            $score += 10;
+        }
+
+        if(!empty($this->age)){
+            $score += 10;
+        }
+
+        if(!empty($this->email)){
+            $score += 10;
+        }
+
+        if(!empty($this->country_id)){
+            $score += 10;
+        }
+
+        if(!empty($this->city_id)){
+            $score += 10;
+        }
+
+        if(!empty($this->region_id)){
+            $score += 10;
+        }
+
+        if(!empty($this->township_id)){
+            $score += 10;
+        }
+
+                
+        if(!empty($this->address)){
+            $score += 10;
+        }
+                        
+        if(!empty($this->religion_id)){
+            $score += 10;
+        }
+
+        if(!empty($this->nationalid)){
+            $score += 10;
+        }
+
+        $phonescore = $this -> studentphones()->count();
+
+        if($phonescore > 0) {
+            $phonescore = $phonescore * 10 ;
+        }
+
+        $score = $this -> convertScoreToPercentage($score + $phonescore );
+
+        $this -> profile_score = $score;
+
+        $this -> save();
+
+        // 140 + 30 ( phone ) = 170 
+
+
+    }
+
+    public function hasprofilepicture(){
+        return !empty($this->image);
+    }
+
+    public function convertScoreToPercentage($score){
+        $maxscore = 170;
+
+        $percentage = ($score/$maxscore) * 100;
+
+        return $percentage;
     }
 
 }

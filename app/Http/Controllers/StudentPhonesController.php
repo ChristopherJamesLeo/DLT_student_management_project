@@ -11,6 +11,13 @@ class StudentPhonesController extends Controller
         $studentphone = StudentPhone::find($id);
 
         $studentphone->delete();
+
+        $student = $studentphone -> student; // method ကိုေခါ်သော်လည်း () မထည့်ရပေ
+        
+        if($student){
+            $student -> calculateProfileScore();
+        }
+
         session()->flash('delete', 'Student phone deleted successfully');
         return redirect()->back();
     }

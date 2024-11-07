@@ -127,58 +127,73 @@ class StudentsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $this -> validate($request,[
-            "regnumber" => "required|unique:students,regnumber,".$id,  // update တွင် unique ဖြစ်ရမည်ဆိုသောကြောင့် အလုပ်မလုပ်သော်ည်း $id တွင်တော့ unique မဖြစ်လဲရသည် မူလ id ဝင်လာပါက update ပြုလုပ်ခွင့်ပြုမည်ဖြစသ်ည် ဟုဆိုလိုသည် (table column နောက်တွက် (comer ထားကိုထားပေးရမည် ))
-            "firstname" => "required",
-            "lastname" => "required",
-            "remark" => "max:1000" // စာလံးု size ၁၀၀၀ရှိ ရမည်
-        ]);
+        // commented due to error
+        // $this -> validate($request,[
+        //     "regnumber" => "required|unique:students,regnumber,".$id,  // update တွင် unique ဖြစ်ရမည်ဆိုသောကြောင့် အလုပ်မလုပ်သော်ည်း $id တွင်တော့ unique မဖြစ်လဲရသည် မူလ id ဝင်လာပါက update ပြုလုပ်ခွင့်ပြုမည်ဖြစသ်ည် ဟုဆိုလိုသည် (table column နောက်တွက် (comer ထားကိုထားပေးရမည် ))
+        //     "firstname" => "required",
+        //     "lastname" => "required",
+        //     "remark" => "max:1000" // စာလံးု size ၁၀၀၀ရှိ ရမည်
+        // ]);
 
+        // dd($request -> all());
 
         $user = Auth::user(); // log in ဝင်ထား‌သောကောင်၏ data ရယူရန်
         $user_id = $user["id"]; // array သုံးလဲရသည်
         $student = Student::findOrFail($id);
 
-
-        $student -> regnumber = $request["regnumber"];
+        // dd($request->all());
+        // $student -> regnumber = $request["regnumber"];
         $student -> firstname = $request["firstname"];
         $student -> lastname = $request["lastname"];
         $student -> slug = Str::slug($request["firstname"]);  // Str ထဲရှီ slug ဟူသော metho dထဲသို့ firstname အား ပေးမည် ၄င်းသည် route name ဖြစ်သွ းမည်ဖြစ်သည်
-        $student -> remark = $request["remark"];
+        $student -> gender_id = $request["gender_id"];
+        $student -> address = $request["address"];
+        $student -> dob = $request["dob"];
+        $student -> age = $request["age"];
+        $student -> email = $request["email"];
+        $student -> country_id = $request["country_id"];
+        $student -> city_id = $request["city_id"];
+        $student -> religion_id = $request["religion_id"];
+        $student -> nationalid = $request["nationalid"];
         $student -> user_id = $user_id;  // user ၏ data ထဲမှ id အား ခေါ်ရမည်
 
         // echo $request["regnumber"] . $request["firstname"] .$request["lastname"]  .Str::slug($request["firstname"]).$request["remark"].$user_id;
 
         $student -> save();
 
+
+
         //        Create new student phone
 
 
-        if(isset($request["newphone"])){
+//         if(isset($request["newphone"])){
 
-//            method 2
-            foreach($request["newphone"] as $newphone){
-                $student->studentphones()->create([
-                    "phone" => $newphone,
-                    "student_id" => $student -> id,
-                ]);
-            }
+// //            method 2
+//             foreach($request["newphone"] as $newphone){
+//                 $student->studentphones()->create([
+//                     "phone" => $newphone,
+//                     "student_id" => $student -> id,
+//                 ]);
+//             }
 
-            foreach($request["phone"] as $key => $phone){
-                StudentPhone::findOrFail($request['studentphoneid'][$key])->update([
-                    "phone" => $phone,
-                ]);
-            }
+//             foreach($request["phone"] as $key => $phone){
+//                 StudentPhone::findOrFail($request['studentphoneid'][$key])->update([
+//                     "phone" => $phone,
+//                 ]);
+//             }
 
-//            extend new phone and update existing phone in same time
-        }else {
-            // update existing phone
-            foreach($request["phone"] as $key => $phone){
-                StudentPhone::findOrFail($request['studentphoneid'][$key])->update([
-                    "phone" => $phone,
-                ]);
-            }
-        }
+// //            extend new phone and update existing phone in same time
+//         }else {
+//             // update existing phone
+//             foreach($request["phone"] as $key => $phone){
+//                 StudentPhone::findOrFail($request['studentphoneid'][$key])->update([
+//                     "phone" => $phone,
+//                 ]);
+//             }
+//         }
+
+        // Recalculate profile score update 
+        $student -> calculateProfileScore();
 
 
 

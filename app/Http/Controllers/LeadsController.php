@@ -110,7 +110,7 @@ class LeadsController extends Controller
 //            "city_id" => "required|exists,cities.id",
         ]);
 
-
+        
         $user = Auth::user(); // log in ဝင်ထား‌သောကောင်၏ data ရယူရန်
         $user_id = $user["id"]; // array သုံးလဲရသည်
         $lead = Lead::findOrFail($id);

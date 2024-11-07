@@ -99,4 +99,8 @@ class User extends Authenticatable implements MustVerifyEmail   // user email ve
         return $this -> hasOne(Lead::class);
     }
 
+    public function student(){
+        return $this -> hasOne(Student::class);
+    }
+
 }

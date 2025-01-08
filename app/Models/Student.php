@@ -127,6 +127,25 @@ class Student extends Model
     }
 
     public function calculateProfileScore(){
+
+        $fields = [
+        "firstname",
+        "lastname",
+        "slug",
+        "dob",
+        "gender_id",
+        "age",
+        "email",
+        "country_id",
+        "city_id",
+        "region_id",
+        "township_id",
+        "address",
+        "religion_id",
+        "nationalid"
+        ];
+
+
         $score = 0 ;
 
         // "regnumber",
@@ -154,61 +173,69 @@ class Student extends Model
         if($this -> hasprofilepicture()){
             $score += 10;
         }
+
+        foreach($fields as $field){
+            if(!empty($this->$field)){
+                $score += 10;
+            }
+        }
+
+
         // firstname is filled or not 
-        if(!empty($this->firstname)){
-            $score += 10;
-        }
+        // if(!empty($this->firstname)){
+        //     $score += 10;
+        // }
 
-        if(!empty($this->lastname)){
-            $score += 10;
-        }
-
-
-        if(!empty($this->dob)){
-            $score += 10;
-        }
+        // if(!empty($this->lastname)){
+        //     $score += 10;
+        // }
 
 
-        if(!empty($this->gender_id)){
-            $score += 10;
-        }
+        // if(!empty($this->dob)){
+        //     $score += 10;
+        // }
 
-        if(!empty($this->age)){
-            $score += 10;
-        }
 
-        if(!empty($this->email)){
-            $score += 10;
-        }
+        // if(!empty($this->gender_id)){
+        //     $score += 10;
+        // }
 
-        if(!empty($this->country_id)){
-            $score += 10;
-        }
+        // if(!empty($this->age)){
+        //     $score += 10;
+        // }
 
-        if(!empty($this->city_id)){
-            $score += 10;
-        }
+        // if(!empty($this->email)){
+        //     $score += 10;
+        // }
 
-        if(!empty($this->region_id)){
-            $score += 10;
-        }
+        // if(!empty($this->country_id)){
+        //     $score += 10;
+        // }
 
-        if(!empty($this->township_id)){
-            $score += 10;
-        }
+        // if(!empty($this->city_id)){
+        //     $score += 10;
+        // }
+
+        // if(!empty($this->region_id)){
+        //     $score += 10;
+        // }
+
+        // if(!empty($this->township_id)){
+        //     $score += 10;
+        // }
 
                 
-        if(!empty($this->address)){
-            $score += 10;
-        }
+        // if(!empty($this->address)){
+        //     $score += 10;
+        // }
                         
-        if(!empty($this->religion_id)){
-            $score += 10;
-        }
+        // if(!empty($this->religion_id)){
+        //     $score += 10;
+        // }
 
-        if(!empty($this->nationalid)){
-            $score += 10;
-        }
+        // if(!empty($this->nationalid)){
+        //     $score += 10;
+        // }
 
         $phonescore = $this -> studentphones()->count();
 
@@ -216,13 +243,15 @@ class Student extends Model
             $phonescore = $phonescore * 10 ;
         }
 
-        $score = $this -> convertScoreToPercentage($score + $phonescore );
+        $score = $this -> convertScoreToPercentage( $score + $phonescore );
 
         $this -> profile_score = $score;
 
         $this -> save();
 
         // 140 + 30 ( phone ) = 170 
+
+        return $score;
 
 
     }
@@ -237,6 +266,10 @@ class Student extends Model
         $percentage = ($score/$maxscore) * 100;
 
         return $percentage;
+    }
+
+    public function isProfileLock(){
+        return $this -> calculateProfileScore() === 100;
     }
 
 }

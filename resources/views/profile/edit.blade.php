@@ -425,7 +425,7 @@
                                         </div>
                     
                                         @if($lead->converted)
-                                            <small>This lead have already been converted to a student. Editiong is diabled</small>
+                                            <small class="text-danger">This lead have already been converted to a student. Editiong is diabled</small>
                                         @endif
                     
                                         <div class="col-md-12">
@@ -526,18 +526,22 @@
                                             </select>
                                         </div>
                                         
-                
+                                        @if($user -> student -> isProfileLock())
+                                            <small class="text-danger">Profile is locked due to 100% score</small>
+                                        @endif
                                         <div class="form-group mb-4 col-md-12 col-sm-12">
                                             <label for="remark">Remark</label>
                                             <textarea name="remark" id="remark" class="form-control rounded-0" placeholder="Remark">{{$student->remark}}</textarea>
                                         </div>
+
+                                        @if($user -> student -> isProfileLock())
                                         <div class="col-md-12">
                                             <div class="d-flex justify-content-end">
                                                 <a href="{{route('students.index')}}" class="btn btn-secondary btn-sm rounded-0">Cancel</a>
                                                 <button type="submit" class="btn btn-primary btn-sm rounded-0 ms-3">Submit</button>
                                             </div>
                                         </div>
-                    
+                                        @endif
                                     </div>
                                 </form>
                                 @endif

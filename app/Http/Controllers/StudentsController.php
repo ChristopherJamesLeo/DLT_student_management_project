@@ -141,6 +141,11 @@ class StudentsController extends Controller
         $user_id = $user["id"]; // array သုံးလဲရသည်
         $student = Student::findOrFail($id);
 
+        // check if profile lock 
+        if($student -> isProfileLock()){
+            return redirect()->back()->with("error","Profile Locked, please contact to admin");
+        }
+
         // dd($request->all());
         // $student -> regnumber = $request["regnumber"];
         $student -> firstname = $request["firstname"];

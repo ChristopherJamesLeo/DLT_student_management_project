@@ -5,22 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Role extends Model
+class Permission extends Model
 {
     use HasFactory;
 
-    protected $table = "roles";
+    protected $table = "permissions";
     protected $primaryKey = "id";
     protected $fillable = [
-        "image",
         "name",
         "slug",
         "status_id",
         "user_id",
     ];
 
-    public function permissions(){
-        return $this -> belongsToMany(Permission::class,"permission_roles"); 
+    public function roles(){
+        return $this -> belongsToMany(Role::class,"permission_roles"); 
     }
 
     public function user(){
@@ -31,3 +30,8 @@ class Role extends Model
         return $this -> belongsTo(Status::class); 
     }
 }
+
+
+// php artisan make:model Permission -m 
+// php artisan make:model RoleUser - m 
+// php artisan migrate 

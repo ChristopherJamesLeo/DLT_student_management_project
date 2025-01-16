@@ -8,7 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable implements MustVerifyEmail   // user email verify လုပ်ရန်
+// class User extends Authenticatable implements MustVerifyEmail   // user email verify လုပ်ရန်
+class User extends Authenticatable    // user email verify လုပ်ရန်
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -104,9 +105,8 @@ class User extends Authenticatable implements MustVerifyEmail   // user email ve
     }
 
     // role နှင့် permission ကို တွဲပြီးသုံးပြီးသားဖြစ်သည်
-    public function roles(){
-        return $this -> belongsToMany(Role::class);  
-        // return $this -> belongsToMany(Role::class,"role_users");   same as below
+    public function roles(){ 
+        return $this -> belongsToMany(Role::class,"role_users");  // same as below
     }
 
     public function permissions(){
@@ -114,12 +114,16 @@ class User extends Authenticatable implements MustVerifyEmail   // user email ve
     }
 
     public function hasRole($rolename){
-        return $this -> roles() -> where("name",$rolename)->exists();  // role ထဲတွင် name ရှိသလား စစ်ခြင်းဖြစ်သည်
+        return $this -> roles() -> whereIn("name",$rolename)->exists();  // role ထဲတွင် name ရှိသလား စစ်ခြင်းဖြစ်သည်
     }
 
     public function hasPermission($permissionname){
         return $this -> roles() -> whereHas("permissions",function($query) use ($permissionname) {  // permission ထဲတွင် callback function ဖြင့် query အား return လုပ်ပေးရမယ် ၄င်းသည် hasPermission funအာ loop ပတ်ပြိး ရလာသော parameter ကို permissionname အား ထည့်ပေးပြီး where ဖြင့် စစ်ကာ ရလာသော value ကို exit ဖြင့် return true false ပြန်ပေးမည်
             $query -> where("name",$permissionname);
         }) -> exists();  // permission ထဲတွင် name ရှိသလား စစ်ခြင်းဖြစ်သည်
+    }
+
+    public function isOwner($model){
+        return $this -> id == $model -> user_id;
     }
 }

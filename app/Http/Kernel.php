@@ -84,5 +84,9 @@ class Kernel extends HttpKernel
         "check.registration.step" => \App\Http\Middleware\CheckRegisterationStepMid::class,
 
         "autologout" =>  \App\Http\Middleware\AutoLogoutMid::class,  // web route ကို restrist လုပ်နိုင်သည်
+
+        "role" => \App\Http\Middleware\CheckRoleMid::class,
+        "permission" => \App\Http\Middleware\CheckPermissionMid::class,
+        
     ];
 }

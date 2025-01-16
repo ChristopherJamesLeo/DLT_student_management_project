@@ -99,7 +99,7 @@ Route::post("/register/step3",[RegisteredUserController::class,'storestep3'])->n
 // group လုပ်ပြီးလဲ middleware ၏ permission ပေးမှသာ ဝင်နိုင်မည်
 
 //Route::middleware('auth')->group(function () {  // auth တစ်ခုဘဲစစ်ပြီး page ထဲဝင်မည်
-Route::middleware(["auth","autologout","verified","role:Admin"])->group(function () {  // email အ;ာ verify လုပ်ပြီးမှ page ထဲဝင်ခိုင်းမည် // custom ၇ေးထားသော autologout အား web ထဲ တွင် invoke လုပ်ရမည် 
+Route::middleware(["auth","autologout","verified"])->group(function () {  // email အ;ာ verify လုပ်ပြီးမှ page ထဲဝင်ခိုင်းမည် // custom ၇ေးထားသော autologout အား web ထဲ တွင် invoke လုပ်ရမည် 
     // role:Admin တွင် Admin သည် Db ထဲရှိ name အတိုင်းထည့်ပေးရမည်
     Route::get("dashboards",[DashboardsController::class,"index"])->name("dashboard.index");
 
@@ -111,7 +111,9 @@ Route::middleware(["auth","autologout","verified","role:Admin"])->group(function
     // log in ဝင်ပြီးမှ အသုံးပြုလို့ရစေချင်သောကြောင့် middleware  ထဲမှာ‌ရေးခြင်းဖြစ်သည်
     Route::resource("statuses",StatusesController::class);
 
-    Route::resource("announcements",AnnouncementsController::class);
+    Route::middleware(["role:Admin,Teacher"])->group(function(){
+        Route::resource("announcements",AnnouncementsController::class);
+    });
 
     Route::resource("days",DaysController::class);
     Route::get("daystatus",[DaysController::class,"daystatus"]);
@@ -273,7 +275,9 @@ Route::middleware(['auth','validate.subscriptions'])->group(function(){
 });
 
 
-
+Route::middleware(["auth","role:Admin"])->group(function(){
+    
+});
 
 
 

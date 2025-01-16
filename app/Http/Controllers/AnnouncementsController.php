@@ -24,6 +24,8 @@ class AnnouncementsController extends Controller
 
     public function index()
     {
+        $this -> authorize("view",Announcement::class);  
+
         $announcements = Announcement::all();
 
         return view("announcements.index",compact("announcements"));
@@ -32,6 +34,7 @@ class AnnouncementsController extends Controller
 
     public function create()
     {
+        $this -> authorize("create",Announcement::class);  // policy ထဲမှာ create အား ဖန်တီးပေးရမယ် ဖြစ်ပြီး ၄င်း create အား authorize ထဲတွင် string type ဖြင့်ထည့်ပေးရမယ် second parameter ကို model အား ထည့်ပေးရမယ် 
         
         $posts = \DB::table("posts")->where("attshow",3)->orderby("title","asc")->get()->pluck("title","id"); 
 
@@ -43,6 +46,7 @@ class AnnouncementsController extends Controller
     public function store(Request $request)
     {
         // return $request;
+        
         $this -> validate($request,[
 
             "image" => "image|mimes:jpg,jpeg,png|max:2048",
@@ -56,7 +60,12 @@ class AnnouncementsController extends Controller
 
         $user_id = $user->id;
 
+        
+
         $announcement = new Announcement();
+        
+        $this -> authorize("create",$announcement);  
+
         $announcement -> title = $request["title"];
         $announcement -> post_id = $request["post_id"];  
         $announcement -> content = $request["content"];
@@ -98,6 +107,8 @@ class AnnouncementsController extends Controller
 
         // dd($post -> checkenroll(1)); check 
 
+        $this -> authorize("view",$announcement);  
+
         $user_id = Auth::user()->id;
 
 
@@ -123,6 +134,8 @@ class AnnouncementsController extends Controller
 
         $announcement = Announcement::findOrFail($id);
 
+        $this -> authorize("edit",$announcement); 
+
         $posts = \DB::table("posts")->where("attshow",3)->orderby("title","asc")->get()->pluck("title","id"); 
 
         return view("announcements.edit")->with("announcement",$announcement)->with("posts",$posts);
@@ -132,6 +145,8 @@ class AnnouncementsController extends Controller
 
     public function update(Request $request, string $id)
     {
+        
+
         $this -> validate($request,[
 
             "image" => "image|mimes:jpg,jpeg,png",
@@ -148,6 +163,9 @@ class AnnouncementsController extends Controller
         $user_id = $user->id;
 
         $announcement = Announcement::findOrFail($id);
+
+        $this -> authorize("update",$announcement);  
+
         $announcement -> title = $request["title"];
         $announcement -> content = $request["content"]; 
         $announcement -> post_id = $request["post_id"];  
@@ -187,6 +205,8 @@ class AnnouncementsController extends Controller
 
     public function destroy(string $id)
     {
+        $this -> authorize("delete",Announcement::class);  
+
         $announcement = Announcement::findOrFail($id);
 
          // Remove Old Image

@@ -25,7 +25,7 @@ class RolesController extends Controller
             if($statusid = request("filterstatus_id")){
                 $query -> where("status_id",$statusid);
             }
-        })->paginate(3);
+        })->paginate(10);
 
         $filterstatuses = Status::whereIn("id",[3,4])->get()->pluck("name","id")->prepend("Choose Status..." , " "); // dropdown ဖြင့် စစ်မည်
 

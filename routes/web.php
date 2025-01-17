@@ -60,7 +60,9 @@ use App\Http\Controllers\StudentPhonesController;
 
 use App\Http\Controllers\LeadsController;
 
+use App\Http\Controllers\RoleUserController;
 
+use App\Http\Controllers\PermissionRolesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -134,6 +136,8 @@ Route::middleware(["auth","autologout","verified"])->group(function () {  // ema
     Route::post("/students/quicksearch",[StudentsController::class,"quicksearch"])->name("students.quicksearch");
 
     Route::resource("roles",RolesController::class);
+    Route::resource("roleusers",RoleUserController::class);
+    Route::resource("permissionroles",PermissionRolesController::class);
     Route::get("rolestatus",[RolesController::class,"rolestatus"]);
 
 

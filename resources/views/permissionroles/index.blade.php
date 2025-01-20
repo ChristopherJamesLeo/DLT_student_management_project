@@ -1,6 +1,7 @@
 @extends("layouts.adminindex")
 @section("css")
     {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css"> --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endsection
 @section("caption","Role List")
 @section("content")
@@ -16,7 +17,7 @@
                    
                     <div class="col-md-4 col-sm-6 mb-2">
                         <div class="form-group">
-                            <select name="role_id" id="role_id" class="form-control rounded-0">
+                            <select name="role_id" id="role_id" class="form-control rounded-0 ">
                                 <option value="" selected disabled>Choose Role...</option>
                                 @foreach($roles as $role)
                                     <option value="{{$role->id}}">{{$role -> name}}</option>
@@ -26,8 +27,8 @@
                     </div>
                     <div class="col-md-4 col-sm-6 mb-2">
                         <div class="form-group">
-                            <select name="permission_id" id="permission_id" class="form-control rounded-0">
-                                <option value="" selected disabled>Choose Permission...</option>
+                            <select name="permission_id[]" id="permission_id" class="form-control rounded-0 select2" multiple="multiple">
+                                <option value="" disabled>Choose Multiple Permission...</option>
                                 @foreach($permissions as $permission)
                                     <option value="{{$permission->id}}">{{$permission -> name}}</option>
                                 @endforeach
@@ -122,8 +123,8 @@
                                 </div>
                                 <div class="col-md-12 col-sm-6 mb-2">
                                     <div class="form-group">
-                                        <select name="permission_id" id="edit_permission_id" class="form-control rounded-0">
-                                            <option value="" selected disabled>Choose Permission...</option>
+                                        <select name="permission_id" id="edit_permission_id" class="form-control rounded-0" >
+                                            <option value="" selected disabled>Choose Multiple Permission...</option>
                                             @foreach($permissions as $permission)
                                                 <option value="{{$permission->id}}">{{$permission -> name}}</option>
                                             @endforeach
@@ -155,7 +156,12 @@
 
 @endsection
 
+
+
 @section("scripts")
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
 {{-- datatable css1 js1 --}}
 {{-- <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script> --}}
 
@@ -163,6 +169,8 @@
 
         console.log("hello");
         $(document).ready(function(){
+
+            $(".select2").select2();
             
             $(".delete-btns").click(function(){
                
@@ -195,6 +203,8 @@
             })
             
             // end edit form
+
+            
 
         })
     </script>

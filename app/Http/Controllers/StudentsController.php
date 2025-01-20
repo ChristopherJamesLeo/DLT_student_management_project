@@ -157,6 +157,7 @@ class StudentsController extends Controller
         $student -> age = $request["age"];
         $student -> email = $request["email"];
         $student -> country_id = $request["country_id"];
+        $student -> township_id = $request["township_id"];
         $student -> city_id = $request["city_id"];
         $student -> religion_id = $request["religion_id"];
         $student -> nationalid = $request["nationalid"];

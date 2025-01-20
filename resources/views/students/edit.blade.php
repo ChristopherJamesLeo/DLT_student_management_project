@@ -1,4 +1,4 @@
-@extends("layouts.adminindex")
+ @extends("layouts.adminindex")
 
 @section("caption","Edit Student")
 @section("content")

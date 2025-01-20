@@ -19,15 +19,17 @@ class PermissionRolesController extends Controller
     public function store(Request $request){
 
         $this->validate($request,[
-            "role_id" => "required",
-            "permission_id" => "required",
+            "role_id" => "required|exists:roles,id",
+            "permission_id" => "required|array",
+            "permission_id.*" => "exists:permissions,id", // array ဖြစ်နေပါက .* ကိုသုံးပြိ ထပ်စစ်ပေးရမည် 
         ]);
 
 
-        $permissionrole = new PermissionRole();
-        $permissionrole->role_id = $request->role_id;
-        $permissionrole->permission_id = $request->permission_id;
-        $permissionrole->save();
+        $role = Role::findOrFail($request["role_id"]);
+
+        $role -> permissions() -> sync($request["permission_id"]); // sync ကိုသုံးပြီး permission ကို နဂိုရှိနေပြီးသားဆို ထပ်မထည့်ဘူး မရှိရင် ထပ်ထည့်မည် 
+
+
 
         return redirect()->back();
     }
@@ -42,6 +44,7 @@ class PermissionRolesController extends Controller
         $permissionrole->role_id = $request->role_id;
         $permissionrole->permission_id = $request->permission_id;
         $permissionrole->save();
+        
         return redirect()->back();
     }
 

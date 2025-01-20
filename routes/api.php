@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\WarehousesController;
 use App\Http\Controllers\Api\CitiesController;
+use App\Http\Controllers\Api\TownshipController;
 use App\Http\Controllers\Api\StatusesController;
 
 // api route ကို ခေါ်ပါက http://127.0.0.1:8000/api/warehouses ဟုပြန်ခေါ်ပေးရမည်
@@ -35,5 +36,11 @@ Route::apiResource("cities", CitiesController::class,["as"=>"api"]);
 Route::get("/citiesstatus",[CitiesController::class,"citiesstatus"]);
 Route::get("/filter/cities/{filter}",[CitiesController::class,"filterbycountryid"])->name("cities.filterbycountryid"); // filter by dynamic select country id
 
+Route::apiResource("townships",TownshipController::class,["as" => "api"]);
+Route::get("/townshipsstatus",[TownshipController::class,"townshipsstatus"]);
+Route::get("/filter/townships/{filter}",[TownshipController::class,"filterbycityid"])->name("townships.filterbycityid");
+
+
 Route::apiResource("statuses",StatusesController::class,['as'=>'api']);
 Route::get("/statusessearch", [StatusesController::class,"search"]);
+

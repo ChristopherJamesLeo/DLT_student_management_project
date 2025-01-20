@@ -20,7 +20,12 @@ class Role extends Model
     ];
 
     public function permissions(){
-        return $this -> belongsToMany(Permission::class,"permission_roles"); 
+        // return $this -> belongsToMany(Permission::class,"permission_roles"); 
+        // method 1 
+        // return $this -> belongsToMany(Permission::class,"permission_roles")->withTimestamps();   // timestamps ကိုသုံးပြီး created_at နှင့် updated_at ကို တစ်ပါတည် ထည့်နိုင်မည် 
+        // method 2 
+        return $this -> belongsToMany(Permission::class,"permission_roles","role_id","permission_id")->withTimestamps();   // timestamps ကိုသုံးပြီး created_at နှင့် updated_at ကို တစ်ပါတည် ထည့်နိုင်မည် 
+
     }
 
     public function user(){

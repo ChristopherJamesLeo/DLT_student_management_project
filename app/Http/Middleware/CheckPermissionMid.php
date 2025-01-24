@@ -18,6 +18,7 @@ class CheckPermissionMid
         if(!Auth::check() || !Auth::user() -> hasPermission($permissionname)){
             // abort(403,"Unauthorized");
             return redirect()->back()->with("error","Unauthorized Permission Access");
+            // return redirect()->route('/dashboards')->with("error","Unauthorized Permission Access");
         }
         return $next($request);
     }

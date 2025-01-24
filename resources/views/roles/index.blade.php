@@ -55,7 +55,7 @@
                         {{-- <td>{{++$idx}}</td> --}}
                         <td>{{$idx+ $roles->firstItem()}}</td>
                         <td>
-                            <a href="{{route('roles.show',$role->id)}}">
+                            <a href="{{route('roles.show',$role->slug)}}">
                                 <img src="{{asset($role->image)}}" class="rounded-circle" style="width:40px;height:40px" alt="{{$role->image}}">
                             </a>
                             
@@ -76,7 +76,7 @@
                         <td>{{$role->created_at->format('d m Y')}}</td>
                         <td>{{$role->updated_at->format('d M Y')}}</td>
                         <td>
-                            <a href="{{route('roles.edit',$role->id)}}" class="me-3 btn btn-outline-info btn-sm"><i class="fas fa-pen"></i></a>
+                            <a href="{{route('roles.edit',$role->slug)}}" class="me-3 btn btn-outline-info btn-sm"><i class="fas fa-pen"></i></a>
                             
                             <a href="#" class="text-danger me-3 delete-btns" data-idx = "{{$role->$idx}}" ><i class="fas fa-trash"></i></a>
     

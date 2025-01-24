@@ -113,10 +113,9 @@ Route::middleware(["auth","autologout","verified"])->group(function () {  // ema
     // log in ဝင်ပြီးမှ အသုံးပြုလို့ရစေချင်သောကြောင့် middleware  ထဲမှာ‌ရေးခြင်းဖြစ်သည်
     Route::resource("statuses",StatusesController::class);
 
-    Route::middleware(["role:Admin,Teacher"])->group(function(){
-        Route::resource("announcements",AnnouncementsController::class);
-    });
 
+
+    Route::resource("announcements",AnnouncementsController::class);
     Route::resource("days",DaysController::class);
     Route::get("daystatus",[DaysController::class,"daystatus"]);
 
@@ -173,7 +172,25 @@ Route::middleware(["auth","autologout","verified"])->group(function () {  // ema
     Route::post("/generateotps",[OtpsController::class,"generate"]); // post method ကိုverify မလုပ်ပေ
     Route::post("/verifyotps",[OtpsController::class,"verify"]);
 
-    Route::resource("posts",PostsController::class);
+
+    // Route::middleware(["role:Admin,Teacher"])->group(function(){
+    //     Route::resource("posts",PostsController::class);
+    // });
+
+    Route::middleware(["role:Admin,Teacher"])->group(function(){
+        // Route::resource("posts",PostsController::class);
+        // Route::resource("posts",PostsController::class);
+        Route::get("/posts",[PostsController::class,"index"])->name("posts.index");
+        Route::get("/posts/create",[PostsController::class,"create"])->name("posts.create");
+        Route::post("/posts",[PostsController::class,"store"])->name("posts.store");
+        Route::get("/posts/{id}",[PostsController::class,"show"])->name("posts.show");
+        Route::get("/posts/{id}/edit",[PostsController::class,"edit"])->name("posts.edit");
+        Route::put("/posts/{id}",[PostsController::class,"update"])->name("posts.update");
+        Route::delete("/posts/{id}",[PostsController::class,"destroy"])->name("posts.destroy");
+ 
+        
+    });
+
 
     // form မှ submt လုပ်ပေးသောကြောင့် post ကို သံုးသည်
     // post ထဲမှ မည်သည့် post ကို like လုပ်တာလဲ id တောင်းထားမည်

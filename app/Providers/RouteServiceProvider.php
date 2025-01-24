@@ -7,6 +7,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use App\Models\Role;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -35,6 +36,13 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
+        });
+
+        // web တွင် slug သုံးရန် ဒီထဲဝင်ရေးပေးရမည် 
+        // For role slug 
+        Route::bind("role",function($value){
+            return Role::where("id",$value)
+                            ->orWhere("slug",$value)->first(); // id ထဲမှာ ရှိရင် ID ကို return ပြန်မည် or slug ထဲမှာရှိရင်လဲ first ကို return ပြန်ပေးမည် 
         });
 
         

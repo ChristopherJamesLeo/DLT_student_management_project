@@ -24,9 +24,9 @@ class CheckRoleMid
     // }
 
     // MULTIPLE PARAMETER ROLE
-    public function handle(Request $request, Closure $next , ...$rolename): Response
+    public function handle(Request $request, Closure $next , ...$roles): Response
     {
-        if(!Auth::check() || !Auth::user() -> hasRole($rolename)){
+        if(!Auth::check() || !Auth::user() -> hasRole($roles)){
             // abort(403,"Unauthorized");
             return redirect()->back()->with("error","Unauthorized Permission Access");
         }

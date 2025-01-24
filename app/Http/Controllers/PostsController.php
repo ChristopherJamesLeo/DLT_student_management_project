@@ -20,14 +20,19 @@ class PostsController extends Controller
 {
     public function index()
     {
-        $posts = Post::all();
+        $this -> authorize("view",Post::class);
 
+        $posts = Post::all();
+      
         return view("posts.index",compact("posts"));
     }
 
 
     public function create()
     {
+
+        $this -> authorize("create",Post::class);
+
         $attshows = Status::whereIn("id",[3,4])->get(); 
 
         $days = Day::where("status_id",3)->get();
@@ -46,6 +51,7 @@ class PostsController extends Controller
     public function store(Request $request)
     {
         // return $request;
+
         $this -> validate($request,[
 
             "image" => "image|mimes:jpg,jpeg,png|max:2048",
@@ -68,6 +74,9 @@ class PostsController extends Controller
         $user_id = $user->id;
 
         $post = new Post();
+
+        $this -> authorize("create",$post);
+
         $post -> title = $request["title"];
         $post -> slug = Str::slug($request["title"]); 
         $post -> content = $request["content"];  
@@ -142,6 +151,8 @@ class PostsController extends Controller
     {
         $post = Post::findOrFail($id);
 
+        $this -> authorize ("show",$post);
+
         $attshows = Status::whereIn("id",[3,4])->get(); 
 
         $dayables = $post-> days() -> get();
@@ -163,6 +174,8 @@ class PostsController extends Controller
     public function edit(string $id)
     {
         $post = Post::findOrFail($id);
+
+        $this -> authorize("edit",$post);
 
         $attshows = Status::whereIn("id",[3,4])->get(); 
 
@@ -209,6 +222,9 @@ class PostsController extends Controller
         $user_id = $user->id;
 
         $post = Post::findOrFail($id);
+
+        $this -> authorize("edit",$post);
+
         $post -> title = $request["title"];
         $post -> slug = Str::slug($request["title"]); 
         $post -> content = $request["content"];  
@@ -258,6 +274,8 @@ class PostsController extends Controller
     public function destroy(string $id)
     {
         $post = Post::findOrFail($id);
+
+        $this -> authorize("delete",$post);
 
          // Remove Old Image
 

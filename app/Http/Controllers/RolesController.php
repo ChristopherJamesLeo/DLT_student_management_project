@@ -90,17 +90,26 @@ class RolesController extends Controller
     }
 
 
-    public function show(string $id)
+    // public function show(string $id)
+    // {
+    //     $role = Role::findOrFail($id);
+
+    //     return view("roles.show",["role"=>$role]);
+    // }
+
+    // show by slug
+    public function show(Role $role) // role ထဲရှီ column အားလုံးရနေမည် note : route ကို provider ထဲမှ RouteServiceProvider ထဲမှ binding လုပ်ပေးရမည် // provider ထဲရှီ role ည် $role ကို ဆိုလိုသည် 
     {
-        $role = Role::findOrFail($id);
+
 
         return view("roles.show",["role"=>$role]);
     }
 
 
-    public function edit(string $id)
+    public function edit(Role $role)
     {
-        $role = Role::findOrFail($id);
+        // $role = Role::findOrFail($id);  with search ID
+        
         $statuses = Status::whereIn("id",[3,4])->get();
         return view("roles.edit")->with("role",$role)->with("statuses",$statuses);
     }

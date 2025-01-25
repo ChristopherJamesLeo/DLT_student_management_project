@@ -35,6 +35,7 @@
 
                             <li class="nav-item nav-categories">UI Features</li>
 
+                            @if(auth()->user()->hasRole(["Admin","Teacher"]))
                             <li class="nav-item"><a href="javascript:void(0);" class="nav-link text-white p-3 mb-2 sidebarlinks" data-bs-target="#basicui" data-bs-toggle="collapse"><i class="fas fa-file-alt fa-lg me-3"></i>Articles<i class="fas fa-angle-left mores"></i></a>
 
                                 <ul id="basicui" class="collapse ps-2">
@@ -62,7 +63,9 @@
                                 </ul>
 
                             </li>
+                            @endif
 
+                            @if(auth()->user()->hasRole(["Admin","Teacher","Student"]))
                             <li class="nav-item nav-categories"><a href="{{route('pointtransfers.index')}}" class="nav-link text-white sidebarlinks"><i class="fas fa-exchange-alt fa-md me-4"></i>Transfer</a></li>
                             <li class="nav-item"><a href="javascript:void(0);" class="nav-link text-white p-3 mb-2 sidebarlinks" data-bs-target="#shopping" data-bs-toggle="collapse"><i class="fas fa-share-alt-square fa-lg me-3"></i>Shopping<i class="fas fa-angle-left mores"></i></a>
 
@@ -86,44 +89,51 @@
 
                             </li>
 
-                            <li class="nav-item nav-categories">Manage</li>
+                            @endif
 
-
-
-
-
+                            
 
                             <!-- end home work -->
+                           
+
+                            
+
+                            @if(auth()->user()->hasRole(["Admin"]))
+                            <li class="nav-item nav-categories">Date Representation</li>
+
                             <li class="nav-item"><a href="javascript:void(0);" class="nav-link text-white p-3 mb-2 sidebarlinks" data-bs-target="#addon" data-bs-toggle="collapse"><i class="fas fa-file-alt fa-lg me-3"></i>Add On <i class="fas fa-angle-left mores"></i></a>
                                 <ul id="addon" class="collapse ps-2">
 
+                                
+
+                                   
+                                    <li class="nav-item nav-categories"><a href="{{route('paymenttypes.index')}}" class="nav-link text-white sidebarlinks">Payment Type</a></li>
+                                    <li class="nav-item nav-categories"><a href="{{route('relatives.index')}}" class="nav-link text-white sidebarlinks">Relative</a></li>
+
+
+                                    <li class="nav-item nav-categories"><a href="{{route('socialapplications.index')}}" class="nav-link text-white sidebarlinks">Social App</a></li>
+
+                                    <li class="nav-item nav-categories"><a href="{{route('warehouses.index')}}" class="nav-link text-white sidebarlinks">Warehouse</a></li>
+                                    
+                                    <li class="nav-item nav-categories"><a href="{{route('userpoints.index')}}" class="nav-link text-white sidebarlinks">User Points</a></li>
+
+
+                                </ul>
+                            <li class="nav-item"><a href="javascript:void(0);" class="nav-link text-white p-3 mb-2 sidebarlinks" data-bs-target="#fixedrole" data-bs-toggle="collapse"><i class="fas fa-file-alt fa-lg me-3"></i>Fixed Analysis<i class="fas fa-angle-left mores"></i></a>
+                                <ul id="fixedrole" class="collapse ps-2">
+                                    <li class="nav-item nav-categories"><a href="{{route('countries.index')}}" class="nav-link text-white sidebarlinks">Countries</a></li>
                                     <li class="nav-item nav-categories"><a href="{{route('cities.index')}}" class="nav-link text-white sidebarlinks">Cities</a></li>
                                     <li class="nav-item nav-categories"><a href="{{route('religions.index')}}" class="nav-link text-white sidebarlinks">Religions</a></li>
                                     <li class="nav-item nav-categories"><a href="{{route('regions.index')}}" class="nav-link text-white sidebarlinks">Regions</a></li>
-
-                                    <li class="nav-item nav-categories"><a href="{{route('paymentmethods.index')}}" class="nav-link text-white sidebarlinks">Payment Method</a></li>
-
                                     <li class="nav-item nav-categories"><a href="{{route('genders.index')}}" class="nav-link text-white sidebarlinks">Genders</a></li>
-                                    <li class="nav-item nav-categories"><a href="{{route('paymenttypes.index')}}" class="nav-link text-white sidebarlinks">Payment Type</a></li>
-                                    <li class="nav-item nav-categories"><a href="{{route('relatives.index')}}" class="nav-link text-white sidebarlinks">Relative</a></li>
+                                    <li class="nav-item nav-categories"><a href="{{route('stages.index')}}" class="nav-link text-white sidebarlinks">Stages</a></li>
+                                    <li class="nav-item nav-categories"><a href="{{route('paymentmethods.index')}}" class="nav-link text-white sidebarlinks">Payment Method</a></li>
 
                                     <li class="nav-item nav-categories"><a href="{{route('roles.index')}}" class="nav-link text-white sidebarlinks">Roles</a></li>
                                     <li class="nav-item nav-categories"><a href="{{route('roleusers.index')}}" class="nav-link text-white sidebarlinks">Role Users</a></li>
                                     <li class="nav-item nav-categories"><a href="{{route('permissionroles.index')}}" class="nav-link text-white sidebarlinks">Permission Role</a></li>
 
-                                    <li class="nav-item nav-categories"><a href="{{route('socialapplications.index')}}" class="nav-link text-white sidebarlinks">Social App</a></li>
-
-                                    <li class="nav-item nav-categories"><a href="{{route('warehouses.index')}}" class="nav-link text-white sidebarlinks">Warehouse</a></li>
                                     <li class="nav-item nav-categories"><a href="{{route('packages.index')}}" class="nav-link text-white sidebarlinks">Packagse</a></li>
-                                    <li class="nav-item nav-categories"><a href="{{route('userpoints.index')}}" class="nav-link text-white sidebarlinks">User Points</a></li>
-
-
-                                </ul>
-
-                            <li class="nav-item"><a href="javascript:void(0);" class="nav-link text-white p-3 mb-2 sidebarlinks" data-bs-target="#fixedrole" data-bs-toggle="collapse"><i class="fas fa-file-alt fa-lg me-3"></i>Fixed Analysis<i class="fas fa-angle-left mores"></i></a>
-                                <ul id="fixedrole" class="collapse ps-2">
-                                    <li class="nav-item nav-categories"><a href="{{route('countries.index')}}" class="nav-link text-white sidebarlinks">Countries</a></li>
-                                    <li class="nav-item nav-categories"><a href="{{route('stages.index')}}" class="nav-link text-white sidebarlinks">Stages</a></li>
 
                                     <li class="nav-item nav-categories"><a href="{{route('statuses.index')}}" class="nav-link text-white sidebarlinks">Status</a></li>
 
@@ -140,7 +150,9 @@
                                     <li class="nav-item nav-categories"><a href="{{route('types.index')}}" class="nav-link text-white sidebarlinks">Type</a></li>
                                 </ul>
 
-                            <li class="nav-item nav-categories">Date Representation</li>
+                            
+                            
+                            
 
                             <li class="nav-item"><a href="javascript:void(0);" class="nav-link text-white p-3 mb-2 sidebarlinks" data-bs-target="#chartelement" data-bs-toggle="collapse"><i class="fas fa-file-alt fa-lg me-3"></i>Charts<i class="fas fa-angle-left mores"></i></a>
 
@@ -172,6 +184,8 @@
                                 </ul>
 
                             </li>
+
+                            @endif
 
                         </ul>
                     </div>

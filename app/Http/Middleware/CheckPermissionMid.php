@@ -21,6 +21,6 @@ class CheckPermissionMid
             // return redirect()->route('/dashboards')->with("error","Unauthorized Permission Access");
         }
         return $next($request);
-    }
+    } 
 
 }

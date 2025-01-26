@@ -8,11 +8,23 @@
     <!-- start content area -->
     <div class="container-fluid">
         
+        {{-- method 1 --}}
+        {{-- @if(auth()->user()->hasRole(["Admin","Teacher","Student"]))
         <div class="col-md-12 my-3">
             <a href="{{route('leaves.create')}}" class="btn btn-primary btn-sm rounded-0">Create</a>
 
             <hr>
         </div>
+        @endif --}}
+
+        {{-- method 2 --}}
+        @can("create",App\Models\Leave::class)  {{-- policy method name , model --}}
+        <div class="col-md-12 my-3">
+            <a href="{{route('leaves.create')}}" class="btn btn-primary btn-sm rounded-0">Create</a>
+
+            <hr>
+        </div>
+        @endcan
 
         <div class="row">
             <div class="col-md-12">

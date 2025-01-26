@@ -9,6 +9,8 @@ use Illuminate\Auth\Access\Response;
 class PostPol
 {
 
+
+
     /**
      * Determine whether the user can view the model.
      */

@@ -32,7 +32,14 @@ class LeavesController extends Controller
     public function index()
     {
         // $leaves = Leave::all();
-        $leaves = Leave::filter()->searchonly()->paginate(10);
+
+        if(auth()->user()->can("viewany",Leave::class)){  // user ထဲတွင် can ဖြင့် viewany တွင် Leave data ရှိနေသလား can ဖြင့် စစ်နိုင်သည်  
+            $leaves = Leave::filter()->searchonly()->paginate(10);  // admin , techer can see all data
+        }else {
+            $leaves = Leave::where("user_id",auth()->user()->id)->filter()->searchonly()->paginate(10); // ကိုယ်ပိုင် data ဘဲမြင်ရမည်ဖြစ်သည် 
+        }
+
+       
 
         $posts = Post::all()->pluck("title","id");
 
@@ -43,6 +50,8 @@ class LeavesController extends Controller
     public function create()
     {
         // $attshows = Post::whereIn("id",[3,4])->get(); 
+        $this -> authorize("create",Leave::class); // authorize (policy method name , Model);
+
         $data["posts"] = \DB::table("posts")->where("attshow",3)->orderBy("title","asc")->get()->pluck("title","id"); 
         
         $data["tags"] = User::orderBy("name","asc")->get()->pluck("name","id"); 
@@ -154,15 +163,15 @@ class LeavesController extends Controller
         $type = "App\Notifications\LeaveNotify";
 
         
-        $getnoti = \DB::table("notifications")->where("type",$type)->where("notifiable_id",$user_id,$id)->where("data->id",$id)->pluck("id");
+        // $getnoti = \DB::table("notifications")->where("type",$type)->where("notifiable_id",$user_id,$id)->where("data->id",$id)->pluck("id");
         // dd($getnoti);
 
-        \DB::table("notifications")->where("id",$getnoti)->update(["read_at"=>now()]);
+        // \DB::table("notifications")->where("id",$getnoti)->update(["read_at"=>now()]);
         // data သွားဆွဲထုတ်ခြင်း ပြုပြင်ခြင်းအတွက် :: ဖြင့် သံုလို့မရပေ model ထဲတွင် မရှိသောကြောင့်ဖြစ်သည် DB::raw ဖြင့်သာ ဆွဲထုတ်ပေးရမည် 
         
 
 
-        \DB::table("notifications")->where("id",$getnoti)->update(["read_at"=>now()]); // read_at တွင် data ဖြည့်ပြီးသည်နှင့် notification သည် ေပျာက်သွားမည်ဖြစ်သည် 
+        // \DB::table("notifications")->where("id",$getnoti)->update(["read_at"=>now()]); // read_at တွင် data ဖြည့်ပြီးသည်နှင့် notification သည် ေပျာက်သွားမည်ဖြစ်သည် 
 
         // dd($getnoti);
 
@@ -172,7 +181,10 @@ class LeavesController extends Controller
 
     public function edit(string $id)
     {
+        
         $data["leave"] = Leave::findOrFail($id);
+
+        $this -> authorize("edit",Leave::findOrFail($id)); // Owner ကဘဲ edit လုပ်ခွင့်ရှိသည် 
 
         $data['posts']= Post::all()->pluck("title","id");
 
@@ -208,6 +220,8 @@ class LeavesController extends Controller
         $user_id = $user->id;
 
         $leave = Leave::findOrFail($id);
+
+        $this -> authorize("update",Leave::findOrFail($id));
 
         $leave -> post_id = $request["post_id"];
         $leave -> startdate = $request["startdate"];  
@@ -284,6 +298,8 @@ class LeavesController extends Controller
     public function destroy(string $id)
     {
         $leave = Leave::findOrFail($id);
+
+        $this -> authorize("delete",Leave::findOrFail($id));
 
          // Remove Old Image
 

@@ -60,7 +60,8 @@
 
         {{-- @vite(['public/assets/dist/js/app.js']) --}}
         <!--jquery js 1-->
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js" type="text/javascript"></script>
+        {{-- <script src="https://code.jquery.com/jquery-3.6.4.min.js" type="text/javascript"></script> --}}
+        <script src="{{asset('./assets/libs/jquery-3.6.0/jquery-3.6.0.min.js')}}"></script>
 
         <!--Chart js-->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

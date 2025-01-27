@@ -51,7 +51,7 @@
                             </div>
                             <div class="col-md-6 form-group mb-3">
                                 <label for="startdate">Start Date <span class="text-danger">*</span></label>
-                                <input type="date" name="startdate" id="startdate" class="form-control rounded-0 @error("startdate") is-invalid @enderror" placeholder="Enter startdate" value="{{old('startdate')}}">
+                                <input type="date" name="startdate" id="startdate" class="form-control rounded-0 @error("startdate") is-invalid @enderror" placeholder="Enter startdate" value="{{old('startdate',$gettoday)}}">
                             </div>
                             <div class="col-md-6 form-group mb-3">
                                 <label for="enddate">End Date <span class="text-danger">*</span></label>
@@ -59,7 +59,7 @@
                             </div>
                             <div class="col-md-6 form-group mb-3">
                                 <label for="starttime">Start Time <span class="text-danger">*</span></label>
-                                <input type="time" name="starttime" id="starttime" class="form-control rounded-0  @error("starttime") is-invalid @enderror" placeholder="Enter starttime" value="{{old('starttime')}}">
+                                <input type="time" name="starttime" id="starttime" class="form-control rounded-0  @error("starttime") is-invalid @enderror" placeholder="Enter starttime" value="{{old('starttime',$gettime)}}">
                             </div>
                             <div class="col-md-6 form-group mb-3">
                                 <label for="endtime">End Time <span class="text-danger">*</span></label>

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
+
 
 use App\Models\Day;
 use App\Models\Dayable;
@@ -43,7 +45,11 @@ class PostsController extends Controller
 
         $types = Type::whereIn("id",[1,2])->get(); 
 
-        return view("posts.create",compact("attshows","days","statuses","tags","types"));
+        $gettoday = Carbon::today()->format("Y-m-d");
+
+        $gettime = Carbon::now()->format("H:m:s");
+
+        return view("posts.create",compact("attshows","days","statuses","tags","types","gettoday","gettime"));
 
     }
 
@@ -65,7 +71,9 @@ class PostsController extends Controller
             "type_id"  => "required|in:1,2",
             "tag_id" => "required",
             "attshow" => "required|in:3,4",
-            "status_id" => "required|in:7,10,11"
+            "status_id" => "required|in:7,10,11",
+            "day_id" => "required|array",
+            "day_id.*" => "exists:days,id"
         ]);
 
 
@@ -77,18 +85,23 @@ class PostsController extends Controller
 
         $this -> authorize("create",$post);
 
-        $post -> title = $request["title"];
+
+        $post -> fill($request->only([  // request ထည့်တာခြင်းအတူတူဘဲဖြစ်သည် 
+            "title","content","fee","startdate","enddate","starttime","endtime","type_id","tag_id","attshow","status_id"
+        ]));
+
+        // $post -> title = $request["title"];  // fill ဖြင့် လည်းထည့်နိုင်သည် 
         $post -> slug = Str::slug($request["title"]); 
-        $post -> content = $request["content"];  
-        $post -> fee = $request["fee"];  
-        $post -> startdate = $request["startdate"];  
-        $post -> enddate = $request["enddate"];  
-        $post -> starttime = $request["starttime"];  
-        $post -> endtime = $request["endtime"];  
-        $post -> type_id = $request["type_id"];  
-        $post -> tag_id = $request["tag_id"];  
-        $post -> attshow = $request["attshow"];  
-        $post -> status_id = $request["status_id"];  
+        // $post -> content = $request["content"];  
+        // $post -> fee = $request["fee"];  
+        // $post -> startdate = $request["startdate"];  
+        // $post -> enddate = $request["enddate"];  
+        // $post -> starttime = $request["starttime"];  
+        // $post -> endtime = $request["endtime"];  
+        // $post -> type_id = $request["type_id"];  
+        // $post -> tag_id = $request["tag_id"];  
+        // $post -> attshow = $request["attshow"];  
+        // $post -> status_id = $request["status_id"];  
         $post -> user_id = $user_id;  
 
         // single img upload
@@ -127,20 +140,34 @@ class PostsController extends Controller
         // }
 
         // method 2 
-        if($post->id){ // post ထဲသို့ data ထည့်တာ အောင်မြင်မှသာ
-            // create dayable 
-            if(count($request["day_id"] ) > 0){
-                foreach($request["day_id"] as $key => $value){
-                    $day = [
-                        // "day_id" => $request["day_id"]["key"], // method 1
-                        "day_id" => $value, // method 2
-                        "dayable_id" => $post->id,
-                        "dayable_type" => $request["dayable_type"] // post အတွက်ဘဲ လာမည်ဖြစ်သောကြောင့် တန်းရေးလို့ရသည် 
-                    ];
+        // if($post->id){ // post ထဲသို့ data ထည့်တာ အောင်မြင်မှသာ
+        //     // create dayable 
+        //     if(count($request["day_id"] ) > 0){
+        //         foreach($request["day_id"] as $key => $value){
+        //             $day = [
+        //                 // "day_id" => $request["day_id"]["key"], // method 1
+        //                 "day_id" => $value, // method 2
+        //                 "dayable_id" => $post->id,
+        //                 "dayable_type" => $request["dayable_type"] // post အတွက်ဘဲ လာမည်ဖြစ်သောကြောင့် တန်းရေးလို့ရသည် 
+        //             ];
 
-                    Dayable::insert($day);
-                }
-            }
+        //             Dayable::insert($day);
+        //         }
+        //     }
+        // }
+
+        // method 3 
+        if($post -> id && $request -> has("day_id")){
+
+            $day = array_map(function($dayid) use ($post){
+                return [
+                    "day_id" => $dayid, // method 2
+                    "dayable_id" => $post->id,
+                    "dayable_type" => Post::class,
+                ];
+            },$request->day_id);
+    
+            Dayable::insert($day);
         }
 
         return redirect(route("posts.index"));
@@ -203,7 +230,7 @@ class PostsController extends Controller
             "image" => "image|mimes:jpg,jpeg,png",
             "title" => "required|max:300|unique:posts,title,".$id,
             "content" => "required",
-            "fee" => "required",
+            "fee" => "required|numeric",
             "startdate"  => "required",
             "enddate"  => "required",
             "starttime"  => "required",
@@ -211,7 +238,9 @@ class PostsController extends Controller
             "type_id"  => "required|in:1,2",
             "tag_id" => "required",
             "attshow" => "required|in:3,4",
-            "status_id" => "required|in:7,10,11"
+            "status_id" => "required|in:7,10,11",
+            "day_id" => "required|array",
+            "day_id.*" => "exists:days,id"
 
         ]);
 
@@ -266,6 +295,11 @@ class PostsController extends Controller
         }
 
         $post -> save();
+
+        // update days
+        $post -> days() -> sync($request->day_id);
+
+        session()->flash("success","post edit successful");
 
         return redirect(route("posts.index"));
     }

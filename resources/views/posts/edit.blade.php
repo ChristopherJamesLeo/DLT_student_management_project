@@ -77,7 +77,9 @@
                             <div class="col-md-12 form-group mb-3">
                                 <label for="">Days<span class="text-danger">*</span></label>
                                 <div class="d-flex flex-wrap">
-                                    @foreach($days as $idx => $day)
+
+                                    {{-- method 1 --}}
+                                    {{-- @foreach($days as $idx => $day)
                                     <div class="form-check form-switch mx-3">
                                         <input type="checkbox" name="day_id[]" id="day_id{{$idx}}" class="form-check-input" value="{{$day->id}}"  
 
@@ -86,6 +88,18 @@
                                                 checked 
                                             @endif
                                         @endforeach
+                                        
+                                        /><Label for="day_id{{$idx}}">{{$day->name}}</Label>
+                                    </div>
+                                    @endforeach --}}
+
+
+                                     {{-- method 2  --}}
+                                    @foreach($days as $idx => $day)
+                                    <div class="form-check form-switch mx-3">
+                                        <input type="checkbox" name="day_id[]" id="day_id{{$idx}}" class="form-check-input" value="{{$day->id}}"  
+
+                                        {{in_array($day->id,$post->days->pluck("id")->toArray()) ? 'checked' : ' '}}
                                         
                                         /><Label for="day_id{{$idx}}">{{$day->name}}</Label>
                                     </div>

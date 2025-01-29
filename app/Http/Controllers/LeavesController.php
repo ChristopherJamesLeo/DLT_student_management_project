@@ -84,11 +84,13 @@ class LeavesController extends Controller
         $user_id = $user->id;
 
         $leave = new Leave();
-        $leave -> post_id = $request["post_id"];
+        // $leave -> post_id = $request["post_id"];
+        $leave -> post_id = json_encode($request["post_id"]);
         $leave -> startdate = $request["startdate"];  
         $leave -> enddate = $request["enddate"];  
         $leave -> content = $request["content"];   
-        $leave -> tag = $request["tag"];
+        // $leave -> tag = $request["tag"];
+        $leave -> tag = json_encode($request["tag"]);
         $leave -> title = $request["title"];
         $leave -> content = $request["content"];
         $leave -> user_id = $user_id;  
@@ -223,11 +225,15 @@ class LeavesController extends Controller
 
         $this -> authorize("update",Leave::findOrFail($id));
 
-        $leave -> post_id = $request["post_id"];
+        // $leave -> post_id = $request["post_id"];
+        $leave -> post_id = json_encode($request["post_id"]);
+
         $leave -> startdate = $request["startdate"];  
         $leave -> enddate = $request["enddate"];  
         $leave -> content = $request["content"];   
-        $leave -> tag = $request["tag"];
+        // $leave -> tag = $request["tag"];
+        $leave -> tag = json_encode($request["tag"]);
+
         $leave -> stage_id = $request["stage_id"];
         $leave -> title = $request["title"];
         $leave -> content = $request["content"];

@@ -36,12 +36,38 @@ class Leave extends Model
         return $this -> belongsTo(User::class);
     }
 
-    public function post(){
-        return $this -> belongsTo(Post::class); 
-    } 
 
-    public function tagperson(){
-        return $this -> belongsTo(User::class,"tag");
+    // for single psot (not json)
+    // public function post(){
+    //     return $this -> belongsTo(Post::class); 
+    // } 
+
+      // for multie post(with json)
+    public function tagposts($postjson){
+
+        $postids = json_decode($postjson,true);  //decode from json encodes tags
+
+        $posts = Post::whereIn("id",$postids)->pluck("name","id");
+
+        return $posts;
+
+    }
+
+
+    // for single tag (not json)
+    // public function tagperson(){
+    //     return $this -> belongsTo(User::class,"tag");
+    // }
+
+
+    // for multie tag(with json)
+    public function tagpersons($tagjson){
+
+        $tagids = json_decode($postjson,true);  //decode from json encodes tags
+
+        $tags = User::whereIn("id",$tagids)->pluck("name","id");
+
+        return $tags;
     }
 
     public function leavefiles(){
@@ -90,6 +116,8 @@ class Leave extends Model
         }
     }
 
+
+
     public function scopesearchonly($query){
         return $query -> where(function($query){
             if($getsearch = request("search")){
@@ -107,5 +135,8 @@ class Leave extends Model
             }
         });
     }
+
+
+
 
 }

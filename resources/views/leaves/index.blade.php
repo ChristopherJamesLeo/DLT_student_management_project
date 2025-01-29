@@ -88,10 +88,10 @@
 
                     <td>{{$idx + $leaves -> firstitem()}}</td>
                     <td><a href="{{route('students.show',$leave->studentUrl())}}">{{$leave -> student($leave->user_id)}}</a></td>
-                    <td>{{$leave->post["title"]}}</td>
+                    {{-- <td>{{$leave->post["title"]}}</td> --}}
                     <td>{{$leave->startdate}}</td>
                     <td>{{$leave->enddate}}</td>
-                    <td>{{$leave->tagperson->name}}</td>
+                    {{-- <td>{{$leave->tagperson->name}}</td> --}}
                     <td>{{$leave->stage["name"]}}</td>
                     <td>{{$leave->user["name"]}}</td>
                      

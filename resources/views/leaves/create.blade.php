@@ -1,5 +1,7 @@
 @extends("layouts.adminindex")
 @section("css")
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
     <style>
         .gallery {
@@ -70,8 +72,7 @@
                             </div>
                             <div class="col-md-6 form-group ">
                                 <label for="post_id">Class <span class="text-danger">*</span></label>
-                                <select name="post_id" id="post_id" class="form-control form-contrl-sm rounded-0 ">
-                                    <option value="" selected disabled>Choose Class...</option>
+                                <select name="post_id[]" id="post_id" class="form-control form-contrl-sm rounded-0 " multiple>
                                     @foreach ($posts as $id => $title)
                                         <option value="{{$id}}">{{$title}}</option>
                                     @endforeach
@@ -80,8 +81,7 @@
                             <div class="col-md-6 form-group">
                                 <label for="tag">Tag <span class="text-danger">*</span></label>
                                
-                                <select name="tag" id="tag" class="form-control form-contrl-sm rounded-0">
-                                    <option value="" selected disabled>Choose Authorized Person ...</option>
+                                <select name="tag[]" id="tag" class="form-control form-contrl-sm rounded-0" multiple>
                                     @foreach ($tags as $id => $name)
                                         <option value="{{$id}}">{{$name}}</option>
                                     @endforeach
@@ -123,6 +123,8 @@
 
 
 @section("scripts")
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 <script>
         $(document).ready(function(){
@@ -174,6 +176,20 @@
           ['view', ['fullscreen', 'codeview', 'help']]
         ]
       });
+
+            $("#post_id").select2({
+                placeholder : "Choose Class"
+            })
+
+            $("#tag").select2({
+                placeholder : "Choose Authorize Person..."
+            })
+
+            $("#startdate,#enddate").flatpickr({
+                dateFormat: "Y-m-d",
+                minDate: "today",
+                maxDate: new Date().fp_incr(30)
+            });
 
         })
 

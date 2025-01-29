@@ -26,10 +26,12 @@ class LeaveRequest extends FormRequest
         // store နှင့် update သည် validate တူညီနေပါက စစ်စရာမလိုဘဲ မတူညီမှသာ POST PUT စစ်ပြီး ေပြာင်းလဲနုိင်သည် 
         if($this -> method() == "POST"){
             return [
-                "post_id" => "required",
+                "post_id" => "required|array",
+                "post_id.*" => "exists:posts,id",
                 "startdate"  => "required|date",
-                "enddate"  => "required|date",
-                "tag" => "required",
+                "enddate"  => "required|date|after_or_equal:startdate", // startdate ရဲ့ နောက်က date ကိုဘဲ ပေးယူမယ် သို့မဟုတ် ညီရင် ရင်နိုင်သည် 
+                "tag" => "required|array",
+                "tag.*" => "exists:tags,id",
                 "title" => "required|max:50",
                 "content" => "required",
                 "image" => "nullable|image|mimes:jpg,jpeg,png|max:2048"

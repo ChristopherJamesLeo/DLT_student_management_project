@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('leaves', function (Blueprint $table) {
             $table->id();
-            $table -> unsignedBigInteger("post_id");
+            // $table -> unsignedBigInteger("post_id");
+            $table -> json("post_id"); // json format ဖြင့် သိမ်းမည်
             $table -> date("startdate");
             $table -> date("enddate");
-            $table -> unsignedBigInteger("tag");
+            // $table -> unsignedBigInteger("tag");
+            $table -> json("tag"); // json format ဖြင့် သိမ်းမည်
             $table -> string("title");
             $table -> longText("content");
             $table -> string("image")->nullable();

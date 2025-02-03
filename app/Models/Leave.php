@@ -46,8 +46,8 @@ class Leave extends Model
     public function tagposts($postjson){
 
         $postids = json_decode($postjson,true);  //decode from json encodes tags
-
-        $posts = Post::whereIn("id",$postids)->pluck("name","id");
+                                                    // value , key 
+        $posts = Post::whereIn("id",$postids)->pluck("title","id");
 
         return $posts;
 
@@ -63,7 +63,7 @@ class Leave extends Model
     // for multie tag(with json)
     public function tagpersons($tagjson){
 
-        $tagids = json_decode($postjson,true);  //decode from json encodes tags
+        $tagids = json_decode($tagjson,true);  //decode from json encodes tags
 
         $tags = User::whereIn("id",$tagids)->pluck("name","id");
 
@@ -82,8 +82,15 @@ class Leave extends Model
         }) ;
     }
 
+
+
     public function studentUrl(){
         return Student::where("user_id",$this->user_id)->get(["students.id"])->first();
+    }
+
+    public function tagpersonUrl($tagid){
+        // return Student::where("user_id",$tagid)->get(["students.id"])->first();
+        return Student::where("user_id",$tagid)->value("id"); // first အစား value ကို မိမိလိုချင်သော column ကိုဆွဲထုတ်နိုင်သည် 
     }
 
     public function student($userid){

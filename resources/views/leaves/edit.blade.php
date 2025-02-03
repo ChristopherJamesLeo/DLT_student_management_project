@@ -1,5 +1,7 @@
 @extends("layouts.adminindex")
 @section("css")
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
     <style>
         .gallery {
@@ -81,20 +83,28 @@
                             <div class="col-md-6 form-group">
                                 <label for="post_id">Class <span class="text-danger">*</span></label>
 
-                                <select name="post_id" id="post_id" class="form-control form-contrl-sm rounded-0">
+                                <select name="post_id[]" id="post_id" class="form-control form-contrl-sm rounded-0" multiple>
+
+                                    {{-- ?? Coalescing operator 
+                                        $value = $variable ?? default value  // variable သည် မိမိပေးစေချင်သော value ဖြစ်သလား ဖြစ်ရင် ၄င်း value ကိုယူမည် မဖြစ်ပါက default value ကိုယူမည်ဖြစ်သည် 
+                                    --}}
                                     @foreach ($posts as $idx => $title)
-                                        <option value="{{$idx}}" {{$idx == $leave->post_id ? "selected" : ""}}>{{$title}}</option>
+                                                                {{-- json အား decode ပြန်လုပ်ပေးမည် ထို့နောက် inarray ဖြင့် json မှ ရလာသော array ထဲတွင် id ပါသလား ပါရင် true မပါရင် false  --}}
+                                        {{-- <option value="{{$idx}}" {{ in_array($idx,json_decode($leave->post_id,true)) ? "selected" : "" }} {{$idx == $leave->post_id ? "selected" : ""}}>{{$title}}</option> --}}
+                                        {{-- or --}}
+                                        <option value="{{$idx}}" {{ in_array($idx,json_decode($leave->post_id,true) ?? [] ) ? "selected" : ""}} {{$idx == $leave->post_id ? "selected" : ""}}>{{$title}}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-md-6 col-sm-12 form-group mb-1">
                                 <label for="tag">Tag <span class="text-danger">*</span></label>
                                 
-                                <select name="tag" id="tag" class="form-control form-contrl-sm rounded-0">
-                                    <option value="" selected disabled>Choose Authorized Person...</option>
+                                <select name="tag[]" id="tag" class="form-control form-contrl-sm rounded-0" multiple>
 
                                     @foreach ($users as $idx => $name)
-                                        <option value="{{$idx}}" {{$idx == $leave->tag ? "selected" : ""}}>{{$name}}</option>
+                                                                     {{-- array ထဲမှာ tag ပါလာ ပါရင် ??  ဖြင့် ယူမယ် မပါရင် [] ထားမည် ထို့နောက် in array ဖြင့် မှန်လားမှားလားစစ်ပြီး select လုပ်မည်  --}}
+                                        <option value="{{$idx}}" {{ in_array( $idx ,json_decode($leave -> tag, true) ?? []) ? "selected" : ""  }} {{$idx == $leave->tag ? "selected" : ""}}>{{$name}}</option>
+
                                     @endforeach
                                 </select>
                             </div>
@@ -102,7 +112,6 @@
                                 <label for="stage_id">Stage <span class="text-danger">*</span></label>
 
                                 <select name="stage_id" id="stage_id" class="form-control form-contrl-sm rounded-0">
-                                    <option value="" selected disabled>Choose Stage...</option>
                                     @foreach ($stages as $idx => $name)
                                         <option value="{{$idx}}" {{$idx == $leave->stage_id ? "selected" : ""}}>{{$name}}</option>
                                     @endforeach
@@ -141,6 +150,8 @@
 
 @section("scripts")
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
         $(document).ready(function(){
 
@@ -176,6 +187,20 @@
             $("#images").change(function(){
                 previewimages(this,".gallery")
             })
+
+            $("#post_id").select2({
+                placeholder : "Choose Class"
+            })
+
+            $("#tag").select2({
+                placeholder : "Choose Authorize Person..."
+            })
+
+            $("#startdate,#enddate").flatpickr({
+                dateFormat: "Y-m-d",
+                minDate: "today",
+                maxDate: new Date().fp_incr(30)
+            });
         })
 
                     // start text editor

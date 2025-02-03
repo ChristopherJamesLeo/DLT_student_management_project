@@ -88,7 +88,7 @@
 
                     <td>{{$idx + $leaves -> firstitem()}}</td>
                     <td><a href="{{route('students.show',$leave->studentUrl())}}">{{$leave -> student($leave->user_id)}}</a></td>
-                    {{-- <td>{{$leave->post["title"]}}</td> --}}
+                    <td><a href="{{route('leaves.show',$leave->id)}}">{{Str::limit($leave->title, 20)}}</a></td>
                     <td>{{$leave->startdate}}</td>
                     <td>{{$leave->enddate}}</td>
                     {{-- <td>{{$leave->tagperson->name}}</td> --}}
@@ -99,7 +99,7 @@
                     <td>{{$leave->updated_at->format('d M Y')}}</td>
                     <td>
 
-                        <a href="{{route('leaves.show',$leave->id)}}" class="me-3 btn btn-outline-info btn-sm"><i class="fas fa-download"></i></a>
+                        <a href="{{route('leaves.show',$leave->id)}}" class="me-3 btn btn-outline-info btn-sm"><i class="fas fa-eye"></i></a>
 
                         <a href="{{route('leaves.edit',$leave->id)}}" class="me-3 btn btn-outline-info btn-sm"><i class="fas fa-pen"></i></a>
                         

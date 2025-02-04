@@ -70,9 +70,9 @@
                     <th>No</th>
                     <th>Students</th>
                     <th>Class</th>
+                    <th>Authorize Person</th>
                     <th>Start Date</th>
                     <th>End Date</th>
-                    <th>Tag</th>
                     <th>Stage</th>
                     <th>By</th>
                     <th>Cretate at</th>
@@ -89,6 +89,20 @@
                     <td>{{$idx + $leaves -> firstitem()}}</td>
                     <td><a href="{{route('students.show',$leave->studentUrl())}}">{{$leave -> student($leave->user_id)}}</a></td>
                     <td><a href="{{route('leaves.show',$leave->id)}}">{{Str::limit($leave->title, 20)}}</a></td>
+                    <td>
+                        @php
+                            // collect() , map()  map သည် laravel မှ method ဖြစ်ပြီး ၄င်းအား သုံးချင်ပါက pure array ဖြစ်နေဖို့လိုသည် pure array ဖြစ်ရင်  collect ကို သုံးပေးရမည် 
+
+                            $tagids = json_decode($leave->tag,true);  //decode from json encodes tags
+
+                            $tagnames = collect($tagids)->map(function($id) use ($users){
+                                return $users[$id];
+                            });
+
+                        @endphp
+
+                        {{$tagnames -> join(",")}}  {{-- display name as comma spread--}}
+                    </td>
                     <td>{{$leave->startdate}}</td>
                     <td>{{$leave->enddate}}</td>
                     {{-- <td>{{$leave->tagperson->name}}</td> --}}

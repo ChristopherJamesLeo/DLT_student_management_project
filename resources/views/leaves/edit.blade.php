@@ -46,8 +46,24 @@
                         <div class="row">
                             <div class="col-md-12 form-group mb-3">
                                 <div class="row">
+
+                                    
                                     <div class="col-md-6">
-                                        <img src="{{asset($leave->image)}}" width="200px" alt="{{$leave->title}}">
+                                       @if (!empty($leavefiles) && $leavefiles->count() > 0)
+                                            <div class="row">
+                                                @foreach ($leavefiles as $id => $leavefile)
+                                                    <div class="col-6">
+                                                        <img src="{{asset($leavefile->image)}}" width="130px" alt="{{$leavefile->id}}">
+                                                    </div>
+                                                
+                                            @endforeach
+                                            </div>
+                                            
+                                       @else
+                                            <label for="images" class="w-100 h-100 text-center">
+                                                <span>Choose Images</span>
+                                            </label>
+                                       @endif
                                     </div>
                                     <div class="col-md-6">
                                         <div class="gallery" style="h-100 ">

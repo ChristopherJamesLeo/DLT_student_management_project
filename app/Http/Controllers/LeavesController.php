@@ -39,11 +39,12 @@ class LeavesController extends Controller
             $leaves = Leave::where("user_id",auth()->user()->id)->filter()->searchonly()->paginate(10); // ကိုယ်ပိုင် data ဘဲမြင်ရမည်ဖြစ်သည် 
         }
 
+        $users = User::pluck("name","id");
        
 
         $posts = Post::all()->pluck("title","id");
 
-        return view("leaves.index",compact("leaves"))->with("posts",$posts);
+        return view("leaves.index",compact("leaves","users"))->with("posts",$posts);
     }
 
 
@@ -139,14 +140,26 @@ class LeavesController extends Controller
 
         // $user = User::findOrFail($request["tag"]);
         // $user = User::findOrFail($leave -> tag);
-        $tagperson = $leave->tagperson()->get(); // model မှ လှမ်းယူသည် 
 
-        $studentId = $leave->student($user_id);
+        // => Notify to single tagged user
+        // $tagperson = $leave->tagperson()->get(); // model မှ လှမ်းယူသည် 
+        // $studentId = $leave->student($user_id);
+        // Notification::send($tagperson, new LeaveNotify($leave->id,$leave->title,$studentId));
+
+
+        // => Notify to multi tagged user
+        $tags = $request["tag"]; // come with array type
+        $tagpersons = User::whereIn("id",$tags)->get(); // fetch all user at once
+
+        $studentId = $leave -> student($user_id);
+
+
+
         // dd($studentId);
                         // ပို့ေစချင်တဲ့သူ              မိမိ ပြစေချင်သော data
         // Notification::send($users, new LeaveNotify($leave->id,$leave->title));
         // Notification::send($user, new LeaveNotify($leave->id,$leave->title));
-        Notification::send($tagperson, new LeaveNotify($leave->id,$leave->title,$studentId));
+        Notification::send($tagpersons, new LeaveNotify($leave->id,$leave->title,$studentId));
 
         session()->flash("success","Data Insert Successful");
 
@@ -157,6 +170,9 @@ class LeavesController extends Controller
     public function show(string $id)
     {
         $leave = Leave::findOrFail($id);
+
+        $leavefiles = LeaveFile::where("leave_id",$id)->get(); // load all associated image
+
 
         // notification ကို show ဖြစ်ပါက ဤလုပ်ဆောင်ချက်ကို လုပ်မည်
         // $getnoti = Notification::where("notifiable_id")->pluck("id"); // error 
@@ -177,7 +193,7 @@ class LeavesController extends Controller
 
         // dd($getnoti);
 
-        return view("leaves.show",["leave"=>$leave]);
+        return view("leaves.show",["leave"=>$leave,"leavefiles"=>$leavefiles]);
     }
 
 
@@ -189,6 +205,8 @@ class LeavesController extends Controller
         $this -> authorize("edit",Leave::findOrFail($id)); // Owner ကဘဲ edit လုပ်ခွင့်ရှိသည် 
 
         $data['posts']= Post::all()->pluck("title","id");
+
+        $data["leavefiles"] = LeaveFile::where("leave_id",$id)->get(); // load all associated image
 
         $data["stages"] = Stage::whereIn("id",["1","2","3"])->get()->pluck("name","id");
 

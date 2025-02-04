@@ -2,6 +2,7 @@
 
 
 @section("css")
+    <link rel="stylesheet" href="{{asset('assets/libs/lightbox2-dev/dist/css/lightbox.min.css')}}">
     <style>
         .chat_box {
             height: 200px;
@@ -127,9 +128,7 @@
                         <span>{{$leave->stage->name}} Class : {{$leave->fee}}</span>
                     </div>
                     <ul class="list-group">
-                        <li class="d-flex justify-content-center list-group-item fw-bold">
-                            <img src="{{asset($leave->image)}}" class="" style="width:200px;height:100px" alt="{{$leave->title}}">
-                        </li>
+                        
                         
                     </ul>
                     <div class="card-body">
@@ -294,6 +293,25 @@
                     </div>
 
                 </div>
+                <div class="row">
+                    <h6>Additional Info</h6>
+                    <div class="col-md-12">
+                        @if (!empty($leavefiles) && $leavefiles->count() > 0)
+                             <div class="row">
+                                @foreach ($leavefiles as $id => $leavefile)
+                                <div class="col-6">
+                                    <a href="{{asset($leavefile->image)}}" data-lightbox ="{{$leavefile->id}}">
+                                        <img src="{{asset($leavefile->image)}}" width="130px" alt="{{$leavefile->id}}">
+                                    </a>
+                                    
+                                </div>
+                            
+                                @endforeach
+                             </div>
+                         
+                        @endif
+                     </div>
+                </div>
                     </div>
                 </div>
             </div>
@@ -361,8 +379,12 @@
 @endsection
 
 @section("scripts")
-
+    <script src="{{asset('assets/libs/lightbox2-dev/dist/js/lightbox.min.js')}}"></script>
     <script>
+        lightbox.option({
+            "resizeDuration" : 50,
+            "wrapAround" : true
+        })
         $(document).ready(function(){
             $(".delete-btns").click(function(){
                 // console.log("hello");

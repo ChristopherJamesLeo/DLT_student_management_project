@@ -93,6 +93,20 @@ class Leave extends Model
         return Student::where("user_id",$tagid)->value("id"); // first အစား value ကို မိမိလိုချင်သော column ကိုဆွဲထုတ်နိုင်သည် 
     }
 
+    public function maptagtonames ( $users = null ){
+        $tagids = json_decode($this->tag,true);  //decode from json encodes tags
+
+        $tagnames = collect($tagids)->map(function($id) use ($users){
+            return $users[$id] ?? "Unknown";
+        });
+        return $tagnames -> join(", ");
+
+    }
+
+    public function isconverted(){
+        return $this -> stage_id != 2; // 2 = pending
+    }
+
     public function student($userid){
 
         // method 1 

@@ -173,6 +173,8 @@ class LeavesController extends Controller
 
         $leavefiles = LeaveFile::where("leave_id",$id)->get(); // load all associated image
 
+        $stages = Stage::whereIn("id",[1,2,3])->where("status_id",3)->get();
+
 
         // notification ကို show ဖြစ်ပါက ဤလုပ်ဆောင်ချက်ကို လုပ်မည်
         // $getnoti = Notification::where("notifiable_id")->pluck("id"); // error 
@@ -193,7 +195,7 @@ class LeavesController extends Controller
 
         // dd($getnoti);
 
-        return view("leaves.show",["leave"=>$leave,"leavefiles"=>$leavefiles]);
+        return view("leaves.show",["leave"=>$leave,"leavefiles"=>$leavefiles,"stages" => $stages]);
     }
 
 
@@ -283,6 +285,10 @@ class LeavesController extends Controller
 
         // }
 
+        if($leave->isconverted()){
+            return redirect()->back()->with("error","This Leave form has already been change stage by authorize person");
+        }
+
         $leave -> save();
         // MULTI DELETE OLD IMG 
         $leavefiles = LeaveFile::where("leave_id",$leave->id)->get();
@@ -328,6 +334,11 @@ class LeavesController extends Controller
          // Remove Old Image
 
         $leavefiles = LeaveFile::where("leave_id",$id)->get();
+
+        if($leave->isconverted()){
+            return redirect()->back()->with("error","This Leave form has already been change stage by authorize person");
+        }
+        
         foreach($leavefiles as $leavefile){
             $path = $leavefile -> image; // ပတ်လမ်းကို ခေါ်ထုတ်မည် 
 
@@ -337,6 +348,8 @@ class LeavesController extends Controller
             }
 
         }
+
+        
         
         $leave -> delete();
 
@@ -363,5 +376,18 @@ class LeavesController extends Controller
         
 
         return redirect()->back();
+    }
+
+    public function updatestage(Request $request,$id){
+
+        $leave = Leave::findOrFail($id);
+
+        $leave -> stage_id = $request->stage_id;
+
+        $leave -> save();
+
+        // session()->flash("success","Successful");
+
+        return redirect()->back()->with("success","Stage update successfully");
     }
 }

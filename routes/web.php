@@ -213,6 +213,7 @@ Route::middleware(["auth","autologout","verified"])->group(function () {  // ema
 
 
     Route::resource("leaves",LeavesController::class);
+    Route::put("/leaves/{id}/updatestage",[LeavesController::class,"updatestage"])->name("leaves.updatestage");
     Route::get("notify/makrasread",[LeavesController::class,"makrasread"])->name("leaves.markasread");
     // route name ပေးပါက default နှင့် မှားနိုင်သည့်အတွက် name အား parameter သံုးခုသံုးသင့်သည် route name ထဲမရှိတဲ့ကောင်အား ကွဲကွဲပြာပြားပေးသင့်သည်
 

@@ -294,6 +294,52 @@
 
                 </div>
                 <div class="row">
+                    @if (auth()->user()->hasRole(["Admin","Teacher"]))
+                        <div class="col-md-12 my-3">
+                            <h5>Authorize</h5>
+                            
+                        
+                            <form action="/leaves/{{$leave->id}}/updatestage" method="post" class="">
+                
+                                @csrf
+                                @method("PUT")
+                
+                                {{-- old('firstname')  သည် refresh ဖြစ်ပြီး data reject ဖြစ်၍ ပြန်လာပါက မူလပေးခဲ့သောစာသားကို မပြောက်ဘဲ invalit ဖြစ်နေသော data input box တစ်ခုတည်းသာ blank ဖြစ်ပြီး အရင် ထည့်ခဲ့သော data ကိူ ပြန်ဖော်ပြပေးနေမည် --}}
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="row">
+                                            <div class="col-md-8 col-sm-12 form-group mb-1">
+                                                {{-- <label for="stage_id">Choose Stage</label> --}}
+                                                <select name="stage_id" id="stage_id" class="form-control rounded-0 gender_id">
+                                                    <option selected disabled>Choose Stage</option>
+                        
+                                                    @foreach($stages as $id => $stage)
+                                {{--                           <option value="{{$gender->id}}" {{$gender['id'] == $lead->gender->id ? "selected" : ""}}>{{$gender['name']}}</option>--}}
+                                                        <option value="{{$stage->id}}" {{$leave->stage_id == $stage->id ? "selected" : ""}}>{{$stage['name']}}</option>
+                                                    @endforeach
+                        
+                                                </select>
+                                                @if($leave -> isconverted())
+                                                    <small class="text-danger">This leave form has already been converted to an authtorize stage</small>
+                                            
+                                                @endif
+                                            </div>
+                                           
+                                            <div class="col-md-4">
+                                                <div class="d-flex justify-content-end">
+                                                    <button type="submit" class="btn btn-primary btn-sm rounded-0 ms-3" {{$leave -> isconverted() ? "disabled" : " "}}>Submit</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                   
+                                </div>
+                            </form>
+                        </div>
+                    @endif
+                    
                     <h6>Additional Info</h6>
                     <div class="col-md-12">
                         @if (!empty($leavefiles) && $leavefiles->count() > 0)
@@ -310,12 +356,10 @@
                              </div>
                          
                         @endif
-                     </div>
-                </div>
                     </div>
+                     
                 </div>
             </div>
-
         </div>
     </div>
     <!--End Content Area-->

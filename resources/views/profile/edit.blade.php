@@ -543,9 +543,9 @@
                                         </div>
                                         @endif
                                     </div>
-                                </form>
+                            </form>
                                 @endif
-                            </div>
+                        </div>
                         </div>
                         <div id="signtab" class="tab-pane">
                             <h6>Sign-In password</h6>

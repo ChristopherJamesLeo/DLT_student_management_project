@@ -89,8 +89,8 @@
                     <td>{{$idx + $leaves -> firstitem()}}</td>
                     <td><a href="{{route('students.show',$leave->studentUrl())}}">{{$leave -> student($leave->user_id)}}</a></td>
                     <td><a href="{{route('leaves.show',$leave->id)}}">{{Str::limit($leave->title, 20)}}</a></td>
-                    <td>
-                        @php
+                    {{-- <td> --}}
+                        {{-- @php
                             // collect() , map()  map သည် laravel မှ method ဖြစ်ပြီး ၄င်းအား သုံးချင်ပါက pure array ဖြစ်နေဖို့လိုသည် pure array ဖြစ်ရင်  collect ကို သုံးပေးရမည် 
 
                             $tagids = json_decode($leave->tag,true);  //decode from json encodes tags
@@ -101,7 +101,13 @@
 
                         @endphp
 
-                        {{$tagnames -> join(",")}}  {{-- display name as comma spread--}}
+                        {{$tagnames -> join(",")}}  display name as comma spread --}}
+                    {{-- </td> --}}
+
+                    {{-- or  --}}
+
+                    <td>
+                        {{$leave->maptagtonames($users)}}
                     </td>
                     <td>{{$leave->startdate}}</td>
                     <td>{{$leave->enddate}}</td>
@@ -116,8 +122,14 @@
                         <a href="{{route('leaves.show',$leave->id)}}" class="me-3 btn btn-outline-info btn-sm"><i class="fas fa-eye"></i></a>
 
                         <a href="{{route('leaves.edit',$leave->id)}}" class="me-3 btn btn-outline-info btn-sm"><i class="fas fa-pen"></i></a>
-                        
+                        @if ($leave->isconverted())
+                            <a href="#" class="text-danger me-3 delete-btns" data-idx = "{{$leave->$idx}}" ><i class="fas fa-trash"></i></a>
+                        @endif
+
                         <a href="#" class="text-danger me-3 delete-btns" data-idx = "{{$leave->$idx}}" ><i class="fas fa-trash"></i></a>
+
+                        
+                        
 
                     </td>
                     <form id="formdelete{{$leave->$idx}}" action="{{route('leaves.destroy',$leave->id)}}" method="POST">

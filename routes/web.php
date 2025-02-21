@@ -121,6 +121,7 @@ Route::middleware(["auth","autologout","verified"])->group(function () {  // ema
 
 
     Route::resource("enrolls",EnrollsController::class);
+    Route::put("/enrolls/{id}/updatestage",[EnrollsController::class,"updatestage"])->name("enrlls.updatestage");
 
     // search
     Route::resource("edulinks",EdulinksController::class);

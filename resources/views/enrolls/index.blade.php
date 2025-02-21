@@ -76,7 +76,8 @@
 
                     <td>{{++$idx}}</td>
                     {{-- <td>{{$enroll ->student($enroll->user_id)}}</td> --}}
-                    <td><a href="{{route('students.show',$enroll -> studenturl())}}">{{$enroll ->student($enroll->user_id)}}</a></td>
+                    {{-- <td><a href="{{route('students.show',$enroll -> studenturl())}}">{{$enroll ->student($enroll->user_id)}}</a></td> --}}
+                    <td><a href="{{route('enrolls.show',$enroll -> id)}}">{{$enroll ->student($enroll->user_id)}}</a></td>
                     <td>{{$enroll ->post->title}}</td>
                     
                     <td>{{$enroll->stage->name}}</td>

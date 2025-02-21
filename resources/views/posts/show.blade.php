@@ -87,8 +87,8 @@
                         <div class="w-100 d-flex">
                             @if(!$post -> checkenroll($userdata->id))
             
-                                {{-- <a href="#createmodel" data-bs-toggle="modal" class="w-100 btn btn-primary btn-sm rounded-0">Enroll</a> --}}
-                                <button type="button" id="#createmodel" data-bs-toggle="modal" class="w-100 btn btn-primary btn-sm rounded-0">Enroll</button>
+                                <a href="#createmodel" data-bs-toggle="modal" class="w-100 btn btn-primary btn-sm rounded-0">Enroll</a>
+                                {{-- <button type="button" id="#createmodel" data-bs-toggle="modal" class="w-100 btn btn-primary btn-sm rounded-0">Enroll</button> --}}
             
                             @endif
 
@@ -456,6 +456,7 @@
                                         <span>Choose Images</span>
                                     </label>
                                     
+                                    
                                 </div>
                             </div>
 
@@ -474,7 +475,7 @@
                                 </div>
 
                                 {{-- start hidden fields --}}
-                                <input type="file" name="image" id="image" class="form-control  rounded-0" hidden >
+                                <input type="file" name="image" id="image" class="form-control rounded-0" hidden>
                                 <input type="hidden" name="post_id" value="{{$post->id}}">
                             </div>
                         </form>

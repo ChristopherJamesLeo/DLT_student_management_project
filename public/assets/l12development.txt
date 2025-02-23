@@ -1,0 +1,223 @@
+digitaloceam.com
+
+create project 
+
+Click "Create Project"
+
+Choose Region : Singapore
+
+Chose an Image : UBUNTU
+
+version : 24.10
+
+choose size 
+    Regular
+    12/Month
+
+Choose Authrication method
+    SSH or password
+
+click "Create Droplet" 
+
+-----------------------------
+
+=> Access to Server ( get server ip and password )
+
+ssh -u root@152.42.213.20 
+insert password 
+
+run on linux terminal ( ssh -u root@152.42.213.20  )
+-------------------
+
+=> step 1 : Updaet you system 
+
+sudo apt-get update && upgrade -y 
+reboot 
+
+reboot ကြာေင့် server သည် reboot ကျသွားပြီး ssh -u root@152.42.213.20 ဖြင့်ပြန်ဝင်ပေးရမည် 
+
+--------------
+step 2
+
+Install Apache 
+
+sudo apt install apache2 
+
+Question : Do you want to continue ? y 
+
+optional -> Config : /etc/apache2/apache2.conf    the main configuration file is located
+
+sudo a2enmod rewrite                to enable URL rewritng . you cn enable the mode rewrite module 
+sudoo sustemctl restart apache2 
+
+Note: sudo systemctl status apache2
+    sudo systemctl enable apache2 
+    sudo systemctl stop apache2 
+    sudo systemctl start apache2 
+    sudo systemctl restart apache2 
+
+
+
+
+----------------------
+=> Step 3
+Install Mysql (Optional) version 8.37
+
+sudo apt install mysql-server 
+
+sudo mysql_secure_installation 
+
+question : 
+remve anonymous users? answer : y 
+disallow root login remotely? : n 
+remove test database and access to it? : y
+relad privillege table now? : y
+
+note : sudo systemctl status mysql              check MySql status 
+        sudo systemctl start mysql 
+
+
+Note : mysql --version                          check version withour login 
+    sudo mysql    or sudo mysql -u root
+    SELECT version() 
+    exit            or    \q 
+
+----------------
+step 4 : Install PHP                version PHP 8.3.6
+sudo apt install software-properties-common
+apt apt install php                 php -v or php --version
+
+question : do you want to continue? y 
+
+sudo nano /var/www/html/info.php 
+    <?php 
+        php.info()
+    ?>
+
+Test: enter this url to your browser >     www.yourserverip/info.php
+
+-----------------------
+=> Step 5 : install php myadmin
+
+sudo apt install phpmyadmin 
+
+Question : do you want to continue? y 
+        Configureing phpmyadming            Note : move cursor top/bottm arrow key, chose spacebar, tab 
+        cnfigure database for phpmyadmin with dbconfig-common? y 
+        mysql application password for phpmyadmin : mydbserver2024 
+
+sudo systemctl resart apache2 
+
+test : enter this url to broweser http://yourserverip/phpmyadmin/ 
+localhos/phpmyadmin
+http://localhost/phpmyadmin
+
+
+-------------------------
+=> Step 6 : Set password for  Root Account
+
+    sudo mysql -u root 
+    ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_passwod BY 'mydbsever2025';
+
+    GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
+    FLUSH PRIVILEGES;
+
+    sudo mysql -u root -p 
+    root's passowrd (mydbserver2025)
+
+    exit  or \q 
+
+    mysql -u root -p -h yourserverip
+    mysql -u root -p -h 152.42.213.20        / access deny ( cus root account don't have remote permission )
+
+----------------------
+
+=> Step 7 : Config Database Remote Access ( optional )
+
+    sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf 
+
+    bind-address = 127.0.0.1 
+    to 
+    bind-address = 0.0.0.0
+
+    sudo systemctl restart mysql 
+
+    sudo mysql -u root -p 
+    mydbserver2025 
+
+    CREATE USER 'user1'@'%' IDENTIFIED BY 'mydbsever2025';
+
+    GRANT ALL PRIVILEGES ON *.* TO 'user1'@'%' WITH GRANT OPTION;
+    FLUSH PRIVILEGES;
+    
+    exit 
+
+    mysql -u user1 -p 
+    userdbserver2025 
+
+    mysql -u root -p -h yourserverip  
+    mysql -u root -p -h 152.42.213.20        / access eny ( cus root account don't have remote permission )
+
+    mysql -u user1 -p -h yourserverip 
+    mysql -u user1 -p -h 152.42.312.20        / access ( cuz user1 accoutnt have remote permission )
+
+
+    lilnux = ping 15.42.213.20 
+            ifconfig 
+            traceroute 152.42.312.20
+            whois 152.42.213.20 
+
+    window = ping 152.42.213.20 
+            ipconfig 
+            tracert 152.42.213.20
+            nslookup 152.42.213.20
+
+
+-----------
+
+=> Step 8 : Manage Firewall
+
+            ufw status 
+                sudo ufw enable 
+
+            ufw status 
+                sudo ufw allow ssh 
+                sudo ufw allow 3306                 for mysql port 
+
+            ufw app list    
+                sudo ufw all 'Apache'               to allow HTTP traffix on port :80
+                sudo ufw allow 'Apache Secure'      to allow HTTPS traffc on port : 443 
+                sudo ufw allow 'Apache Full'        to allow both HTTP and HTTPS traffic 
+
+            sudo ufw status 
+            sudo ufw reload 
+
+
+-------------
+=> Step 9 : Connect DNS Server ( Domain Name Server )
+
+
+=> Step 10 : SSL Certificate 
+
+
+-------------
+
+
+=> Step 11 : Other 
+    
+
+    -> git 
+        sudo apt-get install git 
+        git -v                      git version 2.43.0 ( current )
+
+    -> composer 
+
+        install from -> https://getcomposer.org/download 
+
+        sudo mv composer.phar /usr/local/bin/composer 
+
+
+
+
+
+

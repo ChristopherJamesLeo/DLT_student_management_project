@@ -117,5 +117,7 @@ class Enroll extends Model
         return $this -> stage_id != 2; // 2 = pending
     }
 
+    
+
 }
 

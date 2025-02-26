@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Enroll;
 use App\Models\Stage;
 use App\Models\Status;
+use App\Models\Leave;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -78,11 +79,13 @@ class EnrollsController extends Controller
     {
         $enroll = Enroll::findOrFail($id);
 
+        $allLeaves = Leave::where("user_id",$id)->orderBy("id","desc")->get();
+
         $stages = Stage::whereIn("id",[1,2,3])->where("status_id",3)->get();
 
         $enrollments = Enroll::where("user_id",$enroll->user_id)->get();
 
-        return view("enrolls.show",["enroll"=>$enroll,"stages"=>$stages,"enrollments"=>$enrollments]);
+        return view("enrolls.show",["enroll"=>$enroll,"stages"=>$stages,"enrollments"=>$enrollments,"allLeaves"=>$allLeaves]);
     }
 
 

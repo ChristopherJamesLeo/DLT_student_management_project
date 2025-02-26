@@ -7,3 +7,6 @@
 
 @import 'bootstrap/dist/css/bootstrap.min.css'; 
 /* import ဖြင့် bootstrap အား ခေါ်ပေးရမည် */
+
+@import '@fortawesome/fontawesome-free/css/all.min.css' 
+/* font awesome import  */

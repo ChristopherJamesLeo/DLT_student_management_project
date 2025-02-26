@@ -24,6 +24,7 @@ use App\Models\Tag;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\LeaveFile;
+use App\Models\Enroll;
 
 use App\Notifications\LeaveNotify;
 
@@ -171,6 +172,9 @@ class LeavesController extends Controller
     {
         $leave = Leave::findOrFail($id);
 
+        $allEnrolls = Enroll::where("user_id",$id)->orderBy("id","desc")->get();
+
+
         $leavefiles = LeaveFile::where("leave_id",$id)->get(); // load all associated image
 
         $stages = Stage::whereIn("id",[1,2,3])->where("status_id",3)->get();
@@ -180,6 +184,7 @@ class LeavesController extends Controller
         // $getnoti = Notification::where("notifiable_id")->pluck("id"); // error 
 
         $user_id = Auth::user()->id;
+
         $type = "App\Notifications\LeaveNotify";
 
         
@@ -195,7 +200,7 @@ class LeavesController extends Controller
 
         // dd($getnoti);
 
-        return view("leaves.show",["leave"=>$leave,"leavefiles"=>$leavefiles,"stages" => $stages]);
+        return view("leaves.show",["leave"=>$leave,"leavefiles"=>$leavefiles,"stages" => $stages])->with("allEnrolls",$allEnrolls);
     }
 
 
@@ -338,7 +343,7 @@ class LeavesController extends Controller
         if($leave->isconverted()){
             return redirect()->back()->with("error","This Leave form has already been change stage by authorize person");
         }
-        
+
         foreach($leavefiles as $leavefile){
             $path = $leavefile -> image; // ပတ်လမ်းကို ခေါ်ထုတ်မည် 
 

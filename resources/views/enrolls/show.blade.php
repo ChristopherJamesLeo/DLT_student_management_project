@@ -297,9 +297,14 @@
                             </p>
                         </div>
                         <div id="enrollments" class="tab-pane">
-                            <p>
-                                {!! $enroll->remark !!}
-                            </p>
+                            <div class="row p-2">
+                                @foreach ($allLeaves as $allLeave)
+                                    <div class="col-md-3 border shadow p-3 mb-3 enrollboxes">
+                                        <a href="{{route('students.show',$allLeave->user->id)}}">{{$allLeave->title}}</a>
+                                    </div>
+                                @endforeach
+                            </div>
+                           
                         </div>
                     </div>
 

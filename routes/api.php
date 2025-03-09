@@ -19,16 +19,24 @@ use App\Http\Controllers\Api\StatusesController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// REST FUll ARI ထုတ်နည်း 
+
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {   // sanctum ကို မသုံးဘူး 
+//     return $request->user();
+
+//     // third parameter ထဲတွင် naming ပေးလိုက်ချင်းဖြင့် error ဖေျာက်နုိင်သည် alias ပေးလိုက်ခြင်းဖြစ်သည်
+//     // Route::apiResource("warehouses", WarehousesController::class,["as"=>"api"]);
+//     // // custom api route
+
+//     // Route::get("/warehousesstatus",[WarehousesController::class,"warehousesstatus"]);
+// });
 
 // php artisan route:cache (error)
 // Route::apiResource("warehouses", WarehousesController::class);
 
 // third parameter ထဲတွင် naming ပေးလိုက်ချင်းဖြင့် error ဖေျာက်နုိင်သည် alias ပေးလိုက်ခြင်းဖြစ်သည်
 Route::apiResource("warehouses", WarehousesController::class,["as"=>"api"]);
-// custom api route
+// // custom api route
 
 Route::get("/warehousesstatus",[WarehousesController::class,"warehousesstatus"]);
 
@@ -43,4 +51,7 @@ Route::get("/filter/townships/{filter}",[TownshipController::class,"filterbycity
 
 Route::apiResource("statuses",StatusesController::class,['as'=>'api']);
 Route::get("/statusessearch", [StatusesController::class,"search"]);
+
+
+
 

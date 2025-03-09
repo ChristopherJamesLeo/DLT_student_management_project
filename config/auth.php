@@ -36,8 +36,16 @@ return [
     */
 
     'guards' => [
+        // backend မှ blade ဖိုင် UI ပါသုံးမယ်ဆိုရင် web လဲသုံးပေးရမည် 
         'web' => [
             'driver' => 'session',
+            'provider' => 'users',
+        ],
+
+
+        // only use for api backend // backend မှ api တစ်မျိုးဘဲ ထုတ်ပေးချင်ရင် ဒါဘဲ သုံးရမည် 
+        'api' => [
+            'driver' => 'passport',
             'provider' => 'users',
         ],
     ],
@@ -62,7 +70,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\User::class, // must be User Model / log in register ကို မိမိဘာသာ ဖန်တီးလျှင် users class သည် User::class ဖြစ်ရဲ့လား စစ်ရမည် မဟုတ်လျှင် guards မှာ ပြသနာပပေးမည် 
         ],
 
         // 'users' => [

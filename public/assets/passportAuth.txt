@@ -1,0 +1,120 @@
+=> Laravel 10 Passprot installation 
+
+=> Install 
+composer require laravel/passport
+php artisan migrate
+php artisan passport:install 
+
+
+
+note( php artisan passport:install will generate 0auth-private.key and 0auth-public.key those 2 files are located at storage folder );
+
+oauth.public & private key ကို activate လုပ်ပေးရမည် 
+
+=> go to user model 
+use Laravel\Passport\HasApiTokens; // to use passport 
+{
+// class User extends Authenticatable implements MustVerifyEmail  
+
+    use HasApiTokens, HasFactory, Notifiable;
+
+    /**
+}
+
+
+=> go to config/auth.php
+
+
+    'guards' => [
+        // backend မှ blade ဖိုင် UI ပါသုံးမယ်ဆိုရင် web လဲသုံးပေးရမည် 
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+
+
+        // only use for api backend // backend မှ api တစ်မျိုးဘဲ ထုတ်ပေးချင်ရင် ဒါဘဲ သုံးရမည် 
+        'api' => [
+            'driver' => 'passport',
+            'provider' => 'users',
+        ],
+    ],
+
+    'providers' => [
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class, // must be User Model / log in register ကို မိမိဘာသာ ဖန်တီးလျှင် users class သည် User::class ဖြစ်ရဲ့လား စစ်ရမည် မဟုတ်လျှင် guards မှာ ပြသနာပပေးမည် 
+        ],
+
+
+    ],
+
+
+=> option 
+    php artisan passport:install --uuids     user တစ်ယောက်ချင်းစီကို api key သီးသန့်ထပ်ထုတ်ပေးနိုင်သည် 
+
+
+
+=> generate oauth-private.key and oauth-public.key 
+
+php artisan passport:keys    ( public နှင့် private key ပြန်ထုတ်ပေးရန် / ရှိပြိးသားဆိုလည်း override လုပ်မှာလား မေးနေမည်  )
+
+
+
+=> config for passport 
+
+* Manual Setting Config ( Very important Stage )
+
+go to -> App\Providers\AuthServiceProvider 
+
+use Laravel\Passport\Passport;
+
+// default location
+public function boot(): void
+{
+    Passport::loadKeysFrom(__DIR__.'/../secrets/oauth');    // သူပေးတဲ့ လမ်းကြောင်းအတိုင်း folder တစ်ခု ဖန်တီးပြီး secret file နှစ်ခုကို ထည့်လဲရတယ် မိမိဘာသာ ကြိုက်နှစ်သက်ရာမှာ folder တစ်ခုတည်ဆောက်ပြီးလမ်းကြောင်းပေးပြီးလိုက်လဲရတယ် 
+}
+
+// custom location 
+mkdir -p secret/oauth 
+mv storage/oauth-private.key secrets/oauth/private.key
+mv storage/oauth-public.key secrets/oauth/public.key 
+
+file အား permission စစ်ပေးရမည် ထို့နောက် full permission ပေးနေလား ကြည့်ရမည် 
+ls -la secrets/oauth
+
+to change permission 
+sudo chmod 777 secrets/oauth/public.key
+sudo chmod 777 secrets/oauth/private.key
+
+
+public function boot(): void
+{
+    // Passport::loadKeysFrom(storage_path('secrets/oauth'));     => in storage path
+
+    Passport::loadKeysFrom(base_path('secrets/oauth'));     => အပြင်တွင် တည်ဆောက်ထားပါက 
+
+
+    // check file found or not 
+    if(!file_exists(base_path('secrets/oauth/private.key')) || !file_exists(base_path('secrets/oauth/public.key'))){
+        \Log::error("auth key are missioing);
+    }else {
+        \Log::error("auth key are found);
+    }
+}
+
+
+=> config .env file 
+
+PASSPORT_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----
+<private key here>
+-----END RSA PRIVATE KEY-----"
+
+PASSPORT_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----
+<public key here>
+-----END PUBLIC KEY-----"
+
+
+=> Public Passport Configuration 
+php artisan vendor:publish --tag=passport-config 
+php artisan vendor:publish --tag=passport-migrations

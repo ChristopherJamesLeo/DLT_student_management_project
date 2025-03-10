@@ -35,7 +35,10 @@ use App\Http\Controllers\Api\StatusesController;
 // Route::apiResource("warehouses", WarehousesController::class);
 
 // third parameter ထဲတွင် naming ပေးလိုက်ချင်းဖြင့် error ဖေျာက်နုိင်သည် alias ပေးလိုက်ခြင်းဖြစ်သည်
-Route::apiResource("warehouses", WarehousesController::class,["as"=>"api"]);
+Route::middleware("auth:passport")->group(function(){
+    Route::apiResource("warehouses", WarehousesController::class,["as"=>"api"]);
+});
+
 // // custom api route
 
 Route::get("/warehousesstatus",[WarehousesController::class,"warehousesstatus"]);

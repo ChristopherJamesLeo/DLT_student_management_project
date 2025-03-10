@@ -10,6 +10,7 @@ use App\Models\Leave;
 use App\Policies\AnnouncementPol;
 use App\Policies\PostPol;
 use App\Policies\LeavePol;
+use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -31,6 +32,15 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this -> registerPolicies();  // -> policy အား on ပေးရမည် 
 
-        Passport::loadKeysFrom(__DIR__.'/../secrets/oauth');   //
+        // Passport::loadKeysFrom(__DIR__.'/../secrets/oauth');   // default
+
+        Passport::loadKeysFrom(base_path("secrets/oauth"));
+
+        // check file found or not 
+        // if(!file_exists(base_path('secrets/oauth/private.key')) || !file_exists(base_path('secrets/oauth/public.key'))){
+        //     \Log::error("auth key are missioing");
+        // }else {
+        //     \Log::error("auth key are found");
+        // }
     }
 }

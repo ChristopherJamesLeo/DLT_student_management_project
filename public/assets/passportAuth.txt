@@ -76,7 +76,7 @@ public function boot(): void
 }
 
 // custom location 
-mkdir -p secret/oauth 
+mkdir -p secrets/oauth 
 mv storage/oauth-private.key secrets/oauth/private.key
 mv storage/oauth-public.key secrets/oauth/public.key 
 

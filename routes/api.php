@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\WarehousesController;
 use App\Http\Controllers\Api\CitiesController;
 use App\Http\Controllers\Api\TownshipController;
 use App\Http\Controllers\Api\StatusesController;
+use App\Http\Controllers\Api\AuthController;
 
 // api route ကို ခေါ်ပါက http://127.0.0.1:8000/api/warehouses ဟုပြန်ခေါ်ပေးရမည်
 /*
@@ -35,9 +36,21 @@ use App\Http\Controllers\Api\StatusesController;
 // Route::apiResource("warehouses", WarehousesController::class);
 
 // third parameter ထဲတွင် naming ပေးလိုက်ချင်းဖြင့် error ဖေျာက်နုိင်သည် alias ပေးလိုက်ခြင်းဖြစ်သည်
-Route::middleware("auth:passport")->group(function(){
+
+
+Route::post("/register",[AuthController::class,"register"]);
+Route::post("/login",[AuthController::class,"login"]);
+Route::post("/logout",[AuthController::class,"logout"]);
+
+
+
+                // api သည် passport မှ လာသည်
+Route::middleware("auth:api")->group(function(){
     Route::apiResource("warehouses", WarehousesController::class,["as"=>"api"]);
+
 });
+
+// Route::apiResource("warehouses", WarehousesController::class,["as"=>"api"]);
 
 // // custom api route
 

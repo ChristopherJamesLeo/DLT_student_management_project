@@ -155,6 +155,9 @@
 
     <script>
 
+        const token = "Bearer {{config('app.passport_token')}}";  // config file ထဲရှိ app ထဲမှ passport_token variable ကို blade မှ လှမ်းယူမည် 
+        // console.log(token);
+
         // Start Pass Header Token
         // header token ကို စကတညါးကပို့ထားမည် 
         $.ajaxSetup(   // ajax ဖြင့် စကတည်းက ပို့ထားမည် csrf ကို ပို့ထားမည် 
@@ -162,6 +165,9 @@
                 headers : { 
                     // header အား သံုးနုိင်ရန် html ရှိ header ထဲတွင် meta tag ဖြင့် attribute name = "csrf-token" content="{{csrf_token()}}"
                     'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr("content"), // meta tag ထဲတွင် ရှိသော value အား ယူမည် 
+                    // Authorize 
+                    "Authorization" : token,
+                    "Accept" : "application/json"
                 }
             }
         )
@@ -179,7 +185,7 @@
                     method : "GET",
                     type : "JSON",
                     success : function(response){
-                        // console.log(response);
+                        console.log(response);
                         const datas = response.data;
                         console.log(response.test);
                         console.log(datas);

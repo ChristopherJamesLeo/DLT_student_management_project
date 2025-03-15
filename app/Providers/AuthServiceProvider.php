@@ -42,6 +42,9 @@ class AuthServiceProvider extends ServiceProvider
         // }else {
         //     \Log::error("auth key are found");
         // }
+
+
+        // authorize permission ခွဲနိုင်သည် 
     }
 }
 

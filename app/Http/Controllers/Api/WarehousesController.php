@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 use App\Models\Warehouse;
 use App\Http\Resources\WarehousesCollection;
 use App\Http\Resources\WarehousesResource;
 
-class WarehousesController extends Controller
+class WarehousesController extends Controller  // common controller လှမ်းခေါ်ထားပြီးသာဖြစ်သည် 
 {
     /**
      * Display a listing of the resource.
@@ -25,7 +26,12 @@ class WarehousesController extends Controller
         // method 2 (not use collection)
         $warehouses = Warehouse::paginate(3); // paginate ပေးပါက web controller ထဲတွင်ပါ paginate ထည့်ပေးရမည်
 
-        return WarehousesResource::collection($warehouses);
+        $result = WarehousesResource::collection($warehouses);
+
+        // return WarehousesResource::collection($warehouses);
+
+        return $this -> sendRespond($result,"Warehouse Retrived Successfully"); // controller ထဲသို့ ပို့ထားသည့်အတွက်ကြောင့် json data သည် နှစ်ဆင့်ဖြစ်သွားသည် 
+       
 
 
     }
@@ -35,11 +41,26 @@ class WarehousesController extends Controller
      */
     public function store(Request $request)
     {
-        $this -> validate ($request , [
+        // $this -> validate ($request , [
+        //     "name" => "required|unique:warehouses,name",
+        //     "status_id" => "required",
+        //     "user_id" => "required"
+        // ]);
+
+        // API အတွက် validator နှင့်သုံးမှသာ alert ထုတ်ပြန်ရန် အဆင်ပြေမည်  
+
+        $validator = Validator::make($request->all(),[
             "name" => "required|unique:warehouses,name",
             "status_id" => "required",
             "user_id" => "required"
         ]);
+
+        if($validator->fails()){
+
+            return $this -> sendError("Validation Error",$validator->errors());
+
+        }
+
 
         // API ဖြင့်ခေါ်ထားသောကြောင့် Auth ကို သံုးမရပေ  ထို့ကြောင့် front end မှသာ ပို့ပေးရမည်ဖြစ်သည်
         // $user = Auth::user();
@@ -54,7 +75,10 @@ class WarehousesController extends Controller
 
         $warehouse -> save();
 
-        return new WarehousesResource($warehouse);
+        // return new WarehousesResource($warehouse);
+
+
+        return $this -> sendRespond(new WarehousesResource($warehouse),"Warehouse Store Successfully");  
     }
 
     /**
@@ -62,7 +86,13 @@ class WarehousesController extends Controller
      */
     public function show(string $id)
     {
-        
+        $warehouse = Warehouse::findOrFail($id);
+
+        if(is_null($warehouse)){
+            return $this -> sendError("Warehouse not found");
+        }
+
+        return $this -> sendRespond($warehouse,"Warehouse Retrived Successfully");
     }
 
     /**
@@ -71,10 +101,23 @@ class WarehousesController extends Controller
     public function update(Request $request, string $id)
     {
         $this -> validate ($request , [
+            "name" => "required|unique:warehouses,name".$id,
+            "status_id" => "required",
+            "user_id" => "required"
+        ]);
+
+        // for api  
+        $validator = Validator::make($request->all(),[
             "name" => "required|unique:warehouses,name,".$id,
             "status_id" => "required",
             "user_id" => "required"
         ]);
+
+        if($validator->fails()){
+
+            return $this -> sendError("Validation Error",$validator->errors());
+
+        }
 
         // API ဖြင့်ခေါ်ထားသောကြောင့် Auth ကို သံုးမရပေ  ထို့ကြောင့် front end မှသာ ပို့ပေးရမည်ဖြစ်သည်
         // $user = Auth::user();
@@ -89,7 +132,10 @@ class WarehousesController extends Controller
 
         $warehouse -> save();
 
-        return new WarehousesResources($warehouse);
+        // return new WarehousesResources($warehouse);
+
+        return $this -> sendRespond(new WarehousesResources($warehouse),"Warehouse Update Successfully"); // for api
+
     }
 
     /**
@@ -100,7 +146,10 @@ class WarehousesController extends Controller
         $warehouse = Warehouse::findOrFail($id);
         $warehouse -> delete();
 
-        return new WarehousesResource($warehouse); // collection မလိုသောကြောင့် new ဖြင့် ခေါ်ပေးရမည်
+        // return new WarehousesResource($warehouse); // collection မလိုသောကြောင့် new ဖြင့် ခေါ်ပေးရမည်
+
+        return $this -> sendRespond(new WarehousesResources($warehouse),"Warehouse Delete Successfully"); // for api
+
     }
 
     public function warehousesstatus(Request $request){

@@ -187,4 +187,11 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+
+    // passport custom variable 
+    'passport_token' => env("PASSPORT_TOKEN",null), // ရှိရင်ယူမယ် မရှိရင် null ထားမည် 
+
+
+
+
 ];

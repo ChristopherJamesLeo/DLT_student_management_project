@@ -12,6 +12,7 @@ use Exception;  // catch ထဲရျီ exception အားသံုးနု�
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 
+
 class WarehousesController extends Controller
 {
     public function index()

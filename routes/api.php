@@ -40,12 +40,15 @@ use App\Http\Controllers\Api\AuthController;
 
 Route::post("/register",[AuthController::class,"register"]);
 Route::post("/login",[AuthController::class,"login"]);
-Route::post("/logout",[AuthController::class,"logout"]);
 
+Route::post("/logout",[AuthController::class,"logout"]) -> middleware("auth:api");  // log out လုပ်လျှင် middle ware ထဲထည့်ပေးရတော့မယ
 
 
                 // api သည် passport မှ လာသည်
 Route::middleware("auth:api")->group(function(){
+
+ 
+
     Route::apiResource("warehouses", WarehousesController::class,["as"=>"api"]);
 
 });

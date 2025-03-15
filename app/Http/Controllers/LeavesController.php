@@ -35,17 +35,28 @@ class LeavesController extends Controller
         // $leaves = Leave::all();
 
         if(auth()->user()->can("viewany",Leave::class)){  // user ထဲတွင် can ဖြင့် viewany တွင် Leave data ရှိနေသလား can ဖြင့် စစ်နိုင်သည်  
-            $leaves = Leave::filter()->searchonly()->paginate(10);  // admin , techer can see all data
+            // $leaves = Leave::filter()->searchonly()->paginate(10);  // admin , techer can see all data
+            $leavesQuery = Leave::query(); // admin , techer can see all data
         }else {
-            $leaves = Leave::where("user_id",auth()->user()->id)->filter()->searchonly()->paginate(10); // ကိုယ်ပိုင် data ဘဲမြင်ရမည်ဖြစ်သည် 
+            // $leaves = Leave::where("user_id",auth()->user()->id)->filter()->searchonly()->paginate(10); // ကိုယ်ပိုင် data ဘဲမြင်ရမည်ဖြစ်သည် 
+            $leavesQuery = Leave::where("user_id",auth()->id);
         }
+
+        // $leaves = $leavesQuery -> orderBy("startdate",'desc')->get();
+        $leaves = $leavesQuery -> orderBy("startdate",'desc')->paginate(10);
+
+        $totalLeaves = $leaves->count();
+        $approvedCount = $leaves -> where("stage_id",1)->count();
+        $pendingCount = $leaves -> where("stage_id",2)->count();
+        $rejectedCount = $leaves -> where("stage_id",3)->count();
+         
 
         $users = User::pluck("name","id");
        
 
         $posts = Post::all()->pluck("title","id");
 
-        return view("leaves.index",compact("leaves","users"))->with("posts",$posts);
+        return view("leaves.index",compact("leaves","users","totalLeaves","approvedCount","pendingCount","rejectedCount"))->with("posts",$posts);
     }
 
 

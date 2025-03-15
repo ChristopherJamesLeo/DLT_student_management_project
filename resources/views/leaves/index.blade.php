@@ -7,6 +7,47 @@
 
     <!-- start content area -->
     <div class="container-fluid">
+
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card border-1 border-primary mb-3">
+                        <div class="card-body">
+                            <h6 class="card-title">Total Leave</h6>
+                            <span class="card-text">{{$totalLeaves}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-1 border-success mb-3">
+                        <div class="card-body">
+                            <h6 class="card-title">Approved Leave</h6>
+                            <span class="card-text">{{$approvedCount}}</span>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-1 border-warning mb-3">
+                        <div class="card-body">
+                            <h6 class="card-title">Pending Leave</h6>
+                            <span class="card-text">{{$pendingCount}}</span>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-1 border-danger mb-3">
+                        <div class="card-body">
+                            <h6 class="card-title">Reject Leave</h6>
+                            <span class="card-text">{{$rejectedCount}}</span>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         
         {{-- method 1 --}}
         {{-- @if(auth()->user()->hasRole(["Admin","Teacher","Student"]))

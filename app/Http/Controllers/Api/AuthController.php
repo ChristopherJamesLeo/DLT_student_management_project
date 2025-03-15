@@ -49,7 +49,7 @@ class AuthController extends Controller
 
         $user = User::where("email",$request->email)->first();   // data တစ်ခုတည်းလိုချင်လို့ 
                                 // ဝင်လာသော password , db ထဲရှိ password 
-        if(!$user || Hash::check($request->password,$user->password)){
+        if(!$user || !Hash::check( $request -> password, $user -> password )){
             return response()->json(["message" => "Invalid credential"],401);
         }
 
@@ -70,6 +70,7 @@ class AuthController extends Controller
     }
 
     public function logout(Request $request){
+        
         $request -> user() -> token() -> revoke();
 
         return response()->json(["message" => "Logged Out successfully"],200);

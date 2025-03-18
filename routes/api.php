@@ -7,6 +7,9 @@ use App\Http\Controllers\Api\CitiesController;
 use App\Http\Controllers\Api\TownshipController;
 use App\Http\Controllers\Api\StatusesController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\UsersController;
+use App\Http\Controllers\LeadsController;
+use App\Http\Controllers\StudentsController;
 
 // api route ကို ခေါ်ပါက http://127.0.0.1:8000/api/warehouses ဟုပြန်ခေါ်ပေးရမည်
 /*
@@ -71,6 +74,10 @@ Route::get("/filter/townships/{filter}",[TownshipController::class,"filterbycity
 Route::apiResource("statuses",StatusesController::class,['as'=>'api']);
 Route::get("/statusessearch", [StatusesController::class,"search"]);
 
+
+Route::get("/leadsdashboard",[LeadsController::class,"dashboard"])->name("dashboards.leadssources");
+Route::get("/userdashboard",[UsersController::class,"dashboard"])->name("dashboards.userdashboards");
+Route::get("/studentdashboard",[StudentsController::class,"dashboard"])->name("dashboards.studentsdashboards");
 
 
 

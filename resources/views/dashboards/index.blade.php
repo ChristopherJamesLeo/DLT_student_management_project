@@ -84,7 +84,7 @@
 
     <!--Start Expenses Area-->
     <div class="row">
-        <div class="col-md-7 mb-3">
+        <div class="col-md-6 mb-3">
             <div class="card shadow">
                 <div class="card-header py-2">
                     <h5 class="text-primary">Expenses</h5>
@@ -117,20 +117,82 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-5 mb-3">
+
+        <div class="col-md-6 mb-3">
+            <div class="card shadow">
+                <div class="card-header py-2">
+                    <h5 class="text-primary">Age</h5>
+                </div>
+                <canvas id="agebar"></canvas>
+                {{-- <div class="card-body">
+                    <h4 class="small">Other Expenses <span>20%</span></h4>
+                    <div class="progress mb-2">
+                        <div class="progress-bar bg-danger" style="width:20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+
+                    <h4 class="small">Sales Tracking <span>40%</span></h4>
+                    <div class="progress mb-2">
+                        <div class="progress-bar bg-success" style="width:40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+
+                    <h4 class="small">Rental Fee <span>60%</span></h4>
+                    <div class="progress mb-2">
+                        <div class="progress-bar bg-warning" style="width:60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+
+                    <h4 class="small">Salary <span>80%</span></h4>
+                    <div class="progress mb-2">
+                        <div class="progress-bar bg-info" style="width:80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+
+                    <h4 class="small">Fixture <span>100%</span></h4>
+                    <div class="progress mb-2">
+                        <div class="progress-bar bg-success" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div> --}}
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-3 mb-3">
             <div class="card">
                 <div class="card-header py-2">
-                    <h6 class="text-prmary">Revenue Sources</h6>
+                    <h6 class="text-prmary">Lead Sources Overview</h6>
                     
                 </div>
                 <div class="card-body">
                     <div class="d-flex justify-content-center">
-                        <canvas id="mypiechart"></canvas>
+                        <canvas id="leadchart"></canvas>
                     </div>
-                    <div class="small text-center mt-2">
-                        <span><i class="fas fa-circle text-warning"></i> Return Item</span>
-                        <span class="mx-2"><i class="fas fa-circle text-primary"></i> Direct Sales</span>
-                        <span><i class="fas fa-circle text-danger"></i> Online Sales</span>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card">
+                <div class="card-header py-2">
+                    <h6 class="text-prmary">Gender</h6>
+                    
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-center">
+                        <canvas id="genderchart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-3">
+            <div class="card">
+                <div class="card-header py-2">
+                    <h6 class="text-prmary">Active Students</h6>
+                    
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-center">
+                        <canvas id="activestudents"></canvas>
                     </div>
                 </div>
 
@@ -221,7 +283,7 @@
                                 <i class="fas fa-users fa-2x text-primary me-4"></i>
                                 <div class="text-center">
                                     <p class="text-dark mb-0">Users</p>
-                                    <h5 class="fw-bold text-dark mb-0">56,320</h5>
+                                    <h5 class="fw-bold text-dark mb-0"> <span id="totaluser ">10</span> / <span id="onlineuser" class="text-success">10</span></h5>
                                 </div>
                             </div>
                         </div>
@@ -543,4 +605,8 @@
     <!--End Ttodo list Area-->
         </div>
     </div>
+@endsection
+
+@section("script")
+
 @endsection

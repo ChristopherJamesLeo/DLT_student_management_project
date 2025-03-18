@@ -144,4 +144,23 @@ class LeadsController extends Controller
         return redirect()->back();
     }
 
+    // dashboard
+    public function dashboard(Request $request){
+        $totalleades = Lead::count();
+        $convertedleades = Lead::where("converted",1)->count();
+        $unconvertedleades = $totalleades - $convertedleades;
+
+        $leadsources = [
+            "Totla Leads" => $totalleades,
+            "Converted Leads" => $convertedleades,
+            "Unconverted Leades" => $unconvertedleades
+        ];
+
+        return response()->json([
+            "leadsources" => $leadsources,
+        ],200);
+
+        
+    }
+
 }

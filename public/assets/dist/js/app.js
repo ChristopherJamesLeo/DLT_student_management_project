@@ -20,20 +20,150 @@ function dropbtn(e){
 //End Top Sidebar 
 
 //Start Expense Area 
-const ctx = document.getElementById('mypiechart');
-ctx.height = 200;
-  new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      datasets: [{
-        data: [12, 19, 3],
-      }]
-    },
-    options: {
-        responsive:false
-    }
-  });
 
+// Start Lead chart
+
+
+$(document).ready(function(){
+
+  $.ajax({
+    url: "/api/leadsdashboard",
+    method : "GET",
+    success : function(data){
+      // console.log(data);
+      const ctx = document.getElementById('leadchart');
+      ctx.height = 200;
+        new Chart(ctx, {
+          type: 'doughnut',
+          labels : Object.keys(data.leadsources),
+          data: {
+            datasets: [{
+              data: Object.values(data.leadsources),
+              backgroundColor: ["red","green","blue"],
+              borderWidth : 1
+            }]
+          },
+          options: {
+              responsive:false
+          }
+        });
+    }
+  })
+
+  $.ajax({
+    url: "/api/userdashboard",
+    method : "GET",
+    success : function(data){
+      console.log(data);
+
+      $("#totaluser").text(data.totalusers);
+      $("#onlineuser").text(data.totalonlineusers);
+    }
+  })
+
+
+  $.ajax({
+    url: "/api/studentdashboard",
+    method : "GET",
+    success : function(data){
+      console.log(data);
+      const ctx = document.getElementById('agebar');
+      ctx.height = 250;
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(data.agegroups),
+          datasets: [{
+            label: 'Students',
+            data: Object.values(data.agegroups),
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+    }
+  })
+
+  $.ajax({
+    url: "/api/studentdashboard",
+    method : "GET",
+    success : function(data){
+      // console.log(data);
+      const ctx = document.getElementById('genderchart');
+      ctx.height = 200;
+        new Chart(ctx, {
+          type: 'doughnut',
+          labels : Object.keys(data.genders),
+          data: {
+            datasets: [{
+              data: Object.values(data.genders),
+              backgroundColor: ["red","green"],
+              borderWidth : 1
+            }]
+          },
+          options: {
+              responsive:false
+          }
+        });
+    }
+  })
+
+  $.ajax({
+    url: "/api/studentdashboard",
+    method : "GET",
+    success : function(data){
+      // console.log(data);
+      const ctx = document.getElementById('activestudents');
+      ctx.height = 200;
+        new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            datasets: [{
+              data: [data.totalstudents,data.activestudents],
+              backgroundColor: ["red","green"],
+              borderWidth : 1
+            }]
+          },
+          options: {
+              responsive:false
+          }
+        });
+    }
+  })
+
+
+
+
+
+});
+
+
+
+
+// const ctx = document.getElementById('leadcharts');
+// ctx.height = 200;
+//   new Chart(ctx, {
+//     type: 'doughnut',
+//     data: {
+//       datasets: [{
+//         data: [12, 19, 3],
+//       }]
+//     },
+//     options: {
+//         responsive:false
+//     }
+  // });
+
+
+// End lead chart 
 //End Expense Area 
 
 //Start Earning Area 

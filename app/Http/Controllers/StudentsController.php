@@ -286,6 +286,35 @@ class StudentsController extends Controller
 
         return response()->json(['datas'=>$students]);
     }
+
+
+        // dashboard
+    public function dashboard(Request $request){
+        $totalstudents = Student::count();
+        $activestudents = Student::where("status_id",1)->count();
+        $agegroups = [
+            "Under 18" => Student::where("age","<",18) -> count(),
+            "18-25" => Student::whereBetween("age",[18,25]) -> count(),
+            "26-30" => Student::whereBetween("age",[26,30]) -> count(),
+            "Above 50" => Student::where("age",">",50) -> count(),
+
+        ];
+
+        $genders = [
+            "Male" => Student::where("gender_id",1)->count(),
+            "Female" => Student::where("gender_id",2)->count(),
+        ];
+
+        return response()->json([
+            "totalstudents" => $totalstudents,
+            "activestudents" => $activestudents,
+            "agegroups" => $agegroups,
+            "genders" => $genders
+        ],200);
+
+        
+    }
+
 }
 
 
